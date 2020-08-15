@@ -1,0 +1,272 @@
+.input-search-wrapper {
+  z-index: 0;
+}
+
+.input-search-wrapper img {
+  width: 16px;
+  position: absolute;
+  left: 15px;
+  top: 14px;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.input-search-wrapper .input {
+  width: 100%;
+  padding-left: 40px;
+}
+
+.footer {
+  border-top: 1px solid #e0e0e0;
+  padding: 20px;
+  font-size: 14px;
+  margin-top: 130px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.directory {
+  display: flex;
+  flex-direction: column;
+  margin: 40px;
+  margin-top: 120px;
+}
+
+.human {
+  display: flex;
+  flex-direction: column;
+  margin: 80px 0;
+}
+
+.name {
+  position: relative;
+  font-weight: 700;
+  font-size: 33px;
+  margin-bottom: 40px;
+}
+
+.owner-name-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.owner-name-wrapper {
+  margin-bottom: 40px;
+}
+
+.team-owner-name-wrapper {
+  margin-bottom: 0;
+}
+
+.owner-name-wrapper .name {
+  margin-bottom: 0;
+}
+
+.owner-name-wrapper img {
+  opacity: 0;
+  width: 25px;
+  margin-left: 10px;
+  transition: opacity 300ms ease;
+}
+
+.team-owner-name-wrapper img {
+  width: 20px;
+  margin-left: 8px;
+}
+
+.owner-name-wrapper:hover img {
+  opacity: 1;
+}
+
+.human-has-updates {
+  position: absolute;
+  left: -40px;
+  top: 12px;
+  width: 7px;
+  height: 24px;
+  border-radius: 0 6px 6px 0;
+}
+
+.posts-stream {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 2%;
+  row-gap: 2vw;
+}
+
+.post-thumb {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  border-radius: 12px;
+  border: 1px white solid;
+  box-sizing: border-box;
+  background: white;
+  box-shadow: 0px 3px 6px -1px hsla(0, 0%, 0%, 0.14);
+  cursor: pointer;
+  transition: transform 300ms;
+}
+
+.post-thumb:hover {
+  transform: scale(1.05);
+}
+
+.post-thumb:active {
+  transform: scale(0.95);
+}
+
+.post-thumb-image {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  background-size: cover;
+  border-radius: 8px;
+  transition: opacity 500ms;
+}
+
+.post-thumb-shadow {
+  position: absolute;
+  top: -8px;
+  bottom: -8px;
+  left: -8px;
+  right: -8px;
+  background-size: cover;
+  border-radius: 25px;
+  filter: blur(5px);
+  opacity: 0.2;
+  z-index: -1;
+}
+
+.post-thumb-more-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffffd6;
+  color: black;
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.post-thumb-more-button span {
+  position: relative;
+  top: 1px;
+  margin-right: 2px;
+}
+
+.post-thumb-add-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 42px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.post-thumb-add-button img {
+  width: 40px;
+}
+
+.post-thumb-description {
+  white-space: nowrap;
+  position: absolute;
+  bottom: 6px;
+  overflow: hidden;
+  width: 100%;
+  text-overflow: ellipsis;
+  padding: 11px 20px 6px 20px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0 0 12px 12px;
+  font-size: 14px;
+  transition: all ease 300ms;
+  max-height: 120px;
+}
+
+.post-thumb:hover .post-thumb-description {
+  white-space: normal;
+  height: auto;
+}
+
+.post-thumb:hover .post-thumb-remove {
+  opacity: 1;
+}
+
+.post-thumb-remove {
+  width: 22px;
+  position: absolute;
+  top: -28px;
+  right: -28px;
+  padding: 10px;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.post-thumb-remove img {
+  width: 100%;
+}
+
+.post {
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-image {
+  width: 600px;
+  height: 600px;
+  border-radius: 16px;
+  background-size: cover;
+}
+
+.post-image-dropzone {
+  width: 600px;
+  height: 600px;
+  border-radius: 16px;
+  border: 2px dashed #afafaf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.post-image-dropzone.active {
+  background: #f1edff;
+}
+
+.post-image-select-file {
+  margin-top: 5px;
+  background: transparent;
+}
+
+.post-image.busy {
+  animation: pulse 2s infinite;
+}
+
+.post-description {
+  flex-shrink: 0;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.description-textarea {
+  margin-top: 20px;
+  width: 100%;
+}

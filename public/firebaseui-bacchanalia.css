@@ -1,5 +1,6 @@
 .mdl-shadow--2dp {
   box-shadow: none;
+  background: transparent;
 }
 
 .mdl-button--raised.mdl-button--colored {
@@ -99,7 +100,6 @@
 
 .firebaseui-textfield.mdl-textfield .firebaseui-input:hover {
   transition: all 250ms;
-  box-shadow: 0 0 0px 6px #e7e1ff99;
   box-shadow: 0 0 0px 6px #796eff1c;
   background: white;
 }

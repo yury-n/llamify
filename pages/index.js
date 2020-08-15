@@ -4,6 +4,7 @@ import { useUser } from "../utils/auth/useUser";
 import StickyBar from "../components/StickyBar";
 import firebase from "firebase/app";
 import "firebase/firestore";
+import "firebase/database";
 import Head from "./_head";
 import { useEffect, useState } from "react";
 import initFirebase from "../utils/auth/initFirebase";
@@ -63,11 +64,22 @@ const Index = () => {
       .set({ team: { name: teamNameInput.current.value } });
   };
 
+  console.log(">>>", `/teams/${user.id}/team/name`);
+
   return (
     <>
       <Head />
+      <link rel="stylesheet" media="screen, projection" href="/home.css" />
       <div className="home-page home-sisu-page">
-        <StickyBar teamName={teamState.data?.name} />
+        <StickyBar
+          teamName={teamState.data?.name}
+          onTeamEditSubmit={({ teamName }) => {
+            firebase
+              .database()
+              .ref()
+              .update({ [`/teams/${user.id}/team/name`]: teamName });
+          }}
+        />
         <div className="sisu-form">
           <div className="form-group">
             <label htmlFor="teamName" className="label">
@@ -78,8 +90,8 @@ const Index = () => {
               ref={teamNameInput}
               className="input"
               type="text"
-              autocomplete="off"
-              spellcheck="false"
+              autoComplete="off"
+              spellCheck="false"
               autoFocus={true}
             />
           </div>
@@ -92,13 +104,13 @@ const Index = () => {
               ref={nameInput}
               className="input"
               type="text"
-              autocomplete="off"
-              spellcheck="false"
+              autoComplete="off"
+              spellCheck="false"
             />
           </div>
           <div className="form-buttons buttons">
             <button className="button-wrapper" onClick={() => startTeam()}>
-              <span className="button button-primary" tabindex="-1">
+              <span className="button button-primary" tabIndex="-1">
                 Start
               </span>
             </button>
