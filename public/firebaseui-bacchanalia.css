@@ -1,0 +1,157 @@
+.mdl-shadow--2dp {
+  box-shadow: none;
+}
+
+.mdl-button--raised.mdl-button--colored {
+  background: hsl(260, 92%, 56%);
+  box-shadow: 0px 3px 6px -1px hsla(260, 97%, 10%, 0.55),
+    inset 0px 3px 8px 1px hsla(0, 0%, 100%, 0.35);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+}
+
+.mdl-button--raised.mdl-button--colored:hover,
+.mdl-button--raised.mdl-button--colored:focus {
+  background: hsl(260, 92%, 56%) !important;
+  box-shadow: 0px 3px 6px -1px hsla(260, 97%, 10%, 0.55),
+    inset 0px 3px 8px 1px hsla(0, 0%, 100%, 0.35) !important;
+  transform: scale(1.025);
+}
+
+.mdl-button--raised.mdl-button--colored:active {
+  position: relative;
+  top: 2px;
+  box-shadow: none;
+}
+
+.firebaseui-button {
+  display: inline-block;
+  position: relative;
+  width: auto;
+  line-height: normal;
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 200ms;
+  border: 1px #dbdbdb solid;
+  font-size: 0.95rem;
+  text-transform: none;
+  height: auto;
+  font-family: Arial;
+  margin-left: auto;
+}
+
+.firebaseui-label,
+.mdl-textfield--floating-label.is-dirty .mdl-textfield__label,
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  font-family: "Poppins", sans-serif;
+  color: black;
+}
+
+.mdl-textfield__label {
+  position: static;
+}
+
+.mdl-textfield {
+  padding-top: 0px;
+}
+
+.firebaseui-id-page-sign-in h1 {
+  display: none;
+}
+
+.firebaseui-title {
+  padding-bottom: 50px;
+}
+
+.firebaseui-text {
+  margin-bottom: 40px;
+}
+
+.firebaseui-input-floating-button {
+  right: 14px;
+  top: 52px;
+}
+
+.firebaseui-form-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.firebaseui-textfield.mdl-textfield .firebaseui-input,
+.firebaseui-textfield.mdl-textfield .firebaseui-input-invalid {
+  padding: 12px 18px;
+  font-size: 16px;
+  border-radius: 8px;
+  background: #f3f3f4;
+  border: 1px solid #f3f3f4 !important;
+  outline: none;
+  border: none;
+  box-sizing: border-box;
+}
+
+.firebaseui-textfield.mdl-textfield .firebaseui-input:hover {
+  transition: all 250ms;
+  box-shadow: 0 0 0px 6px #e7e1ff99;
+  box-shadow: 0 0 0px 6px #796eff1c;
+  background: white;
+}
+
+.firebaseui-textfield.mdl-textfield .firebaseui-input:focus {
+  border-color: #796eff !important;
+  box-shadow: 0 0 0px 6px #796eff1c;
+  background: white;
+}
+
+.firebaseui-textfield.mdl-textfield.is-invalid input {
+  border: 1px solid #fc3c83 !important;
+  background: white;
+  box-shadow: 0 0 0px 5px #ffe1f499;
+}
+
+.mdl-textfield--floating-label .mdl-textfield__label:after {
+  display: none !important;
+}
+
+.firebaseui-button.firebaseui-id-secondary-link {
+  background: #f6f6f6;
+  box-shadow: 0px 3px 6px -1px hsla(0, 0%, 0%, 0.14),
+    inset 0px 4px 6px 1px hsl(0, 0%, 100%);
+  border: 1px #dbdbdb99 solid;
+  margin-left: 0;
+  color: black !important;
+}
+
+.firebaseui-button.firebaseui-id-secondary-link:hover {
+  transform: scale(1.025);
+  background: #f6f6f6;
+}
+
+.firebaseui-button.firebaseui-id-secondary-link:active {
+  background: #f6f6f6;
+  position: relative;
+  top: 2px;
+  box-shadow: none;
+}
+
+.firebaseui-error-wrapper {
+  position: relative;
+  top: -10px;
+  min-height: 23px;
+}
+
+.firebaseui-text-input-error {
+  margin: 0;
+}
+
+.firebaseui-error {
+  color: #fc3c83;
+  font-size: 14px;
+}

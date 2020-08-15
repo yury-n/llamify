@@ -8,7 +8,13 @@ const Auth = () => {
         rel="stylesheet"
       ></link>
       <link rel="stylesheet" media="screen, projection" href="/reset.css" />
+      <link
+        rel="stylesheet"
+        media="screen, projection"
+        href="/firebaseui-bacchanalia.css"
+      />
       <link rel="stylesheet" media="screen, projection" href="/index.css" />
+      <img src="/images/logo.svg" className="sisu-logo" />
       <FirebaseAuth />
     </div>
   );
