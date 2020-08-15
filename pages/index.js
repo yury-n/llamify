@@ -45,7 +45,7 @@ const Index = () => {
           console.log({ data });
           setTeamState({
             isFetched: true,
-            data: data.team,
+            data,
           });
         });
     }
@@ -61,7 +61,7 @@ const Index = () => {
   const startTeam = () => {
     firestore
       .doc(`/teams/${user.id}/`)
-      .set({ team: { name: teamNameInput.current.value } });
+      .set({ name: teamNameInput.current.value });
   };
 
   console.log(">>>", `/teams/${user.id}/team/name`);
@@ -74,10 +74,7 @@ const Index = () => {
         <StickyBar
           teamName={teamState.data?.name}
           onTeamEditSubmit={({ teamName }) => {
-            firebase
-              .database()
-              .ref()
-              .update({ [`/teams/${user.id}/team/name`]: teamName });
+            firestore.doc(`/teams/${user.id}/`).set({ name: teamName });
           }}
         />
         <div className="sisu-form">
