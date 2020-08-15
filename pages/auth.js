@@ -1,22 +1,20 @@
 import FirebaseAuth from "../components/FirebaseAuth";
+import Head from "./_head";
 
 const Auth = () => {
   return (
-    <div className="sisu-page">
-      <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&amp;display=swap"
-        rel="stylesheet"
-      ></link>
-      <link rel="stylesheet" media="screen, projection" href="/reset.css" />
+    <>
+      <Head />
       <link
         rel="stylesheet"
         media="screen, projection"
         href="/firebaseui-bacchanalia.css"
       />
-      <link rel="stylesheet" media="screen, projection" href="/index.css" />
-      <img src="/images/logo.svg" className="sisu-logo" />
-      <FirebaseAuth />
-    </div>
+      <div className="sisu-page">
+        <img src="/images/logo.svg" className="sisu-logo" />
+        <FirebaseAuth />
+      </div>
+    </>
   );
 };
 
