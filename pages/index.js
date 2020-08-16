@@ -8,6 +8,7 @@ import "firebase/database";
 import Head from "./_head";
 import { useEffect, useState } from "react";
 import initFirebase from "../utils/auth/initFirebase";
+import PostModal from "../components/Modals/PostModal";
 
 /*
 
@@ -27,6 +28,7 @@ const firestore = firebase.firestore();
 const Index = () => {
   const router = useRouter();
   const { user, isUserFetched } = useUser();
+  const [openModal, setOpenModal] = useState(false);
   const [teamState, setTeamState] = useState({
     isFetched: false,
     name: null,
@@ -34,6 +36,10 @@ const Index = () => {
   });
   const nameInput = useRef(null);
   const teamNameInput = useRef(null);
+
+  setTimeout(() => {
+    setOpenModal(true);
+  }, 3000);
 
   useEffect(() => {
     if (user) {
@@ -77,6 +83,12 @@ const Index = () => {
             firestore.doc(`/teams/${user.id}/`).set({ name: teamName });
           }}
         />
+        {openModal && (
+          <PostModal
+            image="https://source.unsplash.com/random?6"
+            description="This wonderfull view I had when I visited Croatia with my team of frontend and backend developers this autumn."
+          />
+        )}
         <div className="sisu-form">
           <div className="form-group">
             <label htmlFor="teamName" className="label">

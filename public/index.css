@@ -398,6 +398,8 @@ button:active {
   box-shadow: rgba(0, 0, 0, 0.18) 0px 6px 20px 0px;
   border-radius: 32px;
   background: white;
+  max-width: 660px;
+  max-height: 730px;
 }
 
 .modal-x {
