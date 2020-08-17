@@ -11,6 +11,8 @@ import initFirebase from "../utils/auth/initFirebase";
 import PostModal from "../components/Modals/PostModal";
 import StartTeamForm from "../components/StartTeamForm";
 import NewPostsToggle from "../components/NewPostsToggle";
+import HumanEditModal from "../components/Modals/HumanEditModal";
+import Human from "../components/Human";
 
 /*
 
@@ -33,11 +35,14 @@ const Index = () => {
   const router = useRouter();
   const { user, isUserFetched } = useUser();
   const [timeframe, setTimeframe] = useState(null);
+  const [searchString, setSearchString] = useState();
   const [openModal] = useState(false);
   const [teamState, setTeamState] = useState({
     isFetched: false,
-    teamName: null,
-    teamMembers: [],
+    data: {
+      teamName: null,
+      teamMembers: [],
+    },
   });
 
   useEffect(() => {
@@ -64,10 +69,31 @@ const Index = () => {
   }
 
   const startTeam = ({ name, teamName }) => {
-    firestore.doc(`/teams/${user.id}`).set({
+    const teamData = {
       teamName,
-      members: {
-        [`${user.id}`]: { name },
+      teamMembers: {
+        [`${user.id}`]: { id: user.id, name },
+      },
+    };
+    firestore.doc(`/teams/${user.id}`).set(teamData);
+    setTeamState({
+      isFetched: true,
+      data: teamData,
+    });
+  };
+
+  const setName = ({ name }) => {
+    firestore.doc(`/teams/${user.id}`).update({
+      [`teamMembers.${user.id}.name`]: name,
+    });
+    setTeamState({
+      isFetched: true,
+      data: {
+        ...teamState.data,
+        teamMembers: {
+          ...teamState.data.teamMembers,
+          [`${user.id}`]: { ...teamState.data.teamMembers[user.id], name },
+        },
       },
     });
   };
@@ -75,6 +101,13 @@ const Index = () => {
   const showStartTeamForm = teamState.isFetched && !teamState.data;
   const showTeamDirectoty = teamState.isFetched && teamState.data;
 
+  const teamMembersArray = [];
+  if (teamState.data?.teamMembers) {
+    Object.keys(teamState.data.teamMembers).forEach((key) => {
+      teamMembersArray.push(teamState.data.teamMembers[key]);
+    });
+  }
+  console.log(teamMembersArray);
   return (
     <>
       <Head />
@@ -109,12 +142,21 @@ const Index = () => {
                 autoComplete="off"
                 spellCheck={false}
                 placeholder="Search by name"
+                onChange={(e) => setSearchString(e.target.value)}
               />
             </div>
             <NewPostsToggle
               timeframe={timeframe}
               onSetTimeframe={setTimeframe}
             />
+            {teamMembersArray.map((member) => (
+              <Human
+                key={user.id}
+                human={member}
+                isOwner={member.id === user.id}
+                onSetName={setName}
+              />
+            ))}
           </div>
         )}
       </div>

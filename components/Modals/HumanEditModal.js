@@ -1,22 +1,22 @@
 import { useState } from "react";
 import Modal from "./Modal";
 
-const TeamEditModal = ({
-  teamName: teamNameProp,
+const HumanEditModal = ({
+  name: nameProp,
   onSubmit: onSubmitProp,
   onClose,
 }) => {
-  const [teamName, setTeamName] = useState(teamNameProp);
+  const [name, setName] = useState(nameProp);
   const onSubmit = (e) => {
     onSubmitProp({
-      teamName,
+      name,
     });
     e.preventDefault();
   };
   return (
     <Modal onClose={onClose}>
       <form className="new-team form" onSubmit={onSubmit}>
-        <div className="modal-title">Edit Team</div>
+        <div className="modal-title">Edit</div>
         <div className="form-group">
           <label htmlFor="email" className="label">
             Name
@@ -24,8 +24,11 @@ const TeamEditModal = ({
           <input
             className="input"
             type="text"
-            value={teamName}
-            onChange={(e) => setTeamName(e.target.value)}
+            value={name}
+            autoFocus={true}
+            autoComplete="false"
+            spellCheck={false}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
         <div className="form-buttons buttons">
@@ -45,4 +48,4 @@ const TeamEditModal = ({
   );
 };
 
-export default TeamEditModal;
+export default HumanEditModal;

@@ -47,11 +47,16 @@
   margin-bottom: 40px;
 }
 
+.name-wrapper {
+  pointer-events: none;
+}
+
 .owner-name-wrapper {
   position: relative;
   display: flex;
   align-items: center;
   cursor: pointer;
+  pointer-events: all;
 }
 
 .owner-name-wrapper {
@@ -85,7 +90,7 @@
 .human-has-updates {
   position: absolute;
   left: -40px;
-  top: 12px;
+  top: 5px;
   width: 7px;
   height: 24px;
   border-radius: 0 6px 6px 0;
