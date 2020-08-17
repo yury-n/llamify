@@ -1,9 +1,11 @@
 import { useUser } from "../utils/auth/useUser";
 import { useState } from "react";
 import TeamEditModal from "./Modals/TeamEditModal";
+import InviteModal from "./Modals/InviteModal";
 
-const StickyBar = ({ teamName, onTeamEditSubmit }) => {
+const StickyBar = ({ teamId, teamName, onTeamEditSubmit }) => {
   const [showTeamEditModal, setShowTeamEditModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const { logout } = useUser();
   return (
     <>
@@ -26,12 +28,15 @@ const StickyBar = ({ teamName, onTeamEditSubmit }) => {
               Log out
             </span>
           </button>
-          {false && (
-            <button className="button-wrapper">
+          {teamId && (
+            <button
+              className="button-wrapper"
+              onClick={() => setShowInviteModal(true)}
+            >
               <span
                 className="button button-hollow"
                 tabIndex="-1"
-                style="width: 60px;"
+                style={{ width: 60 }}
               >
                 Invite
               </span>
@@ -42,8 +47,17 @@ const StickyBar = ({ teamName, onTeamEditSubmit }) => {
       {showTeamEditModal && (
         <TeamEditModal
           teamName={teamName}
-          onSubmit={onTeamEditSubmit}
+          onSubmit={(payload) => {
+            onTeamEditSubmit(payload);
+            setShowTeamEditModal(false);
+          }}
           onClose={() => setShowTeamEditModal(false)}
+        />
+      )}
+      {showInviteModal && (
+        <InviteModal
+          teamId={teamId}
+          onClose={() => setShowInviteModal(false)}
         />
       )}
     </>

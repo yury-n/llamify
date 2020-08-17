@@ -11,7 +11,7 @@ export const HeadComp = (props) => {
         rel="stylesheet"
       ></link>
       <link rel="stylesheet" media="screen, projection" href="/reset.css" />
-      <link rel="stylesheet" media="screen, projection" href="/index.css" />
+      <link rel="stylesheet" media="screen, projection" href="/shared.css" />
     </Head>
   );
 };

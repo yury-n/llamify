@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import c from "classnames";
 import { useRouter } from "next/router";
 import { useUser } from "../utils/auth/useUser";
 import StickyBar from "../components/StickyBar";
@@ -9,6 +9,8 @@ import Head from "./_head";
 import { useEffect, useState } from "react";
 import initFirebase from "../utils/auth/initFirebase";
 import PostModal from "../components/Modals/PostModal";
+import StartTeamForm from "../components/StartTeamForm";
+import NewPostsToggle from "../components/NewPostsToggle";
 
 /*
 
@@ -16,6 +18,8 @@ creator:
 /teams/user_id/team/name
 /teams/user_id/team/members/
 /teams/user_id/team/members/user_id/posts
+
+/team_member_posts/team_id/user_id/
 
 member:
 /teams/user_id/team_id/
@@ -28,18 +32,13 @@ const firestore = firebase.firestore();
 const Index = () => {
   const router = useRouter();
   const { user, isUserFetched } = useUser();
-  const [openModal, setOpenModal] = useState(false);
+  const [timeframe, setTimeframe] = useState(null);
+  const [openModal] = useState(false);
   const [teamState, setTeamState] = useState({
     isFetched: false,
-    name: null,
-    members: [],
+    teamName: null,
+    teamMembers: [],
   });
-  const nameInput = useRef(null);
-  const teamNameInput = useRef(null);
-
-  setTimeout(() => {
-    setOpenModal(true);
-  }, 3000);
 
   useEffect(() => {
     if (user) {
@@ -64,23 +63,32 @@ const Index = () => {
     return null;
   }
 
-  const startTeam = () => {
-    firestore
-      .doc(`/teams/${user.id}/`)
-      .set({ name: teamNameInput.current.value });
+  const startTeam = ({ name, teamName }) => {
+    firestore.doc(`/teams/${user.id}`).set({
+      teamName,
+      members: {
+        [`${user.id}`]: { name },
+      },
+    });
   };
 
-  console.log(">>>", `/teams/${user.id}/team/name`);
+  const showStartTeamForm = teamState.isFetched && !teamState.data;
+  const showTeamDirectoty = teamState.isFetched && teamState.data;
 
   return (
     <>
       <Head />
       <link rel="stylesheet" media="screen, projection" href="/home.css" />
-      <div className="home-page home-sisu-page">
+      <div className={c("home-page", showStartTeamForm && "home-sisu-page")}>
         <StickyBar
-          teamName={teamState.data?.name}
+          teamName={teamState.data?.teamName}
+          teamId={teamState.data?.teamId || user.id}
           onTeamEditSubmit={({ teamName }) => {
-            firestore.doc(`/teams/${user.id}/`).set({ name: teamName });
+            setTeamState({
+              ...teamState,
+              data: { ...teamState.data, teamName },
+            });
+            firestore.doc(`/teams/${user.id}/`).update({ teamName });
           }}
         />
         {openModal && (
@@ -89,42 +97,26 @@ const Index = () => {
             description="This wonderfull view I had when I visited Croatia with my team of frontend and backend developers this autumn."
           />
         )}
-        <div className="sisu-form">
-          <div className="form-group">
-            <label htmlFor="teamName" className="label">
-              Team Name
-            </label>
-            <input
-              id="teamName"
-              ref={teamNameInput}
-              className="input"
-              type="text"
-              autoComplete="off"
-              spellCheck="false"
-              autoFocus={true}
+        {showStartTeamForm && <StartTeamForm onStartTeam={startTeam} />}
+        {showTeamDirectoty && (
+          <div className="directory">
+            <div className="input-wrapper input-search-wrapper">
+              <img src="/icons/magnifying_glass.svg" />
+              <input
+                className="input input-search"
+                id="email"
+                type="text"
+                autoComplete="off"
+                spellCheck={false}
+                placeholder="Search by name"
+              />
+            </div>
+            <NewPostsToggle
+              timeframe={timeframe}
+              onSetTimeframe={setTimeframe}
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="name" className="label">
-              Your Name
-            </label>
-            <input
-              id="name"
-              ref={nameInput}
-              className="input"
-              type="text"
-              autoComplete="off"
-              spellCheck="false"
-            />
-          </div>
-          <div className="form-buttons buttons">
-            <button className="button-wrapper" onClick={() => startTeam()}>
-              <span className="button button-primary" tabIndex="-1">
-                Start
-              </span>
-            </button>
-          </div>
-        </div>
+        )}
       </div>
     </>
   );
