@@ -30,6 +30,10 @@ textarea,
   background: linear-gradient(0deg, white, #e6eeff);
 }
 
+.team-logo-form-wrapper {
+  display: flex;
+}
+
 .home-page {
   padding-top: 90px;
 }
@@ -68,6 +72,15 @@ textarea,
   margin-bottom: 40px;
   position: relative;
   left: -5px;
+}
+
+.home-logo {
+  position: fixed;
+  width: 45px;
+  left: 50%;
+  margin-left: -22.5px;
+  top: 19px;
+  z-index: 1000;
 }
 
 ::selection {
@@ -204,6 +217,29 @@ button:active {
   left: auto;
   right: 4px;
   background-color: var(--primary-color);
+}
+
+.file-button-wrapper {
+  position: relative;
+}
+
+.file-input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.file-input-label {
+  position: absolute !important;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  z-index: 1;
 }
 
 .button-wrapper,
@@ -368,10 +404,8 @@ button:active {
 }
 
 .team-logo {
-  width: 32px;
   height: 32px;
   margin-right: 12px;
-  background-size: cover;
 }
 
 .team-logo-form-preview {
@@ -414,7 +448,7 @@ button:active {
   position: absolute;
   top: -30px;
   right: -50px;
-  width: 35px;
+  width: 30px;
   cursor: pointer;
 }
 

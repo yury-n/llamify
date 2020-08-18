@@ -119,6 +119,14 @@ const Index = () => {
     });
   };
 
+  const updateTeam = ({ teamId, teamName, teamLogo }) => {
+    setTeamState({
+      ...teamState,
+      data: { ...teamState.data, teamName, teamLogo },
+    });
+    firestore.doc(`/teams/${teamId}/`).update({ teamName, teamLogo });
+  };
+
   const showStartTeamForm =
     teamState.isFetched && !teamState.data && !teamIdFromURL;
   const showJoinTeamForm =
@@ -154,13 +162,8 @@ const Index = () => {
           <StickyBar
             teamName={teamState.data?.teamName}
             teamId={teamState.data?.teamId}
-            onTeamEditSubmit={({ teamName }) => {
-              setTeamState({
-                ...teamState,
-                data: { ...teamState.data, teamName },
-              });
-              firestore.doc(`/teams/${user.id}/`).update({ teamName });
-            }}
+            teamLogo={teamState.data?.teamLogo}
+            onTeamEditSubmit={updateTeam}
           />
         )}
         {openModal && (

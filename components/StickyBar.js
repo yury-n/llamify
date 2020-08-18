@@ -3,12 +3,13 @@ import { useState } from "react";
 import TeamEditModal from "./Modals/TeamEditModal";
 import InviteModal from "./Modals/InviteModal";
 
-const StickyBar = ({ teamId, teamName, onTeamEditSubmit }) => {
+const StickyBar = ({ teamId, teamName, teamLogo, onTeamEditSubmit }) => {
   const [showTeamEditModal, setShowTeamEditModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const { logout } = useUser();
   return (
     <>
+      <img src="/images/logo.svg" className="home-logo" />
       <div className="sticky-bar">
         <div
           className="owner-name-wrapper team-owner-name-wrapper"
@@ -16,8 +17,9 @@ const StickyBar = ({ teamId, teamName, onTeamEditSubmit }) => {
             setShowTeamEditModal(true);
           }}
         >
+          {teamLogo && <img className="team-logo" src={teamLogo} />}
           <div className="team-name">{teamName}</div>
-          <img src="/icons/edit.svg" />
+          <img className="icon" src="/icons/edit.svg" />
         </div>
         <div className="sticky-bar-buttons buttons">
           <button className="button-wrapper" onClick={() => logout()}>
@@ -46,6 +48,7 @@ const StickyBar = ({ teamId, teamName, onTeamEditSubmit }) => {
       </div>
       {showTeamEditModal && (
         <TeamEditModal
+          teamId={teamId}
           teamName={teamName}
           onSubmit={(payload) => {
             onTeamEditSubmit(payload);

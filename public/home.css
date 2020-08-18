@@ -44,11 +44,24 @@
   position: relative;
   font-weight: 700;
   font-size: 33px;
-  margin-bottom: 40px;
 }
 
 .name-wrapper {
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.avatar {
+  width: 39px;
+  height: 39px;
+  border-radius: 100%;
+  border: 3px solid white;
+  box-shadow: 0 0 0px 1px #a7a7a7;
+  margin-right: 12px;
+  background: white;
+  background-size: cover;
 }
 
 .owner-name-wrapper {
@@ -71,29 +84,29 @@
   margin-bottom: 0;
 }
 
-.owner-name-wrapper img {
+.owner-name-wrapper .icon {
   opacity: 0;
   width: 25px;
   margin-left: 10px;
   transition: opacity 300ms ease;
 }
 
-.team-owner-name-wrapper img {
+.team-owner-name-wrapper .icon {
   width: 20px;
   margin-left: 8px;
 }
 
-.owner-name-wrapper:hover img {
+.owner-name-wrapper:hover .icon {
   opacity: 1;
 }
 
 .human-has-updates {
   position: absolute;
-  left: -40px;
-  top: 5px;
-  width: 7px;
-  height: 24px;
-  border-radius: 0 6px 6px 0;
+  left: -85px;
+  top: 10px;
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
 }
 
 .new-posts-toggle {
