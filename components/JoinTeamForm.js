@@ -1,33 +1,17 @@
 import { useRef } from "react";
 
-const StartTeamForm = ({ onStartTeam }) => {
+const JoinTeamForm = ({ onJoinTeam }) => {
   const nameInput = useRef(null);
-  const teamNameInput = useRef(null);
   const submitButton = useRef(null);
   const onSubmit = (e) => {
     submitButton.current.childNodes[0].classList.add("busy");
-    onStartTeam({
-      teamName: teamNameInput.current.value,
+    onJoinTeam({
       name: nameInput.current.value,
     });
     e.preventDefault();
   };
   return (
     <form className="sisu-form" onSubmit={onSubmit}>
-      <div className="form-group">
-        <label htmlFor="teamName" className="label">
-          Team Name
-        </label>
-        <input
-          id="teamName"
-          ref={teamNameInput}
-          className="input"
-          type="text"
-          autoComplete="off"
-          spellCheck="false"
-          autoFocus={true}
-        />
-      </div>
       <div className="form-group">
         <label htmlFor="name" className="label">
           Your Name
@@ -39,6 +23,7 @@ const StartTeamForm = ({ onStartTeam }) => {
           type="text"
           autoComplete="off"
           spellCheck="false"
+          autoFocus={true}
         />
       </div>
       <div className="form-buttons buttons">
@@ -56,4 +41,4 @@ const StartTeamForm = ({ onStartTeam }) => {
   );
 };
 
-export default StartTeamForm;
+export default JoinTeamForm;

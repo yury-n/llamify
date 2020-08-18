@@ -13,7 +13,7 @@ const InviteModal = ({ teamId, onClose }) => {
         />
         <div class="form-buttons buttons">
           <button class="button-wrapper" onClick={onClose}>
-            <span class="button button-primary" tabindex="-1">
+            <span class="button button-primary" tabIndex="-1">
               Close
             </span>
           </button>

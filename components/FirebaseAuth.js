@@ -36,6 +36,10 @@ const FirebaseAuth = () => {
   const [renderAuth, setRenderAuth] = useState(false);
   useEffect(() => {
     if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const team = urlParams.get("team");
+      let redirectTo = team ? `/?team=${team}` : "/";
+      firebaseAuthConfig.signInSuccessUrl = redirectTo;
       setRenderAuth(true);
     }
   }, []);
