@@ -8,12 +8,15 @@ let imageFile;
 const TeamEditModal = ({
   teamId,
   teamName: teamNameProp,
+  teamLogo: teamLogoProp,
   onSubmit: onSubmitProp,
   onClose,
 }) => {
   const submitButton = useRef(null);
   const [teamName, setTeamName] = useState(teamNameProp);
-  const [imagePreview, setImagePreview] = useState();
+  const [imagePreview, setImagePreview] = useState(
+    teamLogoProp ? { src: teamLogoProp } : null
+  );
 
   const onSubmit = (e) => {
     submitButton.current.childNodes[0].classList.add("busy");

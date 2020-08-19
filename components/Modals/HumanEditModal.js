@@ -3,13 +3,16 @@ import Modal from "./Modal";
 
 const HumanEditModal = ({
   name: nameProp,
-  onSubmit: onSubmitProp,
+  role: roleProp,
+  onHumanEditSubmit,
   onClose,
 }) => {
   const [name, setName] = useState(nameProp);
+  const [role, setRole] = useState(roleProp);
   const onSubmit = (e) => {
-    onSubmitProp({
+    onHumanEditSubmit({
       name,
+      role,
     });
     e.preventDefault();
   };
@@ -18,10 +21,11 @@ const HumanEditModal = ({
       <form className="new-team form" onSubmit={onSubmit}>
         <div className="modal-title">Edit</div>
         <div className="form-group">
-          <label htmlFor="email" className="label">
+          <label htmlFor="name" className="label">
             Name
           </label>
           <input
+            id="name"
             className="input"
             type="text"
             value={name}
@@ -29,6 +33,21 @@ const HumanEditModal = ({
             autoComplete="false"
             spellCheck={false}
             onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="role" className="label">
+            Role
+          </label>
+          <input
+            id="role"
+            className="input"
+            type="text"
+            value={role}
+            autoFocus={true}
+            autoComplete="false"
+            spellCheck={false}
+            onChange={(e) => setRole(e.target.value)}
           />
         </div>
         <div className="form-buttons buttons">

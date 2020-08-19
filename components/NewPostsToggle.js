@@ -1,19 +1,22 @@
 import c from "classnames";
 
 const NewPostsToggle = ({ timeframe, onSetTimeframe }) => {
+  const toggle = () => {
+    if (timeframe) {
+      onSetTimeframe(null);
+    } else {
+      onSetTimeframe("week");
+    }
+  };
   return (
     <div className="new-posts-toggle">
       <div
         className={c("toggle-control", timeframe && "active")}
-        onClick={() => {
-          if (timeframe) {
-            onSetTimeframe(null);
-          } else {
-            onSetTimeframe("week");
-          }
-        }}
+        onClick={toggle}
       ></div>
-      <div className="label-inline">Show only new posts</div>
+      <div className="label-inline" onClick={toggle}>
+        Show only new posts
+      </div>
       <button
         className={c("timeframe-tag", timeframe === "week" && "active")}
         onClick={() => onSetTimeframe("week")}

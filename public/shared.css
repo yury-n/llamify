@@ -80,7 +80,7 @@ textarea,
   left: 50%;
   margin-left: -22.5px;
   top: 19px;
-  z-index: 1000;
+  z-index: 100;
 }
 
 ::selection {
@@ -405,7 +405,8 @@ button:active {
 
 .team-logo {
   height: 32px;
-  margin-right: 12px;
+  margin-right: 14px;
+  margin-left: 4px;
 }
 
 .team-logo-form-preview {

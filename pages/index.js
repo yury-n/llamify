@@ -100,12 +100,13 @@ const Index = () => {
       });
   };
 
-  const setName = ({ name }) => {
+  const updateHuman = ({ name, role }) => {
     if (!teamState.data?.teamId) {
       return;
     }
     firestore.doc(`/teams/${teamState.data?.teamId}`).update({
       [`teamMembers.${user.id}.name`]: name,
+      [`teamMembers.${user.id}.role`]: role,
     });
     setTeamState({
       isFetched: true,
@@ -113,7 +114,11 @@ const Index = () => {
         ...teamState.data,
         teamMembers: {
           ...teamState.data.teamMembers,
-          [`${user.id}`]: { ...teamState.data.teamMembers[user.id], name },
+          [`${user.id}`]: {
+            ...teamState.data.teamMembers[user.id],
+            name,
+            role,
+          },
         },
       },
     });
@@ -197,7 +202,7 @@ const Index = () => {
                 key={member.id}
                 human={member}
                 isOwner={member.id === user.id}
-                onSetName={setName}
+                onHumanEditSubmit={updateHuman}
               />
             ))}
           </div>

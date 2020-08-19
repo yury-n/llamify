@@ -50,6 +50,7 @@ const StickyBar = ({ teamId, teamName, teamLogo, onTeamEditSubmit }) => {
         <TeamEditModal
           teamId={teamId}
           teamName={teamName}
+          teamLogo={teamLogo}
           onSubmit={(payload) => {
             onTeamEditSubmit(payload);
             setShowTeamEditModal(false);
