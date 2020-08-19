@@ -12,8 +12,9 @@ const Human = ({ human, isOwner, onHumanEditSubmit }) => {
           <div
             className="avatar"
             style={{
-              backgroundImage:
-                "url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/37abb01e-9eb0-4ceb-8e7f-c247caed05a6/d96i0vx-888f4459-94d0-4c24-882f-0e72900baa0e.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvMzdhYmIwMWUtOWViMC00Y2ViLThlN2YtYzI0N2NhZWQwNWE2XC9kOTZpMHZ4LTg4OGY0NDU5LTk0ZDAtNGMyNC04ODJmLTBlNzI5MDBiYWEwZS5qcGcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.89-tSG7QtvR9u8wk9S_jZ0O2lBgnrf3imxIFjFpcu7I)",
+              backgroundImage: human.avatar
+                ? `url(${human.avatar})`
+                : undefined,
             }}
             onClick={openModal}
           ></div>
@@ -40,8 +41,10 @@ const Human = ({ human, isOwner, onHumanEditSubmit }) => {
       </div>
       {showEditModal && (
         <HumanEditModal
+          id={human.id}
           name={human.name}
           role={human.role}
+          avatar={human.avatar}
           onHumanEditSubmit={(payload) => {
             onHumanEditSubmit(payload);
             setShowEditModal(false);

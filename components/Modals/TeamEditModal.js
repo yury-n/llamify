@@ -1,9 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Modal from "./Modal";
-import firebase from "firebase/app";
-import "firebase/storage";
-
-let imageFile;
+import useImageUpload from "../../utils/hooks/useImageUpload";
 
 const TeamEditModal = ({
   teamId,
@@ -14,60 +11,23 @@ const TeamEditModal = ({
 }) => {
   const submitButton = useRef(null);
   const [teamName, setTeamName] = useState(teamNameProp);
-  const [imagePreview, setImagePreview] = useState(
-    teamLogoProp ? { src: teamLogoProp } : null
-  );
-
-  useEffect(() => {
-    imageFile = null;
-  }, []);
+  const {
+    imageFile,
+    imagePreview,
+    onFileChange,
+    uploadToFirebase,
+  } = useImageUpload(teamLogoProp, `teamLogos/${teamId}`);
 
   const onSubmit = (e) => {
     submitButton.current.childNodes[0].classList.add("busy");
     if (imageFile) {
-      var reader = new FileReader();
-      reader.onload = function (readerEvent) {
-        var image = new Image();
-        image.onload = function () {
-          // Resize the image
-
-          var canvas = document.createElement("canvas"),
-            max_size = 50,
-            width = image.width,
-            height = image.height;
-          if (width > height) {
-            if (width > max_size) {
-              height *= max_size / width;
-              width = max_size;
-            }
-          } else {
-            if (height > max_size) {
-              width *= max_size / height;
-              height = max_size;
-            }
-          }
-          canvas.width = width;
-          canvas.height = height;
-          canvas.getContext("2d").drawImage(image, 0, 0, width, height);
-          canvas.toBlob((blob) => {
-            const storageRef = firebase.storage().ref();
-            const logoFileRef = storageRef.child(
-              `teamLogos/${teamId}.${imagePreview.type}`
-            );
-            logoFileRef.put(blob).then(() => {
-              logoFileRef.getDownloadURL().then((url) => {
-                onSubmitProp({
-                  teamId,
-                  teamName,
-                  teamLogo: url,
-                });
-              });
-            });
-          });
-        };
-        image.src = readerEvent.target.result;
-      };
-      reader.readAsDataURL(imageFile);
+      uploadToFirebase((url) => {
+        onSubmitProp({
+          teamId,
+          teamName,
+          teamLogo: url,
+        });
+      });
     } else {
       onSubmitProp({
         teamId,
@@ -75,17 +35,6 @@ const TeamEditModal = ({
       });
     }
     e.preventDefault();
-  };
-
-  const onFileChange = (e) => {
-    imageFile = e.target.files[0];
-    const objectURL = URL.createObjectURL(imageFile);
-    setImagePreview({
-      src: objectURL,
-      type: imageFile.type.split("/")[1],
-    });
-    e.preventDefault();
-    e.stopPropagation();
   };
 
   return (
@@ -107,9 +56,12 @@ const TeamEditModal = ({
           <label htmlFor="email" className="label">
             Logo
           </label>
-          <div className="team-logo-form-wrapper">
+          <div className="image-field-form-wrapper">
             {imagePreview && (
-              <img className="team-logo-form-preview" src={imagePreview.src} />
+              <img
+                className="image-field-form-preview"
+                src={imagePreview.src}
+              />
             )}
             <button className="button-wrapper file-button-wrapper">
               <input

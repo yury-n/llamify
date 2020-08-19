@@ -30,7 +30,7 @@ textarea,
   background: linear-gradient(0deg, white, #e6eeff);
 }
 
-.team-logo-form-wrapper {
+.image-field-form-wrapper {
   display: flex;
 }
 
@@ -409,7 +409,7 @@ button:active {
   margin-left: 4px;
 }
 
-.team-logo-form-preview {
+.image-field-form-preview {
   width: 42px;
   height: 42px;
   margin-right: 12px;
