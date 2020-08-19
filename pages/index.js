@@ -125,11 +125,15 @@ const Index = () => {
   };
 
   const updateTeam = ({ teamId, teamName, teamLogo }) => {
+    const updates = { teamName };
+    if (teamLogo) {
+      updates.teamLogo = teamLogo;
+    }
     setTeamState({
       ...teamState,
-      data: { ...teamState.data, teamName, teamLogo },
+      data: { ...teamState.data, ...updates },
     });
-    firestore.doc(`/teams/${teamId}/`).update({ teamName, teamLogo });
+    firestore.doc(`/teams/${teamId}/`).update(updates);
   };
 
   const showStartTeamForm =

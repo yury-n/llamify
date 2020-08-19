@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Modal from "./Modal";
 import firebase from "firebase/app";
 import "firebase/storage";
@@ -18,22 +18,56 @@ const TeamEditModal = ({
     teamLogoProp ? { src: teamLogoProp } : null
   );
 
+  useEffect(() => {
+    imageFile = null;
+  }, []);
+
   const onSubmit = (e) => {
     submitButton.current.childNodes[0].classList.add("busy");
-    if (imagePreview) {
-      const storageRef = firebase.storage().ref();
-      const logoFileRef = storageRef.child(
-        `teamLogos/${teamId}.${imagePreview.type}`
-      );
-      logoFileRef.put(imageFile).then(() => {
-        logoFileRef.getDownloadURL().then((url) => {
-          onSubmitProp({
-            teamId,
-            teamName,
-            teamLogo: url,
+    if (imageFile) {
+      var reader = new FileReader();
+      reader.onload = function (readerEvent) {
+        var image = new Image();
+        image.onload = function () {
+          // Resize the image
+
+          var canvas = document.createElement("canvas"),
+            max_size = 50,
+            width = image.width,
+            height = image.height;
+          if (width > height) {
+            if (width > max_size) {
+              height *= max_size / width;
+              width = max_size;
+            }
+          } else {
+            if (height > max_size) {
+              width *= max_size / height;
+              height = max_size;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext("2d").drawImage(image, 0, 0, width, height);
+          canvas.toBlob((blob) => {
+            const storageRef = firebase.storage().ref();
+            const logoFileRef = storageRef.child(
+              `teamLogos/${teamId}.${imagePreview.type}`
+            );
+            logoFileRef.put(blob).then(() => {
+              logoFileRef.getDownloadURL().then((url) => {
+                onSubmitProp({
+                  teamId,
+                  teamName,
+                  teamLogo: url,
+                });
+              });
+            });
           });
-        });
-      });
+        };
+        image.src = readerEvent.target.result;
+      };
+      reader.readAsDataURL(imageFile);
     } else {
       onSubmitProp({
         teamId,
