@@ -176,6 +176,7 @@ const Index = () => {
       <div className={c("home-page", showForm && "home-sisu-page")}>
         {teamState.isFetched && (
           <StickyBar
+            isTeamEditable={user.id === teamState.data.teamId}
             teamName={teamState.data?.teamName}
             teamId={teamState.data?.teamId}
             teamLogo={teamState.data?.teamLogo}

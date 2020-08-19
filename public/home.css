@@ -88,8 +88,10 @@
   margin-bottom: 40px;
 }
 
-.team-owner-name-wrapper {
+.team-name-wrapper {
   margin-bottom: 0;
+  display: flex;
+  align-items: center;
 }
 
 .owner-name-wrapper .name {
@@ -103,7 +105,7 @@
   transition: opacity 300ms ease;
 }
 
-.team-owner-name-wrapper .icon {
+.team-name-wrapper .icon {
   width: 20px;
   margin-left: 8px;
 }

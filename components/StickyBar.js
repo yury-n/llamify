@@ -1,9 +1,16 @@
+import c from "classnames";
 import { useUser } from "../utils/auth/useUser";
 import { useState } from "react";
 import TeamEditModal from "./Modals/TeamEditModal";
 import InviteModal from "./Modals/InviteModal";
 
-const StickyBar = ({ teamId, teamName, teamLogo, onTeamEditSubmit }) => {
+const StickyBar = ({
+  teamId,
+  teamName,
+  teamLogo,
+  isTeamEditable,
+  onTeamEditSubmit,
+}) => {
   const [showTeamEditModal, setShowTeamEditModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const { logout } = useUser();
@@ -12,14 +19,17 @@ const StickyBar = ({ teamId, teamName, teamLogo, onTeamEditSubmit }) => {
       <img src="/images/logo.svg" className="home-logo" />
       <div className="sticky-bar">
         <div
-          className="owner-name-wrapper team-owner-name-wrapper"
+          className={c(
+            "team-name-wrapper",
+            isTeamEditable && "owner-name-wrapper"
+          )}
           onClick={() => {
-            setShowTeamEditModal(true);
+            isTeamEditable && setShowTeamEditModal(true);
           }}
         >
           {teamLogo && <img className="team-logo" src={teamLogo} />}
           <div className="team-name">{teamName}</div>
-          <img className="icon" src="/icons/edit.svg" />
+          {isTeamEditable && <img className="icon" src="/icons/edit.svg" />}
         </div>
         <div className="sticky-bar-buttons buttons">
           <button className="button-wrapper" onClick={() => logout()}>
