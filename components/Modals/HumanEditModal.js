@@ -10,11 +10,11 @@ const HumanEditModal = ({
   const [name, setName] = useState(nameProp);
   const [role, setRole] = useState(roleProp);
   const onSubmit = (e) => {
+    e.preventDefault();
     onHumanEditSubmit({
       name,
       role,
     });
-    e.preventDefault();
   };
   return (
     <Modal onClose={onClose}>

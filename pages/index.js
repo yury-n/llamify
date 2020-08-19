@@ -106,7 +106,7 @@ const Index = () => {
     }
     firestore.doc(`/teams/${teamState.data?.teamId}`).update({
       [`teamMembers.${user.id}.name`]: name,
-      [`teamMembers.${user.id}.role`]: role,
+      [`teamMembers.${user.id}.role`]: role || null,
     });
     setTeamState({
       isFetched: true,
@@ -151,6 +151,11 @@ const Index = () => {
     [(u) => u.name.toLowerCase()],
     ["asc"]
   );
+  // put yourself first
+  teamMembersArray = [
+    teamMembersArray.find((m) => m.id === user.id),
+    ...teamMembersArray.filter((m) => m.id !== user.id),
+  ];
 
   if (searchString) {
     teamMembersArray = teamMembersArray.filter((u) =>
