@@ -163,7 +163,7 @@ const Index = () => {
     ...teamMembersArray.filter((m) => m.id !== user.id),
   ];
 
-  if (searchString) {
+  if (searchString && searchString.length >= 2) {
     teamMembersArray = teamMembersArray.filter((u) =>
       u.name.toLowerCase().includes(searchString.toLowerCase())
     );
@@ -201,7 +201,7 @@ const Index = () => {
                 type="text"
                 autoComplete="off"
                 spellCheck={false}
-                placeholder="Search by name"
+                placeholder="Search by name or role"
                 onChange={(e) => setSearchString(e.target.value)}
               />
             </div>

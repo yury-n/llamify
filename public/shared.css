@@ -76,10 +76,10 @@ textarea,
 
 .home-logo {
   position: fixed;
-  width: 45px;
+  width: 48px;
   left: 50%;
-  margin-left: -22.5px;
-  top: 19px;
+  margin-left: -28px;
+  top: 18px;
   z-index: 100;
 }
 
@@ -286,6 +286,7 @@ button:active {
 .button.button-white {
   background: white;
   border-color: #dbdbdb;
+  box-shadow: 0px 3px 6px -1px hsl(0deg 0% 0% / 8%);
 }
 
 .button:not(.busy):not(.disabled):hover {
@@ -296,6 +297,43 @@ button:active {
   position: relative;
   top: 2px;
   box-shadow: none;
+}
+
+.icon-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 38px;
+  padding: 0 18px;
+}
+
+.icon-button.active {
+  border-color: #ae86fd;
+  background: #f4f1ff;
+  cursor: default;
+  box-shadow: none;
+  color: #7c3cfc;
+  pointer-events: none;
+}
+
+.icon-button img,
+.icon-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+.list-view-button {
+  margin-left: 14px;
+}
+
+.grid-view-button {
+  margin-left: 10px;
+}
+
+.grid-view-button .button,
+.list-view-button .button {
+  padding: 0 16px;
+  height: 36px;
 }
 
 .button-primary {
@@ -354,7 +392,7 @@ button:active {
   box-sizing: content-box;
   padding: 9px 20px;
   color: hsl(260, 93%, 35%);
-  box-shadow: 0px 3px 6px -1px hsla(0, 0%, 0%, 0.22);
+  box-shadow: 0px 3px 6px -1px hsl(0deg 0% 0% / 8%);
   background: #f9f9f9;
 }
 
@@ -393,6 +431,10 @@ button:active {
   justify-content: space-between;
   align-items: center;
   z-index: 10;
+}
+
+.sticky-bar-left-side {
+  display: flex;
 }
 
 .sticky-bar-buttons {

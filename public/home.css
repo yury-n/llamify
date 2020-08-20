@@ -89,9 +89,11 @@
 }
 
 .team-name-wrapper {
+  position: relative;
   margin-bottom: 0;
   display: flex;
   align-items: center;
+  padding-right: 28px;
 }
 
 .owner-name-wrapper .name {
@@ -106,8 +108,9 @@
 }
 
 .team-name-wrapper .icon {
+  position: absolute;
   width: 20px;
-  margin-left: 8px;
+  right: 0;
 }
 
 .owner-name-wrapper:hover .icon {
@@ -137,7 +140,7 @@
 }
 
 .timeframe-tag {
-  padding: 7px 18px;
+  padding: 8px 18px;
   border: 1px solid #dbdbdb;
   margin-left: 8px;
   font-size: 14px;
@@ -164,6 +167,7 @@
   background: #f4f1ff;
   cursor: default;
   box-shadow: none;
+  color: #7c3cfc;
 }
 
 .new-posts-toggle .toggle-control {
