@@ -46,10 +46,13 @@ const FirebaseAuth = () => {
   return (
     <div className="sisu-form">
       {renderAuth ? (
-        <StyledFirebaseAuth
-          uiConfig={firebaseAuthConfig}
-          firebaseAuth={firebase.auth()}
-        />
+        <>
+          <img src="/images/logo.svg" className="sisu-logo" />
+          <StyledFirebaseAuth
+            uiConfig={firebaseAuthConfig}
+            firebaseAuth={firebase.auth()}
+          />
+        </>
       ) : null}
     </div>
   );

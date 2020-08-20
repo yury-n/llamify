@@ -22,6 +22,7 @@ const Index = () => {
   const router = useRouter();
   const { user, isUserFetched } = useUser();
   const [timeframe, setTimeframe] = useState(null);
+  const [viewMode, setViewMode] = useState("list");
   const [searchString, setSearchString] = useState();
   const [openModal] = useState(false);
   const [teamState, setTeamState] = useState({
@@ -54,6 +55,11 @@ const Index = () => {
         });
       });
   };
+
+  useEffect(() => {
+    setViewMode(localStorage.getItem("app.viewMode") || "list");
+    setTimeframe(localStorage.getItem("app.timeframe") || null);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -138,6 +144,20 @@ const Index = () => {
     firestore.doc(`/teams/${teamId}/`).update(updates);
   };
 
+  const onSetViewMode = (viewMode) => {
+    setViewMode(viewMode);
+    localStorage.setItem("app.viewMode", viewMode);
+  };
+
+  const onSetTimeframe = (timeframe) => {
+    setTimeframe(timeframe);
+    if (timeframe) {
+      localStorage.setItem("app.timeframe", timeframe);
+    } else {
+      localStorage.removeItem("app.timeframe");
+    }
+  };
+
   const showStartTeamForm =
     teamState.isFetched && !teamState.data && !teamIdFromURL;
   const showJoinTeamForm =
@@ -181,6 +201,8 @@ const Index = () => {
             teamId={teamState.data?.teamId}
             teamLogo={teamState.data?.teamLogo}
             onTeamEditSubmit={updateTeam}
+            viewMode={viewMode}
+            onSetViewMode={onSetViewMode}
           />
         )}
         {openModal && (
@@ -193,21 +215,23 @@ const Index = () => {
         {showStartTeamForm && <StartTeamForm onStartTeam={startTeam} />}
         {showTeamDirectoty && (
           <div className="directory">
-            <div className="input-wrapper input-search-wrapper">
-              <img src="/icons/magnifying_glass.svg" />
-              <input
-                className="input input-search"
-                id="email"
-                type="text"
-                autoComplete="off"
-                spellCheck={false}
-                placeholder="Search by name or role"
-                onChange={(e) => setSearchString(e.target.value)}
-              />
-            </div>
+            {viewMode === "list" && (
+              <div className="input-wrapper input-search-wrapper">
+                <img src="/icons/magnifying_glass.svg" />
+                <input
+                  className="input input-search"
+                  id="email"
+                  type="text"
+                  autoComplete="off"
+                  spellCheck={false}
+                  placeholder="Search by name or role"
+                  onChange={(e) => setSearchString(e.target.value)}
+                />
+              </div>
+            )}
             <NewPostsToggle
               timeframe={timeframe}
-              onSetTimeframe={setTimeframe}
+              onSetTimeframe={onSetTimeframe}
             />
             {teamMembersArray.map((member) => (
               <Human

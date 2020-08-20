@@ -135,12 +135,12 @@
 }
 
 .new-posts-toggle .label-inline {
-  margin-right: 7px;
+  margin-right: 10px;
   cursor: pointer;
 }
 
 .timeframe-tag {
-  padding: 8px 18px;
+  padding: 7px 17px;
   border: 1px solid #dbdbdb;
   margin-left: 8px;
   font-size: 14px;
@@ -150,6 +150,10 @@
   top: -1px;
   transition: transform 200ms;
   box-shadow: 0px 1px 4px -1px hsla(0, 0%, 0%, 0.14);
+}
+
+.timeframe-tag + .timeframe-tag {
+  margin-left: 12px;
 }
 
 .timeframe-tag:not(.active):hover {
@@ -171,7 +175,7 @@
 }
 
 .new-posts-toggle .toggle-control {
-  margin-right: 12px;
+  margin-right: 14px;
 }
 
 .posts-stream {

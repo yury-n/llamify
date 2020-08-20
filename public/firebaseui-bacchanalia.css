@@ -1,3 +1,7 @@
+#firebaseui_container {
+  width: 100%;
+}
+
 .mdl-shadow--2dp {
   box-shadow: none;
   background: transparent;

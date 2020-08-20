@@ -17,6 +17,7 @@ textarea,
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .sisu-page::before {
@@ -63,12 +64,12 @@ textarea,
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   width: 350px;
 }
 
 .sisu-logo {
   width: 130px;
-  margin-top: 190px;
   margin-bottom: 40px;
   position: relative;
   left: -5px;
@@ -327,7 +328,7 @@ button:active {
 }
 
 .grid-view-button {
-  margin-left: 10px;
+  margin-left: 8px;
 }
 
 .grid-view-button .button,
@@ -408,7 +409,7 @@ button:active {
 }
 
 .buttons .button-wrapper + .button-wrapper {
-  margin-left: 10px;
+  margin-left: 8px;
 }
 
 .form-group {
@@ -431,6 +432,15 @@ button:active {
   justify-content: space-between;
   align-items: center;
   z-index: 10;
+}
+
+.sticky-bar .button-secondary,
+.sticky-bar .button-hollow {
+  transform: scale(0.9);
+}
+
+.sticky-bar .button-hollow:hover {
+  transform: scale(0.97) !important;
 }
 
 .sticky-bar-left-side {

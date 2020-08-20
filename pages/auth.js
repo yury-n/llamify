@@ -11,7 +11,6 @@ const Auth = () => {
         href="/firebaseui-bacchanalia.css"
       />
       <div className="sisu-page">
-        <img src="/images/logo.svg" className="sisu-logo" />
         <FirebaseAuth />
       </div>
     </>
