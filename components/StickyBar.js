@@ -22,6 +22,7 @@ const StickyBar = ({
       <button
         className="button-wrapper list-view-button"
         onClick={() => onSetViewMode("list")}
+        title="List View"
       >
         <span
           className={c(
@@ -46,6 +47,7 @@ const StickyBar = ({
       <button
         className="button-wrapper grid-view-button"
         onClick={() => onSetViewMode("grid")}
+        title="Grid View"
       >
         <span
           className={c(
@@ -92,7 +94,7 @@ const StickyBar = ({
         </div>
         <div className="sticky-bar-buttons buttons">
           {teamId && (
-            <button className="button-wrapper" onClick={() => logout()}>
+            <button className="button-wrapper" title="Notifcations">
               <span
                 className="button icon-button button-secondary button-white"
                 tabIndex="-1"
@@ -104,7 +106,11 @@ const StickyBar = ({
               </span>
             </button>
           )}
-          <button className="button-wrapper" onClick={() => logout()}>
+          <button
+            className="button-wrapper"
+            onClick={() => logout()}
+            title="Logout"
+          >
             <span
               className="button icon-button button-secondary button-white"
               tabIndex="-1"
@@ -119,6 +125,7 @@ const StickyBar = ({
             <button
               className="button-wrapper"
               onClick={() => setShowInviteModal(true)}
+              title="Invite to join the team"
             >
               <span
                 className="button button-hollow"
