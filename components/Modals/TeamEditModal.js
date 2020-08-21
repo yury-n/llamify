@@ -16,12 +16,12 @@ const TeamEditModal = ({
     imagePreview,
     onFileChange,
     uploadToFirebase,
-  } = useImageUpload(teamLogoProp, `teamLogos/${teamId}`);
+  } = useImageUpload(teamLogoProp);
 
   const onSubmit = (e) => {
     submitButton.current.childNodes[0].classList.add("busy");
     if (imageFile) {
-      uploadToFirebase((url) => {
+      uploadToFirebase(`teamLogos/${teamId}`, 64, (url) => {
         onSubmitProp({
           teamId,
           teamName,

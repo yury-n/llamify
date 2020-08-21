@@ -198,6 +198,10 @@
   transition: transform 300ms;
 }
 
+.post-thumb-empty {
+  pointer-events: none;
+}
+
 .post-thumb:hover {
   transform: scale(1.05);
 }
@@ -213,6 +217,7 @@
   left: 8px;
   right: 8px;
   background-size: cover;
+  background-position: center;
   border-radius: 8px;
   transition: opacity 500ms;
 }
@@ -287,11 +292,6 @@
   max-height: 120px;
 }
 
-.post-thumb:hover .post-thumb-description {
-  white-space: normal;
-  height: auto;
-}
-
 .post-thumb:hover .post-thumb-remove {
   opacity: 1;
 }
@@ -322,10 +322,10 @@
   height: 600px;
   border-radius: 16px;
   background-size: cover;
+  background-position: center;
 }
 
 .post-image-dropzone {
-  width: 600px;
   height: 600px;
   border-radius: 16px;
   border: 2px dashed #afafaf;
@@ -346,6 +346,7 @@
 
 .post-image.busy {
   animation: pulse 2s infinite;
+  cursor: progress;
 }
 
 .post-description {
@@ -358,4 +359,6 @@
 .description-textarea {
   margin-top: 20px;
   width: 100%;
+  height: 100px;
+  flex-shrink: 0;
 }

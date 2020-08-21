@@ -393,7 +393,7 @@ button:active {
   box-sizing: content-box;
   padding: 9px 20px;
   color: hsl(260, 93%, 35%);
-  box-shadow: 0px 3px 6px -1px hsl(0deg 0% 0% / 8%);
+  box-shadow: 0px 3px 6px -1px hsl(0deg 0% 0% / 18%);
   background: #f9f9f9;
 }
 
@@ -413,6 +413,7 @@ button:active {
 }
 
 .form-group {
+  width: 100%;
   display: flex;
   flex-direction: column;
   margin-bottom: 25px;
@@ -494,7 +495,6 @@ button:active {
   border-radius: 32px;
   background: white;
   max-width: 660px;
-  max-height: 730px;
 }
 
 .modal-x {
@@ -528,9 +528,11 @@ button:active {
 }
 
 .form-buttons {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 40px;
   flex-direction: row-reverse;
+  flex-shrink: 0;
 }

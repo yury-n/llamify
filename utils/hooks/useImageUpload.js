@@ -2,7 +2,7 @@ import { useState } from "react";
 import firebase from "firebase/app";
 import "firebase/storage";
 
-const useImageUpload = (initImage, path) => {
+const useImageUpload = (initImage) => {
   const [imageFile, setImageFile] = useState();
   const [imagePreview, setImagePreview] = useState(
     initImage ? { src: initImage } : null
@@ -20,14 +20,14 @@ const useImageUpload = (initImage, path) => {
     e.stopPropagation();
   };
 
-  const uploadToFirebase = (callback) => {
+  const uploadToFirebase = (path, maxSize = 50, callback) => {
     var reader = new FileReader();
     reader.onload = function (readerEvent) {
       var image = new Image();
       image.onload = function () {
         // Resize the image
         var canvas = document.createElement("canvas"),
-          max_size = 50,
+          max_size = maxSize,
           width = image.width,
           height = image.height;
         if (width > height) {

@@ -10,6 +10,7 @@ const InviteModal = ({ teamId, onClose }) => {
           type="text"
           value={`http://llamify.com/?team=${teamId}`}
           style={{ width: 330 }}
+          readOnly
         />
         <div class="form-buttons buttons">
           <button class="button-wrapper" onClick={onClose}>

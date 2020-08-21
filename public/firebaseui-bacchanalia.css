@@ -28,7 +28,8 @@
 .mdl-button--raised.mdl-button--colored:active {
   position: relative;
   top: 2px;
-  box-shadow: none;
+  box-shadow: none !important;
+  background: hsl(260, 92%, 56%) !important;
 }
 
 .firebaseui-button {

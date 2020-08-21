@@ -3,8 +3,8 @@ import Modal from "./Modal";
 import useImageUpload from "../../utils/hooks/useImageUpload";
 
 const HumanEditModal = ({
-  id,
-  idProp,
+  userId,
+  teamId,
   name: nameProp,
   role: roleProp,
   avatar: avatarProp,
@@ -19,13 +19,13 @@ const HumanEditModal = ({
     imagePreview,
     onFileChange,
     uploadToFirebase,
-  } = useImageUpload(avatarProp, `userAvatars/${idProp}`);
+  } = useImageUpload(avatarProp);
 
   const onSubmit = (e) => {
     submitButton.current.childNodes[0].classList.add("busy");
     e.preventDefault();
     if (imageFile) {
-      uploadToFirebase((url) => {
+      uploadToFirebase(`userAvatars/${teamId}/${userId}`, 80, (url) => {
         onHumanEditSubmit({
           name,
           role,
@@ -52,7 +52,6 @@ const HumanEditModal = ({
             className="input"
             type="text"
             value={name}
-            autoFocus={true}
             autoComplete="false"
             spellCheck={false}
             onChange={(e) => setName(e.target.value)}
@@ -67,7 +66,6 @@ const HumanEditModal = ({
             className="input"
             type="text"
             value={role || ""}
-            autoFocus={true}
             autoComplete="false"
             spellCheck={false}
             onChange={(e) => setRole(e.target.value)}

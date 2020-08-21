@@ -1,26 +1,39 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
-const Modal = ({ onClose, children }) => {
+const Modal = ({ width: widthProp, height: heightProp, onClose, children }) => {
+  const [size, setSize] = useState({
+    width: widthProp,
+    height: heightProp,
+  });
   const modalOverlayRef = useRef();
   const modalRef = useRef();
   useEffect(() => {
-    const modalRect = modalRef.current.getBoundingClientRect();
-    const modalAspectRatio = modalRect.width / modalRect.height;
+    const modalAspectRatio = widthProp / heightProp;
     let newHeight;
     let newWidth;
-    console.log({ modalRect });
-    if (modalRect.height > window.innerHeight) {
+    if (heightProp && heightProp > window.innerHeight - 140) {
       newHeight = window.innerHeight - 140;
       newWidth = newHeight * modalAspectRatio;
-    } else if (modalRect.width > window.innerWidth) {
+    } else if (widthProp && widthProp > window.innerWidth - 140) {
       newWidth = window.innerWidth - 140;
       newHeight = newWidth / modalAspectRatio;
     }
     console.log({ newWidth, newHeight });
     if (newWidth || newHeight) {
-      modalRef.current.style.width = `${newWidth}px`;
-      modalRef.current.style.height = `${newHeight}px`;
+      setSize({
+        width: newWidth,
+        height: newHeight,
+      });
     }
+    const handleEscapeKey = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keyup", handleEscapeKey);
+    return () => {
+      window.removeEventListener("keyup", handleEscapeKey);
+    };
   }, []);
   return (
     <div
@@ -30,7 +43,7 @@ const Modal = ({ onClose, children }) => {
         e.target === modalOverlayRef.current && onClose();
       }}
     >
-      <div ref={modalRef} className="modal">
+      <div ref={modalRef} className="modal" style={size}>
         <img className="modal-x" src="/icons/x.svg" onClick={() => onClose()} />
         {children}
       </div>

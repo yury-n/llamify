@@ -49,6 +49,7 @@ const Index = () => {
           fetchTeam(data.joinedTeamId);
           return;
         }
+        console.log("teamData", data);
         setTeamState({
           isFetched: true,
           data,
@@ -132,6 +133,43 @@ const Index = () => {
     });
   };
 
+  const onPostSubmit = ({
+    postId,
+    teamId,
+    userId,
+    fullImageUrl,
+    thumbImageUrl,
+    description,
+  }) => {
+    const allUserPostIds = teamState.data?.teamMembers[userId].postIds;
+    if (!allUserPostIds.includes(postId)) {
+      allUserPostIds.unshift(postId);
+    }
+    const postUpdates = {
+      postId,
+    };
+    if (fullImageUrl && thumbImageUrl) {
+      postUpdates.fullImageUrl = fullImageUrl;
+      postUpdates.thumbImageUrl = thumbImageUrl;
+    }
+    postUpdates.description = description || "";
+
+    firestore.doc(`/teams/${teamId}/`).update({
+      [`teamMembers.${userId}.postIds`]: allUserPostIds,
+      [`teamMembers.${userId}.posts.${postId}`]: postUpdates,
+    });
+  };
+
+  const onPostRemove = ({ postId, teamId, userId }) => {
+    const allUserPostIds = teamState.data?.teamMembers[userId].postIds;
+    firestore.doc(`/teams/${teamId}/`).update({
+      [`teamMembers.${userId}.postIds`]: allUserPostIds.filter(
+        (pId) => pId !== postId
+      ),
+      [`teamMembers.${userId}.posts.${postId}`]: firebase.firestore.FieldValue.delete(),
+    });
+  };
+
   const updateTeam = ({ teamId, teamName, teamLogo }) => {
     const updates = { teamName };
     if (teamLogo) {
@@ -191,12 +229,12 @@ const Index = () => {
 
   return (
     <>
-      <Head />
+      <Head teamName={teamState.data?.teamName} />
       <link rel="stylesheet" media="screen, projection" href="/home.css" />
       <div className={c("home-page", showForm && "home-sisu-page")}>
         {teamState.isFetched && (
           <StickyBar
-            isTeamEditable={user.id === teamState.data.teamId}
+            isTeamEditable={user.id === teamState.data?.teamId}
             teamName={teamState.data?.teamName}
             teamId={teamState.data?.teamId}
             teamLogo={teamState.data?.teamLogo}
@@ -237,8 +275,11 @@ const Index = () => {
               <Human
                 key={member.id}
                 human={member}
+                teamId={teamState.data?.teamId}
                 isOwner={member.id === user.id}
                 onHumanEditSubmit={updateHuman}
+                onPostSubmit={onPostSubmit}
+                onPostRemove={onPostRemove}
               />
             ))}
           </div>
