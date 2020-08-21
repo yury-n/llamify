@@ -46,6 +46,10 @@
   font-size: 33px;
 }
 
+.name span {
+  background: #e2dbff;
+}
+
 .role {
   color: #595959;
   margin-left: 16px;

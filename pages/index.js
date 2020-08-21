@@ -154,6 +154,24 @@ const Index = () => {
     }
     postUpdates.description = description || "";
 
+    setTeamState({
+      isFetched: true,
+      data: {
+        ...teamState.data,
+        teamMembers: {
+          ...teamState.data.teamMembers,
+          [`${user.id}`]: {
+            ...teamState.data.teamMembers[user.id],
+            postIds: allUserPostIds,
+            posts: {
+              ...teamState.data.teamMembers[user.id].posts,
+              [postId]: postUpdates,
+            },
+          },
+        },
+      },
+    });
+
     firestore.doc(`/teams/${teamId}/`).update({
       [`teamMembers.${userId}.postIds`]: allUserPostIds,
       [`teamMembers.${userId}.posts.${postId}`]: postUpdates,
@@ -161,11 +179,26 @@ const Index = () => {
   };
 
   const onPostRemove = ({ postId, teamId, userId }) => {
-    const allUserPostIds = teamState.data?.teamMembers[userId].postIds;
+    const postIds = teamState.data?.teamMembers[userId].postIds.filter(
+      (pId) => pId !== postId
+    );
+
+    setTeamState({
+      isFetched: true,
+      data: {
+        ...teamState.data,
+        teamMembers: {
+          ...teamState.data.teamMembers,
+          [`${user.id}`]: {
+            ...teamState.data.teamMembers[user.id],
+            postIds,
+          },
+        },
+      },
+    });
+
     firestore.doc(`/teams/${teamId}/`).update({
-      [`teamMembers.${userId}.postIds`]: allUserPostIds.filter(
-        (pId) => pId !== postId
-      ),
+      [`teamMembers.${userId}.postIds`]: postIds,
       [`teamMembers.${userId}.posts.${postId}`]: firebase.firestore.FieldValue.delete(),
     });
   };
@@ -280,6 +313,9 @@ const Index = () => {
                 onHumanEditSubmit={updateHuman}
                 onPostSubmit={onPostSubmit}
                 onPostRemove={onPostRemove}
+                searchString={
+                  searchString && searchString.length >= 2 && searchString
+                }
               />
             ))}
           </div>

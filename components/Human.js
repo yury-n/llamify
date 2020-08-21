@@ -11,6 +11,7 @@ const Human = ({
   onHumanEditSubmit,
   onPostSubmit,
   onPostRemove,
+  searchString,
 }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const openModal = () => isOwner && setShowEditModal(true);
@@ -22,6 +23,9 @@ const Human = ({
   for (var i = 0; i < emptyPostCardsToAdd; i++) {
     posts.push(null);
   }
+  const nameParts = human.name.split(new RegExp(searchString, "i"));
+  const regexp = human.name.match(new RegExp(searchString, "i"));
+  const highlightedNamePart = regexp && regexp[0];
   return (
     <>
       <div key={human.id} className="human">
@@ -36,7 +40,15 @@ const Human = ({
             onClick={openModal}
           ></div>
           <div className="name" onClick={openModal}>
-            {human.name}
+            {highlightedNamePart ? (
+              <>
+                {nameParts[0]}
+                <span>{highlightedNamePart}</span>
+                {nameParts[1]}
+              </>
+            ) : (
+              human.name
+            )}
             <div
               className="human-has-updates"
               style={{ backgroundColor: "#86fc3c" }}

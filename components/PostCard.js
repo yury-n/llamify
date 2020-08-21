@@ -19,7 +19,9 @@ const PostCard = ({ post, onPostRemove }) => {
           className="post-thumb-image"
           style={{ backgroundImage: `url(${post.thumbImageUrl})` }}
         ></div>
-        <div className="post-thumb-description">{post.description}</div>
+        {post.description && (
+          <div className="post-thumb-description">{post.description}</div>
+        )}
       </div>
       {showRemoveModal && (
         <RemoveConfirmationModal
