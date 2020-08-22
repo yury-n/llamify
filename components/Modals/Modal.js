@@ -1,6 +1,13 @@
+import c from "classnames";
 import { useRef, useEffect, useState } from "react";
 
-const Modal = ({ width: widthProp, height: heightProp, onClose, children }) => {
+const Modal = ({
+  width: widthProp,
+  height: heightProp,
+  onClose,
+  children,
+  overlayClassname,
+}) => {
   const [size, setSize] = useState({
     width: widthProp,
     height: heightProp,
@@ -38,7 +45,7 @@ const Modal = ({ width: widthProp, height: heightProp, onClose, children }) => {
   return (
     <div
       ref={modalOverlayRef}
-      className="modal-overlay"
+      className={c("modal-overlay", overlayClassname)}
       onClick={(e) => {
         e.target === modalOverlayRef.current && onClose();
       }}

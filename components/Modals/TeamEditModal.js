@@ -82,7 +82,7 @@ const TeamEditModal = ({
             </button>
           </div>
         </div>
-        <div className="form-buttons buttons">
+        <div className="form-buttons">
           <button
             className="button-wrapper"
             onClick={onSubmit}

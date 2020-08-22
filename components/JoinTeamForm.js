@@ -26,7 +26,7 @@ const JoinTeamForm = ({ onJoinTeam }) => {
           autoFocus={true}
         />
       </div>
-      <div className="form-buttons buttons">
+      <div className="form-buttons">
         <button
           className="button-wrapper"
           onClick={onSubmit}

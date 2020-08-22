@@ -7,22 +7,26 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/database";
 import Head from "./_head";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import initFirebase from "../utils/auth/initFirebase";
 import PostModal from "../components/Modals/PostModal";
 import StartTeamForm from "../components/StartTeamForm";
 import NewPostsToggle from "../components/NewPostsToggle";
-import Human from "../components/Human";
 import JoinTeamForm from "../components/JoinTeamForm";
+import Humans from "../components/Humans";
+import PostCreateEditModal from "../components/Modals/PostCreateEditModal";
 
 initFirebase();
 const firestore = firebase.firestore();
 
 const Index = () => {
   const router = useRouter();
+  const rootDiv = useRef(null);
   const { user, isUserFetched } = useUser();
   const [timeframe, setTimeframe] = useState(null);
   const [viewMode, setViewMode] = useState("list");
+  const [showPostSubmitModal, setShowPostSubmitModal] = useState(false);
+  const [isDragActive, setIsDragActive] = useState(false);
   const [searchString, setSearchString] = useState();
   const [openModal] = useState(false);
   const [teamState, setTeamState] = useState({
@@ -60,6 +64,19 @@ const Index = () => {
   useEffect(() => {
     setViewMode(localStorage.getItem("app.viewMode") || "list");
     setTimeframe(localStorage.getItem("app.timeframe") || null);
+    window.document.addEventListener("dragenter", () => {
+      console.log("<<<");
+      setIsDragActive(true);
+      setShowPostSubmitModal(true);
+    });
+    window.document.addEventListener("dragover", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    });
+    window.document.addEventListener("drop", (e) => {
+      console.log(">>>", e);
+      e.preventDefault();
+    });
   }, []);
 
   useEffect(() => {
@@ -132,6 +149,8 @@ const Index = () => {
       },
     });
   };
+
+  const onShowPostSubmitModal = () => setShowPostSubmitModal(true);
 
   const onPostSubmit = ({
     postId,
@@ -264,7 +283,10 @@ const Index = () => {
     <>
       <Head teamName={teamState.data?.teamName} />
       <link rel="stylesheet" media="screen, projection" href="/home.css" />
-      <div className={c("home-page", showForm && "home-sisu-page")}>
+      <div
+        className={c("home-page", showForm && "home-sisu-page")}
+        ref={rootDiv}
+      >
         {teamState.isFetched && (
           <StickyBar
             isTeamEditable={user.id === teamState.data?.teamId}
@@ -304,23 +326,29 @@ const Index = () => {
               timeframe={timeframe}
               onSetTimeframe={onSetTimeframe}
             />
-            {teamMembersArray.map((member) => (
-              <Human
-                key={member.id}
-                human={member}
-                teamId={teamState.data?.teamId}
-                isOwner={member.id === user.id}
-                onHumanEditSubmit={updateHuman}
-                onPostSubmit={onPostSubmit}
-                onPostRemove={onPostRemove}
-                searchString={
-                  searchString && searchString.length >= 2 && searchString
-                }
-              />
-            ))}
+            <Humans
+              humans={teamMembersArray}
+              teamId={teamState.data?.teamId}
+              currentUserId={user.id}
+              onHumanEditSubmit={updateHuman}
+              onShowPostSubmitModal={onShowPostSubmitModal}
+              onPostRemove={onPostRemove}
+              searchString={
+                searchString && searchString.length >= 2 && searchString
+              }
+            />
           </div>
         )}
       </div>
+      {showPostSubmitModal && (
+        <PostCreateEditModal
+          userId={user.id}
+          teamId={teamState.data?.teamId}
+          onPostSubmit={onPostSubmit}
+          onClose={() => setShowPostSubmitModal(false)}
+          isDragActive={isDragActive}
+        />
+      )}
     </>
   );
 };

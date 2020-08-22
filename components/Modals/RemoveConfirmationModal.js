@@ -6,7 +6,7 @@ const RemoveConfirmationModal = ({ onClose, onRemove }) => {
       <div className="alert">
         <div className="modal-title">Remove</div>
         <div>Are you sure you want to remove this post?</div>
-        <div className="form-buttons buttons">
+        <div className="form-buttons">
           <button className="button-wrapper" onClick={onRemove}>
             <span className="button button-primary danger" tabIndex="-1">
               Remove

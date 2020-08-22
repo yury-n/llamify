@@ -338,6 +338,19 @@ button:active {
   height: 36px;
 }
 
+.button-shine {
+  position: absolute;
+  width: 95px;
+  top: -21px;
+  left: -4px;
+  height: 35px;
+  transition: 300ms ease;
+}
+
+.button-primary:hover .button-shine {
+  left: 4px;
+}
+
 .button-primary {
   background: hsl(260, 92%, 56%);
   box-shadow: 0px 3px 6px -1px hsla(260, 97%, 10%, 0.55),
@@ -386,7 +399,7 @@ button:active {
   background: var(--secondary-color);
   box-shadow: 0px 3px 6px -1px hsla(0, 0%, 0%, 0.14),
     inset 0px 4px 6px 1px hsl(0, 0%, 100%);
-  border: 1px #dbdbdb99 solid;
+  border: 1px transparent solid; /* #dbdbdb99 */
 }
 
 .button-hollow {
@@ -487,6 +500,11 @@ button:active {
   justify-content: center;
   align-items: center;
   z-index: 100;
+}
+
+.modal-overlay-drag-active {
+  /* pass all events through */
+  pointer-events: none;
 }
 
 .modal {

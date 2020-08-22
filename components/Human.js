@@ -9,7 +9,7 @@ const Human = ({
   teamId,
   isOwner,
   onHumanEditSubmit,
-  onPostSubmit,
+  onShowPostSubmitModal,
   onPostRemove,
   searchString,
 }) => {
@@ -61,11 +61,7 @@ const Human = ({
         </div>
         <div className="posts-stream">
           {isOwner && (
-            <CreatePostButton
-              userId={human.id}
-              teamId={teamId}
-              onPostSubmit={onPostSubmit}
-            />
+            <CreatePostButton onShowPostSubmitModal={onShowPostSubmitModal} />
           )}
           {posts.map((post, index) => (
             <PostCard

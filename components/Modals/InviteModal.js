@@ -12,7 +12,7 @@ const InviteModal = ({ teamId, onClose }) => {
           style={{ width: 330 }}
           readOnly
         />
-        <div class="form-buttons buttons">
+        <div class="form-buttons">
           <button class="button-wrapper" onClick={onClose}>
             <span class="button button-primary" tabIndex="-1">
               Close
