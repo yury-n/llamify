@@ -1,21 +1,20 @@
 import { useState } from "react";
 import firebase from "firebase/app";
 import "firebase/storage";
+import getImageFilePreview from "../getImageFilePreview";
 
-const useImageUpload = (initImage) => {
-  const [imageFile, setImageFile] = useState();
-  const [imagePreview, setImagePreview] = useState(
-    initImage ? { src: initImage } : null
-  );
+const useImageUpload = (initImagePreview, initImageFile) => {
+  // ^ these props are to inject a file that arrived from DnD
+  const [imageFile, setImageFile] = useState(initImageFile);
+  const [imagePreview, setImagePreview] = useState(initImagePreview);
+
+  console.log({ initImageFile });
+  console.log(">>", initImageFile instanceof Blob);
 
   const onFileChange = (e) => {
     const file = e.target.files[0];
-    const objectURL = URL.createObjectURL(file);
     setImageFile(file);
-    setImagePreview({
-      src: objectURL,
-      type: file.type.split("/")[1],
-    });
+    setImagePreview(getImageFilePreview(file));
     e.preventDefault();
     e.stopPropagation();
   };
@@ -46,7 +45,8 @@ const useImageUpload = (initImage) => {
         canvas.getContext("2d").drawImage(image, 0, 0, width, height);
         canvas.toBlob((blob) => {
           const storageRef = firebase.storage().ref();
-          const logoFileRef = storageRef.child(`${path}.${imagePreview.type}`);
+          const imageType = (imagePreview || initImagePreview).type;
+          const logoFileRef = storageRef.child(`${path}.${imageType}`);
           logoFileRef.put(blob).then(() => {
             logoFileRef.getDownloadURL().then((url) => {
               callback(url);
@@ -56,10 +56,15 @@ const useImageUpload = (initImage) => {
       };
       image.src = readerEvent.target.result;
     };
-    reader.readAsDataURL(imageFile);
+    reader.readAsDataURL(initImageFile || imageFile);
   };
 
-  return { imageFile, imagePreview, onFileChange, uploadToFirebase };
+  return {
+    imageFile: imageFile || initImageFile,
+    imagePreview: imagePreview || initImagePreview,
+    onFileChange,
+    uploadToFirebase,
+  };
 };
 
 export default useImageUpload;

@@ -8,11 +8,13 @@ import initFirebase from "../../utils/auth/initFirebase";
 import "firebase/firestore";
 import ButtonShine from "../ButtonShine";
 
-const PostCreateEditModal = ({
+const PostSubmitModal = ({
   postId,
   userId,
   teamId,
   description: descriptionProp,
+  imagePreview: imagePreviewProp,
+  imageFile: imageFileProp,
   isDragActive,
   onClose,
   onPostSubmit,
@@ -20,10 +22,16 @@ const PostCreateEditModal = ({
   const submitButton = useRef(null);
   const imagePreviewDiv = useRef(null);
   const textarea = useRef(null);
-  const { imagePreview, onFileChange, uploadToFirebase } = useImageUpload(
-    undefined
-  );
+
+  const {
+    imagePreview: imagePreviewFromInput,
+    onFileChange,
+    uploadToFirebase,
+  } = useImageUpload(imagePreviewProp, imageFileProp);
+
   const [description, setDescription] = useState(descriptionProp);
+
+  const imagePreview = imagePreviewProp || imagePreviewFromInput;
 
   console.log({ imagePreview });
 
@@ -134,4 +142,4 @@ const PostCreateEditModal = ({
   );
 };
 
-export default PostCreateEditModal;
+export default PostSubmitModal;

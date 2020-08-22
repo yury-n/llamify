@@ -14,7 +14,8 @@ import StartTeamForm from "../components/StartTeamForm";
 import NewPostsToggle from "../components/NewPostsToggle";
 import JoinTeamForm from "../components/JoinTeamForm";
 import Humans from "../components/Humans";
-import PostCreateEditModal from "../components/Modals/PostCreateEditModal";
+import PostSubmitModal from "../components/Modals/PostSubmitModal";
+import getImageFilePreview from "../utils/getImageFilePreview";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -27,6 +28,7 @@ const Index = () => {
   const [viewMode, setViewMode] = useState("list");
   const [showPostSubmitModal, setShowPostSubmitModal] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
+  const [droppedFile, setDroppedFile] = useState();
   const [searchString, setSearchString] = useState();
   const [openModal] = useState(false);
   const [teamState, setTeamState] = useState({
@@ -76,6 +78,16 @@ const Index = () => {
     window.document.addEventListener("drop", (e) => {
       console.log(">>>", e);
       e.preventDefault();
+
+      let file;
+      if (e.dataTransfer.items) {
+        file = e.dataTransfer.items[0].getAsFile();
+        console.log({ file1: file });
+      } else {
+        file = e.dataTransfer.files[0];
+        console.log({ file });
+      }
+      setDroppedFile(file);
     });
   }, []);
 
@@ -151,6 +163,12 @@ const Index = () => {
   };
 
   const onShowPostSubmitModal = () => setShowPostSubmitModal(true);
+
+  const onClosePostSubmitModal = () => {
+    setShowPostSubmitModal(false);
+    setDroppedFile(null);
+    setIsDragActive(false);
+  };
 
   const onPostSubmit = ({
     postId,
@@ -341,11 +359,13 @@ const Index = () => {
         )}
       </div>
       {showPostSubmitModal && (
-        <PostCreateEditModal
+        <PostSubmitModal
           userId={user.id}
           teamId={teamState.data?.teamId}
+          imageFile={droppedFile}
+          imagePreview={droppedFile && getImageFilePreview(droppedFile)}
           onPostSubmit={onPostSubmit}
-          onClose={() => setShowPostSubmitModal(false)}
+          onClose={onClosePostSubmitModal}
           isDragActive={isDragActive}
         />
       )}

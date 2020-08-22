@@ -22,9 +22,9 @@ const ButtonShine = () => (
         width="187"
         height="33"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feBlend
           mode="normal"
           in="SourceGraphic"
@@ -41,8 +41,8 @@ const ButtonShine = () => (
         gradientUnits="userSpaceOnUse"
         gradientTransform="translate(100.5 19.1093) rotate(90) scale(10.1111 129.889)"
       >
-        <stop stop-color="white" />
-        <stop offset="1" stop-color="#C4C4C4" stop-opacity="0" />
+        <stop stopColor="white" />
+        <stop offset="1" stopColor="#C4C4C4" stopOpacity="0" />
       </radialGradient>
       <radialGradient
         id="paint1_radial"
@@ -52,8 +52,8 @@ const ButtonShine = () => (
         gradientUnits="userSpaceOnUse"
         gradientTransform="translate(80 23) rotate(90.0001) scale(2.5 34.1667)"
       >
-        <stop stop-color="white" />
-        <stop offset="1" stop-color="#C4C4C4" stop-opacity="0" />
+        <stop stopColor="white" />
+        <stop offset="1" stopColor="#C4C4C4" stopOpacity="0" />
       </radialGradient>
     </defs>
   </svg>
