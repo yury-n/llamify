@@ -6,6 +6,9 @@ const PostCard = ({ post, onPostRemove }) => {
   if (!post) {
     return <div className="post-thumb post-thumb-empty"></div>;
   }
+  const onImageLoad = (e) => {
+    e.target.style.opacity = 1;
+  };
   return (
     <>
       <div className="post-thumb">
@@ -15,10 +18,9 @@ const PostCard = ({ post, onPostRemove }) => {
         >
           <img src="/icons/x.svg" />
         </div>
-        <div
-          className="post-thumb-image"
-          style={{ backgroundImage: `url(${post.thumbImageUrl})` }}
-        ></div>
+        <div className="post-thumb-image">
+          <img src={post.thumbImageUrl} loading="lazy" onLoad={onImageLoad} />
+        </div>
         {post.description && (
           <div className="post-thumb-description">{post.description}</div>
         )}
