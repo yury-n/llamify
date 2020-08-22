@@ -66,6 +66,14 @@ const Index = () => {
   useEffect(() => {
     setViewMode(localStorage.getItem("app.viewMode") || "list");
     setTimeframe(localStorage.getItem("app.timeframe") || null);
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get("q");
+      console.log({ query });
+      if (query) {
+        setSearchString(query);
+      }
+    }
     window.document.addEventListener("dragenter", () => {
       console.log("<<<");
       setIsDragActive(true);
@@ -276,27 +284,33 @@ const Index = () => {
 
   const showForm = showStartTeamForm || showJoinTeamForm;
 
+  let teamMembersArray;
+
   const teamMembersArrayUnsorted = [];
   if (teamState.data?.teamMembers) {
     Object.keys(teamState.data.teamMembers).forEach((key) => {
       teamMembersArrayUnsorted.push(teamState.data.teamMembers[key]);
     });
-  }
-  let teamMembersArray = orderBy(
-    teamMembersArrayUnsorted,
-    [(u) => u.name.toLowerCase()],
-    ["asc"]
-  );
-  // put yourself first
-  teamMembersArray = [
-    teamMembersArray.find((m) => m.id === user.id),
-    ...teamMembersArray.filter((m) => m.id !== user.id),
-  ];
 
-  if (searchString && searchString.length >= 2) {
-    teamMembersArray = teamMembersArray.filter((u) =>
-      u.name.toLowerCase().includes(searchString.toLowerCase())
+    teamMembersArray = orderBy(
+      teamMembersArrayUnsorted,
+      [(u) => u.name.toLowerCase()],
+      ["asc"]
     );
+
+    if (teamMembersArray.length) {
+      // put yourself first
+      teamMembersArray = [
+        teamMembersArray.find((m) => m.id === user.id),
+        ...teamMembersArray.filter((m) => m.id !== user.id),
+      ];
+    }
+
+    if (searchString && searchString.length >= 2) {
+      teamMembersArray = teamMembersArray.filter((u) =>
+        u.name.toLowerCase().includes(searchString.toLowerCase())
+      );
+    }
   }
 
   return (
@@ -346,17 +360,19 @@ const Index = () => {
               timeframe={timeframe}
               onSetTimeframe={onSetTimeframe}
             />
-            <Humans
-              humans={teamMembersArray}
-              teamId={teamState.data?.teamId}
-              currentUserId={user.id}
-              onHumanEditSubmit={updateHuman}
-              onShowPostSubmitModal={onShowPostSubmitModal}
-              onPostRemove={onPostRemove}
-              searchString={
-                searchString && searchString.length >= 2 && searchString
-              }
-            />
+            {teamMembersArray && (
+              <Humans
+                humans={teamMembersArray}
+                teamId={teamState.data?.teamId}
+                currentUserId={user.id}
+                onHumanEditSubmit={updateHuman}
+                onShowPostSubmitModal={onShowPostSubmitModal}
+                onPostRemove={onPostRemove}
+                searchString={
+                  searchString && searchString.length >= 2 && searchString
+                }
+              />
+            )}
           </div>
         )}
       </div>
