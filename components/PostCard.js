@@ -1,20 +1,26 @@
 import { useState } from "react";
 import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
+import PostModal from "./Modals/PostModal";
 
 const PostCard = ({ post, onPostRemove }) => {
   const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [showPostModal, setShowPostModal] = useState(false);
   if (!post) {
     return <div className="post-thumb post-thumb-empty"></div>;
   }
   const onImageLoad = (e) => {
     e.target.style.opacity = 1;
   };
+
   return (
     <>
-      <div className="post-thumb">
+      <div className="post-thumb" onClick={() => setShowPostModal(true)}>
         <div
           className="post-thumb-remove"
-          onClick={() => setShowRemoveModal(true)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowRemoveModal(true);
+          }}
         >
           <img src="/icons/x.svg" />
         </div>
@@ -25,6 +31,9 @@ const PostCard = ({ post, onPostRemove }) => {
           <div className="post-thumb-description">{post.description}</div>
         )}
       </div>
+      {showPostModal && (
+        <PostModal post={post} onClose={() => setShowPostModal(false)} />
+      )}
       {showRemoveModal && (
         <RemoveConfirmationModal
           onClose={() => setShowRemoveModal(false)}

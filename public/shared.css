@@ -513,7 +513,6 @@ button:active {
   box-shadow: rgba(0, 0, 0, 0.18) 0px 6px 20px 0px;
   border-radius: 32px;
   background: white;
-  max-width: 660px;
 }
 
 .modal-x {
@@ -532,6 +531,7 @@ button:active {
 
 .avatar-modal {
   border-radius: 100%;
+  padding: 20px;
 }
 
 .form {

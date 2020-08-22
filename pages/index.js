@@ -352,6 +352,7 @@ const Index = () => {
                   autoComplete="off"
                   spellCheck={false}
                   placeholder="Search by name or role"
+                  value={searchString}
                   onChange={(e) => setSearchString(e.target.value)}
                 />
               </div>
