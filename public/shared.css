@@ -530,6 +530,10 @@ button:active {
   margin-bottom: 40px;
 }
 
+.avatar-modal {
+  border-radius: 100%;
+}
+
 .form {
   display: flex;
   flex-direction: column;

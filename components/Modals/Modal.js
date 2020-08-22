@@ -6,6 +6,7 @@ const Modal = ({
   height: heightProp,
   onClose,
   children,
+  modalClassname,
   overlayClassname,
 }) => {
   const [size, setSize] = useState({
@@ -50,7 +51,7 @@ const Modal = ({
         e.target === modalOverlayRef.current && onClose();
       }}
     >
-      <div ref={modalRef} className="modal" style={size}>
+      <div ref={modalRef} className={c("modal", modalClassname)} style={size}>
         <img className="modal-x" src="/icons/x.svg" onClick={() => onClose()} />
         {children}
       </div>

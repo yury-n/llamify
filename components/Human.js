@@ -2,6 +2,7 @@ import c from "classnames";
 import { useState } from "react";
 import CreatePostButton from "./CreatePostButton";
 import PostCard from "./PostCard";
+import FullAvatarModal from "./Modals/FullAvatarModal";
 const { default: HumanEditModal } = require("./Modals/HumanEditModal");
 
 const Human = ({
@@ -14,9 +15,10 @@ const Human = ({
   searchString,
 }) => {
   const [showEditModal, setShowEditModal] = useState(false);
-  const openModal = () => isOwner && setShowEditModal(true);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+
   const requiredNumOfCards = isOwner ? 5 : 6;
-  const posts = human.postIds
+  const posts = (human.postIds || [])
     .map((postId) => human.posts[postId])
     .slice(0, requiredNumOfCards);
   const emptyPostCardsToAdd = requiredNumOfCards - posts.length;
@@ -26,20 +28,38 @@ const Human = ({
   const nameParts = human.name.split(new RegExp(searchString, "i"));
   const regexp = human.name.match(new RegExp(searchString, "i"));
   const highlightedNamePart = regexp && regexp[0];
+
+  const onAvatarClick = () => {
+    isOwner ? setShowEditModal(true) : setShowAvatarModal(true);
+  };
+
+  const onEditClick = () => {
+    if (isOwner) {
+      setShowEditModal(true);
+    }
+  };
+
+  const onImageLoad = (e) => {
+    e.target.style.opacity = 1;
+  };
+
   return (
     <>
       <div key={human.id} className="human">
         <div className={c("name-wrapper", isOwner && "owner-name-wrapper")}>
           <div
-            className="avatar"
-            style={{
-              backgroundImage: human.avatar
-                ? `url(${human.avatar})`
-                : undefined,
-            }}
-            onClick={openModal}
-          ></div>
-          <div className="name" onClick={openModal}>
+            className={c("avatar", !human.avatarThumbUrl && "no-avatar")}
+            onClick={onAvatarClick}
+          >
+            {human.avatarThumbUrl && (
+              <img
+                src={human.avatarThumbUrl}
+                loading="lazy"
+                onLoad={onImageLoad}
+              />
+            )}
+          </div>
+          <div className="name" onClick={onEditClick}>
             {highlightedNamePart ? (
               <>
                 {nameParts[0]}
@@ -56,7 +76,7 @@ const Human = ({
           </div>
           {human.role && <div className="role">{human.role}</div>}
           {isOwner && (
-            <img className="icon" src="/icons/edit.svg" onClick={openModal} />
+            <img className="icon" src="/icons/edit.svg" onClick={onEditClick} />
           )}
         </div>
         <div className="posts-stream">
@@ -80,12 +100,18 @@ const Human = ({
           teamId={teamId}
           name={human.name}
           role={human.role}
-          avatar={human.avatar}
+          avatarThumbUrl={human.avatarThumbUrl}
           onHumanEditSubmit={(payload) => {
             onHumanEditSubmit(payload);
             setShowEditModal(false);
           }}
           onClose={() => setShowEditModal(false)}
+        />
+      )}
+      {showAvatarModal && (
+        <FullAvatarModal
+          avatarFullUrl={human.avatarFullUrl}
+          onClose={() => setShowAvatarModal(false)}
         />
       )}
     </>

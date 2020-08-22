@@ -7,7 +7,7 @@ const HumanEditModal = ({
   teamId,
   name: nameProp,
   role: roleProp,
-  avatar: avatarProp,
+  avatarThumbUrl: avatarThumbUrlProp,
   onHumanEditSubmit,
   onClose,
 }) => {
@@ -19,19 +19,36 @@ const HumanEditModal = ({
     imagePreview,
     onFileChange,
     uploadToFirebase,
-  } = useImageUpload(avatarProp);
+  } = useImageUpload(
+    avatarThumbUrlProp
+      ? {
+          src: avatarThumbUrlProp,
+        }
+      : null
+  );
 
   const onSubmit = (e) => {
     submitButton.current.childNodes[0].classList.add("busy");
     e.preventDefault();
     if (imageFile) {
-      uploadToFirebase(`userAvatars/${teamId}/${userId}`, 80, (url) => {
-        onHumanEditSubmit({
-          name,
-          role,
-          avatar: url,
-        });
-      });
+      uploadToFirebase(
+        `userAvatars/${teamId}/thumb/${userId}`,
+        80,
+        (avatarThumbUrl) => {
+          uploadToFirebase(
+            `userAvatars/${teamId}/full/${userId}`,
+            400,
+            (avatarFullUrl) => {
+              onHumanEditSubmit({
+                name,
+                role,
+                avatarThumbUrl,
+                avatarFullUrl,
+              });
+            }
+          );
+        }
+      );
     } else {
       onHumanEditSubmit({
         name,

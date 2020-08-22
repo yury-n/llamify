@@ -136,14 +136,15 @@ const Index = () => {
       });
   };
 
-  const updateHuman = ({ name, role, avatar }) => {
+  const updateHuman = ({ name, role, avatarThumbUrl, avatarFullUrl }) => {
     if (!teamState.data?.teamId) {
       return;
     }
     firestore.doc(`/teams/${teamState.data?.teamId}`).update({
       [`teamMembers.${user.id}.name`]: name,
       [`teamMembers.${user.id}.role`]: role || null,
-      [`teamMembers.${user.id}.avatar`]: avatar || null,
+      [`teamMembers.${user.id}.avatarThumbUrl`]: avatarThumbUrl || null,
+      [`teamMembers.${user.id}.avatarFullUrl`]: avatarFullUrl || null,
     });
     setTeamState({
       isFetched: true,
@@ -155,7 +156,8 @@ const Index = () => {
             ...teamState.data.teamMembers[user.id],
             name,
             role,
-            avatar,
+            avatarThumbUrl,
+            avatarFullUrl,
           },
         },
       },
