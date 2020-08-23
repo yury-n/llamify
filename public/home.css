@@ -442,3 +442,37 @@
   width: 100%;
   font-size: 14px;
 }
+
+.comments {
+  margin-top: 40px;
+}
+
+.comment {
+  display: flex;
+  font-size: 15px;
+  margin-top: 15px;
+  line-height: 1.35;
+}
+
+.comment-author {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 14px;
+}
+
+.comment-author-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 100%;
+  overflow: hidden;
+  margin-top: -4px;
+  margin-right: 14px;
+  background-size: cover;
+  display: inline-block;
+}
+
+.comment-author-name {
+  font-weight: 700;
+  font-size: 14px;
+  margin-right: 8px;
+}

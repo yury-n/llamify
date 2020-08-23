@@ -25,6 +25,20 @@ const PostModal = ({ post, onClose }) => {
               </div>
             </div>
             <div className="post-description">{post.description}</div>
+            <div className="comments">
+              <div className="comment">
+                <div
+                  className="comment-author-avatar"
+                  style={{
+                    backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/llamify.appspot.com/o/userAvatars%2F6VeGb1I3PANCkHi4q7EVudv85592%2Fthumb%2FOmDHMXlbFNTWeaqBeabLlie4CaK2.jpeg?alt=media&token=e625ce37-7964-42c5-b0a5-49c595820c6d)`,
+                  }}
+                />
+                <div>
+                  <span className="comment-author-name">Yury</span>
+                  <span>hello my friend of mine</span>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="post-sidebar-bottom">
             <textarea
