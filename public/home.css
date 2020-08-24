@@ -28,7 +28,9 @@
 }
 
 .grid-view {
-  margin-top: 50px;
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
 }
 
 .directory {
@@ -490,4 +492,13 @@
   font-size: 13px;
   color: #989898;
   cursor: pointer;
+}
+
+.load-more-button-wrapper {
+  margin-top: 80px;
+  margin-bottom: 40px;
+}
+
+.load-more-button-wrapper .button {
+  width: 200px;
 }

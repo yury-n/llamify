@@ -90,9 +90,7 @@ const Human = ({
             <PostCard
               key={`${index}-${post?.id}`}
               post={post}
-              onPostRemove={(postId) =>
-                onPostRemove({ postId, userId: human.id, teamId })
-              }
+              onPostRemove={onPostRemove}
             />
           ))}
         </div>

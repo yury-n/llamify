@@ -21,7 +21,7 @@ import PostsGrid from "../components/PostsGrid";
 initFirebase();
 const firestore = firebase.firestore();
 
-const GRID_POSTS_PER_PAGE = 10;
+const GRID_POSTS_PER_PAGE = 20;
 
 const Index = () => {
   const router = useRouter();
@@ -43,7 +43,8 @@ const Index = () => {
     },
   });
   const [posts, setPosts] = useState([]);
-  const [lastFetchedPostsPage, setLastFetchedPostsPage] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const [postsHasMore, setPostsHasMore] = useState(true);
 
   let teamIdFromURL;
   if (typeof window !== "undefined") {
@@ -70,30 +71,35 @@ const Index = () => {
   };
 
   const fetchPosts = (teamId) => {
-    if (
-      !teamId ||
-      (lastFetchedPostsPage != null && lastFetchedPostsPage >= 0)
-    ) {
+    if (!teamId) {
       return;
     }
 
-    const query = firestore
+    setIsFetching(true);
+
+    let query = firestore
       .collection(`/teams/${teamId}/posts`)
-      .orderBy("postTimestamp", "desc")
-      .startAt(1598286191761)
-      .limit(1);
+      .orderBy("postTimestamp", "asc");
 
     if (posts.length) {
-      query.startAt(posts[posts.length - 1].timestamp);
+      query = query.startAfter(posts[posts.length - 1].timestamp);
     }
+    query = query.limit(GRID_POSTS_PER_PAGE + 1);
 
     query.get().then((postsSnapshot) => {
-      const fetchedFosts = [];
+      const fetchedPosts = [];
       postsSnapshot.forEach((post) => {
-        fetchedFosts.push(post.data().postData); // <3
+        fetchedPosts.push(post.data().postData); // <3
       });
-      setPosts([...posts, ...fetchedFosts]);
-      setLastFetchedPostsPage(0);
+      const fetchHasMore = fetchedPosts.length === GRID_POSTS_PER_PAGE + 1;
+      if (fetchHasMore) {
+        fetchedPosts.pop();
+      }
+      setPosts([...posts, ...fetchedPosts]);
+      setIsFetching(false);
+      if (!fetchHasMore) {
+        setPostsHasMore(fetchHasMore);
+      }
     });
   };
 
@@ -113,10 +119,8 @@ const Index = () => {
     let file;
     if (e.dataTransfer.items) {
       file = e.dataTransfer.items[0].getAsFile();
-      console.log({ file1: file });
     } else {
       file = e.dataTransfer.files[0];
-      console.log({ file });
     }
     setDroppedFile(file);
   };
@@ -125,13 +129,13 @@ const Index = () => {
     const viewModeFromStorage =
       localStorage.getItem("app.viewMode") || viewMode;
     const timeframeFromStorage = localStorage.getItem("app.timeframe") || null;
+
     setViewMode(viewModeFromStorage);
     setTimeframe(timeframeFromStorage);
 
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
       const query = urlParams.get("q");
-      console.log({ query });
       if (query) {
         setSearchString(query);
       }
@@ -147,10 +151,22 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    if (viewMode === "grid") {
+    if (viewMode === "grid" && !posts.length) {
       fetchPosts(teamState.data?.teamId);
     }
   }, [viewMode, teamState]);
+
+  useEffect(() => {
+    if (searchString && searchString.length >= 2 && viewMode !== "list") {
+      setViewMode("list");
+    }
+  }, [searchString]);
+
+  useEffect(() => {
+    if (timeframe) {
+      setViewMode("grid");
+    }
+  }, [timeframe]);
 
   useEffect(() => {
     if (user) {
@@ -304,7 +320,12 @@ const Index = () => {
     }
   };
 
-  const onPostRemove = ({ postId, teamId, userId }) => {
+  const onPostRemove = (postId) => {
+    const userId = user.id;
+    const teamId = teamState.data?.teamId;
+    if (!userId || !teamId) {
+      return;
+    }
     const postIds = teamState.data?.teamMembers[userId].postIds.filter(
       (pId) => pId !== postId
     );
@@ -323,10 +344,15 @@ const Index = () => {
       },
     });
 
+    const postsFiltered = posts.filter((p) => p.postId !== postId);
+    setPosts(postsFiltered);
+
     firestore.doc(`/teams/${teamId}/`).update({
       [`teamMembers.${userId}.postIds`]: postIds,
+      // TODO: use the same for timestamp
       [`teamMembers.${userId}.posts.${postId}`]: firebase.firestore.FieldValue.delete(),
     });
+    firestore.doc(`/teams/${teamId}/posts/${postId}`).delete();
 
     // TODO: remove from team.posts
   };
@@ -389,7 +415,9 @@ const Index = () => {
 
     if (searchString && searchString.length >= 2) {
       teamMembersArray = teamMembersArray.filter((u) =>
-        u.name.toLowerCase().includes(searchString.toLowerCase())
+        `${u.firstName.toLowerCase()} ${u.lastName.toLowerCase()}`.includes(
+          searchString.toLowerCase()
+        )
       );
     }
   }
@@ -455,7 +483,23 @@ const Index = () => {
             )}
             {viewMode === "grid" && (
               <div className="grid-view">
-                <PostsGrid posts={posts} />
+                <PostsGrid posts={posts} onPostRemove={onPostRemove} />
+                {posts.length > 0 && postsHasMore && (
+                  <button
+                    className="button-wrapper load-more-button-wrapper"
+                    onClick={() => fetchPosts(teamState.data?.teamId)}
+                  >
+                    <span
+                      className={c(
+                        "button button-secondary button-white",
+                        isFetching && "busy"
+                      )}
+                      tabIndex="-1"
+                    >
+                      Load more
+                    </span>
+                  </button>
+                )}
               </div>
             )}
           </div>
