@@ -17,5 +17,8 @@
     "react-dom": "^16.13.1",
     "react-firebaseui": "4.1.0",
     "swr": "0.2.3"
+  },
+  "browser": {
+    "child_process": false
   }
 }

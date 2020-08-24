@@ -16,9 +16,13 @@ const TeamEditModal = ({
     imagePreview,
     onFileChange,
     uploadToFirebase,
-  } = useImageUpload({
-    src: teamLogoProp,
-  });
+  } = useImageUpload(
+    teamLogoProp
+      ? {
+          src: teamLogoProp,
+        }
+      : null
+  );
 
   const onSubmit = (e) => {
     submitButton.current.childNodes[0].classList.add("busy");
@@ -60,9 +64,9 @@ const TeamEditModal = ({
           </label>
           <div className="image-field-form-wrapper">
             {imagePreview && (
-              <img
+              <div
                 className="image-field-form-preview"
-                src={imagePreview.src}
+                style={{ backgroundImage: `url(${imagePreview.src})` }}
               />
             )}
             <button className="button-wrapper file-button-wrapper">

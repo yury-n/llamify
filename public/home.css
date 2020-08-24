@@ -27,6 +27,10 @@
   align-items: center;
 }
 
+.grid-view {
+  margin-top: 50px;
+}
+
 .directory {
   display: flex;
   flex-direction: column;
@@ -105,7 +109,7 @@
 }
 
 .owner-name-wrapper {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .team-name-wrapper {
@@ -423,7 +427,7 @@
 
 .post-author-name {
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .post-author-role {
@@ -448,6 +452,7 @@
 }
 
 .comment {
+  position: relative;
   display: flex;
   font-size: 15px;
   margin-top: 15px;
@@ -465,14 +470,24 @@
   height: 28px;
   border-radius: 100%;
   overflow: hidden;
-  margin-top: -4px;
+  margin-top: -3px;
   margin-right: 14px;
   background-size: cover;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .comment-author-name {
   font-weight: 700;
   font-size: 14px;
   margin-right: 8px;
+}
+
+.comment-reply-button {
+  position: absolute;
+  bottom: -25px;
+  left: 41px;
+  font-size: 13px;
+  color: #989898;
+  cursor: pointer;
 }

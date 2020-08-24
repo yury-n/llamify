@@ -25,8 +25,11 @@ const Human = ({
   for (var i = 0; i < emptyPostCardsToAdd; i++) {
     posts.push(null);
   }
-  const nameParts = human.name.split(new RegExp(searchString, "i"));
-  const regexp = human.name.match(new RegExp(searchString, "i"));
+
+  const name = `${human.firstName} ${human.lastName}`;
+
+  const nameParts = name.split(new RegExp(searchString, "i"));
+  const regexp = name.match(new RegExp(searchString, "i"));
   const highlightedNamePart = regexp && regexp[0];
 
   const onAvatarClick = () => {
@@ -67,7 +70,7 @@ const Human = ({
                 {nameParts[1]}
               </>
             ) : (
-              human.name
+              name
             )}
             <div
               className="human-has-updates"
@@ -98,7 +101,8 @@ const Human = ({
         <HumanEditModal
           userId={human.id}
           teamId={teamId}
-          name={human.name}
+          firstName={human.firstName}
+          lastName={human.lastName}
           role={human.role}
           avatarThumbUrl={human.avatarThumbUrl}
           onHumanEditSubmit={(payload) => {

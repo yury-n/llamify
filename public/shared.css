@@ -481,6 +481,7 @@ button:active {
   height: 42px;
   margin-right: 12px;
   background-size: cover;
+  background-position: center;
 }
 
 .sticky-bar .team-name {

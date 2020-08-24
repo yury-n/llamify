@@ -16,9 +16,12 @@ import JoinTeamForm from "../components/JoinTeamForm";
 import Humans from "../components/Humans";
 import PostSubmitModal from "../components/Modals/PostSubmitModal";
 import getImageFilePreview from "../utils/getImageFilePreview";
+import PostsGrid from "../components/PostsGrid";
 
 initFirebase();
 const firestore = firebase.firestore();
+
+const GRID_POSTS_PER_PAGE = 10;
 
 const Index = () => {
   const router = useRouter();
@@ -39,6 +42,9 @@ const Index = () => {
       teamMembers: [],
     },
   });
+  const [posts, setPosts] = useState([]);
+  const [lastFetchedPostsPage, setLastFetchedPostsPage] = useState(null);
+
   let teamIdFromURL;
   if (typeof window !== "undefined") {
     const urlParams = new URLSearchParams(window.location.search);
@@ -63,9 +69,65 @@ const Index = () => {
       });
   };
 
+  const fetchPosts = (teamId) => {
+    if (
+      !teamId ||
+      (lastFetchedPostsPage != null && lastFetchedPostsPage >= 0)
+    ) {
+      return;
+    }
+
+    const query = firestore
+      .collection(`/teams/${teamId}/posts`)
+      .orderBy("postTimestamp", "desc")
+      .startAt(1598286191761)
+      .limit(1);
+
+    if (posts.length) {
+      query.startAt(posts[posts.length - 1].timestamp);
+    }
+
+    query.get().then((postsSnapshot) => {
+      const fetchedFosts = [];
+      postsSnapshot.forEach((post) => {
+        fetchedFosts.push(post.data().postData); // <3
+      });
+      setPosts([...posts, ...fetchedFosts]);
+      setLastFetchedPostsPage(0);
+    });
+  };
+
+  const onDragEnter = () => {
+    setIsDragActive(true);
+    setShowPostSubmitModal(true);
+  };
+
+  const onDragOver = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  const onDrop = (e) => {
+    e.preventDefault();
+
+    let file;
+    if (e.dataTransfer.items) {
+      file = e.dataTransfer.items[0].getAsFile();
+      console.log({ file1: file });
+    } else {
+      file = e.dataTransfer.files[0];
+      console.log({ file });
+    }
+    setDroppedFile(file);
+  };
+
   useEffect(() => {
-    setViewMode(localStorage.getItem("app.viewMode") || "list");
-    setTimeframe(localStorage.getItem("app.timeframe") || null);
+    const viewModeFromStorage =
+      localStorage.getItem("app.viewMode") || viewMode;
+    const timeframeFromStorage = localStorage.getItem("app.timeframe") || null;
+    setViewMode(viewModeFromStorage);
+    setTimeframe(timeframeFromStorage);
+
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
       const query = urlParams.get("q");
@@ -74,30 +136,21 @@ const Index = () => {
         setSearchString(query);
       }
     }
-    window.document.addEventListener("dragenter", () => {
-      console.log("<<<");
-      setIsDragActive(true);
-      setShowPostSubmitModal(true);
-    });
-    window.document.addEventListener("dragover", (e) => {
-      e.stopPropagation();
-      e.preventDefault();
-    });
-    window.document.addEventListener("drop", (e) => {
-      console.log(">>>", e);
-      e.preventDefault();
-
-      let file;
-      if (e.dataTransfer.items) {
-        file = e.dataTransfer.items[0].getAsFile();
-        console.log({ file1: file });
-      } else {
-        file = e.dataTransfer.files[0];
-        console.log({ file });
-      }
-      setDroppedFile(file);
-    });
+    window.document.addEventListener("dragenter", onDragEnter);
+    window.document.addEventListener("dragover", onDragOver);
+    window.document.addEventListener("drop", onDrop);
+    return () => {
+      window.document.removeEventListener("dragenter", onDragEnter);
+      window.document.removeEventListener("dragover", onDragOver);
+      window.document.removeEventListener("drop", onDrop);
+    };
   }, []);
+
+  useEffect(() => {
+    if (viewMode === "grid") {
+      fetchPosts(teamState.data?.teamId);
+    }
+  }, [viewMode, teamState]);
 
   useEffect(() => {
     if (user) {
@@ -116,12 +169,12 @@ const Index = () => {
     return null;
   }
 
-  const startTeam = ({ name, teamName }) => {
+  const startTeam = ({ firstName, lastName, teamName }) => {
     const teamData = {
       teamId: user.id,
       teamName,
       teamMembers: {
-        [`${user.id}`]: { id: user.id, name },
+        [`${user.id}`]: { id: user.id, firstName, lastName },
       },
     };
     firestore.doc(`/teams/${user.id}`).set(teamData);
@@ -131,25 +184,33 @@ const Index = () => {
     });
   };
 
-  const joinTeam = ({ name }) => {
+  const joinTeam = ({ firstName, lastName }) => {
     firestore.doc(`/teams/${user.id}`).set({ joinedTeamId: teamIdFromURL });
     firestore
       .doc(`/teams/${teamIdFromURL}`)
       .update({
         [`teamMembers.${user.id}.id`]: user.id,
-        [`teamMembers.${user.id}.name`]: name,
+        [`teamMembers.${user.id}.firstName`]: firstName,
+        [`teamMembers.${user.id}.lastName`]: lastName,
       })
       .then(() => {
         fetchTeam(teamIdFromURL);
       });
   };
 
-  const updateHuman = ({ name, role, avatarThumbUrl, avatarFullUrl }) => {
+  const updateHuman = ({
+    firstName,
+    lastName,
+    role,
+    avatarThumbUrl,
+    avatarFullUrl,
+  }) => {
     if (!teamState.data?.teamId) {
       return;
     }
     firestore.doc(`/teams/${teamState.data?.teamId}`).update({
-      [`teamMembers.${user.id}.name`]: name,
+      [`teamMembers.${user.id}.firstName`]: firstName,
+      [`teamMembers.${user.id}.lastName`]: lastName,
       [`teamMembers.${user.id}.role`]: role || null,
       [`teamMembers.${user.id}.avatarThumbUrl`]: avatarThumbUrl || null,
       [`teamMembers.${user.id}.avatarFullUrl`]: avatarFullUrl || null,
@@ -162,7 +223,8 @@ const Index = () => {
           ...teamState.data.teamMembers,
           [`${user.id}`]: {
             ...teamState.data.teamMembers[user.id],
-            name,
+            firstName,
+            lastName,
             role,
             avatarThumbUrl,
             avatarFullUrl,
@@ -188,18 +250,27 @@ const Index = () => {
     thumbImageUrl,
     description,
   }) => {
-    const allUserPostIds = teamState.data?.teamMembers[userId].postIds;
-    if (!allUserPostIds.includes(postId)) {
+    const allUserPostIds = teamState.data?.teamMembers[userId].postIds || [];
+    const isNewPost = !allUserPostIds.includes(postId);
+    if (isNewPost) {
       allUserPostIds.unshift(postId);
     }
-    const postUpdates = {
+    const post = {
       postId,
     };
     if (fullImageUrl && thumbImageUrl) {
-      postUpdates.fullImageUrl = fullImageUrl;
-      postUpdates.thumbImageUrl = thumbImageUrl;
+      post.fullImageUrl = fullImageUrl;
+      post.thumbImageUrl = thumbImageUrl;
     }
-    postUpdates.description = description || "";
+    post.description = description || "";
+    const currentUser = teamState.data.teamMembers[user.id];
+    post.author = {
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      role: currentUser.role,
+      avatarThumbUrl: currentUser.avatarThumbUrl,
+    };
+    post.timestamp = new Date().getTime();
 
     setTeamState({
       isFetched: true,
@@ -212,17 +283,25 @@ const Index = () => {
             postIds: allUserPostIds,
             posts: {
               ...teamState.data.teamMembers[user.id].posts,
-              [postId]: postUpdates,
+              [postId]: post,
             },
           },
         },
       },
     });
+    setPosts([post, ...posts]);
 
     firestore.doc(`/teams/${teamId}/`).update({
       [`teamMembers.${userId}.postIds`]: allUserPostIds,
-      [`teamMembers.${userId}.posts.${postId}`]: postUpdates,
+      [`teamMembers.${userId}.posts.${postId}`]: post,
     });
+
+    if (isNewPost) {
+      firestore.doc(`/teams/${teamId}/posts/${postId}`).set({
+        postTimestamp: post.timestamp,
+        postData: post,
+      });
+    }
   };
 
   const onPostRemove = ({ postId, teamId, userId }) => {
@@ -248,6 +327,8 @@ const Index = () => {
       [`teamMembers.${userId}.postIds`]: postIds,
       [`teamMembers.${userId}.posts.${postId}`]: firebase.firestore.FieldValue.delete(),
     });
+
+    // TODO: remove from team.posts
   };
 
   const updateTeam = ({ teamId, teamName, teamLogo }) => {
@@ -294,7 +375,7 @@ const Index = () => {
 
     teamMembersArray = orderBy(
       teamMembersArrayUnsorted,
-      [(u) => u.name.toLowerCase()],
+      [(u) => `${u.firstName.toLowerCase()} ${u.lastName.toLowerCase()}`],
       ["asc"]
     );
 
@@ -342,26 +423,24 @@ const Index = () => {
         {showStartTeamForm && <StartTeamForm onStartTeam={startTeam} />}
         {showTeamDirectoty && (
           <div className="directory">
-            {viewMode === "list" && (
-              <div className="input-wrapper input-search-wrapper">
-                <img src="/icons/magnifying_glass.svg" />
-                <input
-                  className="input input-search"
-                  id="email"
-                  type="text"
-                  autoComplete="off"
-                  spellCheck={false}
-                  placeholder="Search by name or role"
-                  value={searchString}
-                  onChange={(e) => setSearchString(e.target.value)}
-                />
-              </div>
-            )}
+            <div className="input-wrapper input-search-wrapper">
+              <img src="/icons/magnifying_glass.svg" />
+              <input
+                className="input input-search"
+                id="email"
+                type="text"
+                autoComplete="off"
+                spellCheck={false}
+                placeholder="Search by name or role"
+                value={searchString}
+                onChange={(e) => setSearchString(e.target.value)}
+              />
+            </div>
             <NewPostsToggle
               timeframe={timeframe}
               onSetTimeframe={onSetTimeframe}
             />
-            {teamMembersArray && (
+            {viewMode === "list" && teamMembersArray && (
               <Humans
                 humans={teamMembersArray}
                 teamId={teamState.data?.teamId}
@@ -373,6 +452,11 @@ const Index = () => {
                   searchString && searchString.length >= 2 && searchString
                 }
               />
+            )}
+            {viewMode === "grid" && (
+              <div className="grid-view">
+                <PostsGrid posts={posts} />
+              </div>
             )}
           </div>
         )}

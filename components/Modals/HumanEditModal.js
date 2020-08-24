@@ -5,14 +5,16 @@ import useImageUpload from "../../utils/hooks/useImageUpload";
 const HumanEditModal = ({
   userId,
   teamId,
-  name: nameProp,
+  firstName: firstNameProp,
+  lastName: lastNameProp,
   role: roleProp,
   avatarThumbUrl: avatarThumbUrlProp,
   onHumanEditSubmit,
   onClose,
 }) => {
   const submitButton = useRef(null);
-  const [name, setName] = useState(nameProp);
+  const [firstName, setFirstName] = useState(firstNameProp);
+  const [lastName, setLastName] = useState(lastNameProp);
   const [role, setRole] = useState(roleProp);
   const {
     imageFile,
@@ -40,7 +42,8 @@ const HumanEditModal = ({
             400,
             (avatarFullUrl) => {
               onHumanEditSubmit({
-                name,
+                firstName,
+                lastName,
                 role,
                 avatarThumbUrl,
                 avatarFullUrl,
@@ -51,7 +54,8 @@ const HumanEditModal = ({
       );
     } else {
       onHumanEditSubmit({
-        name,
+        firstName,
+        lastName,
         role,
       });
     }
@@ -61,17 +65,31 @@ const HumanEditModal = ({
       <div className="new-team form">
         <div className="modal-title">Edit</div>
         <div className="form-group">
-          <label htmlFor="name" className="label">
-            Name
+          <label htmlFor="first-name" className="label">
+            First Name
           </label>
           <input
             id="name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             className="input"
             type="text"
-            value={name}
-            autoComplete="false"
-            spellCheck={false}
-            onChange={(e) => setName(e.target.value)}
+            autoComplete="off"
+            spellCheck="false"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="last-name" className="label">
+            Last Name
+          </label>
+          <input
+            id="name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className="input"
+            type="text"
+            autoComplete="off"
+            spellCheck="false"
           />
         </div>
         <div className="form-group">
@@ -94,9 +112,9 @@ const HumanEditModal = ({
           </label>
           <div className="image-field-form-wrapper">
             {imagePreview && (
-              <img
+              <div
                 className="image-field-form-preview"
-                src={imagePreview.src}
+                style={{ backgroundImage: `url(${imagePreview.src})` }}
               />
             )}
             <button className="button-wrapper file-button-wrapper">

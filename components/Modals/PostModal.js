@@ -16,12 +16,16 @@ const PostModal = ({ post, onClose }) => {
               <div
                 className="post-author-avatar"
                 style={{
-                  backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/llamify.appspot.com/o/userAvatars%2F6VeGb1I3PANCkHi4q7EVudv85592%2Fthumb%2FOmDHMXlbFNTWeaqBeabLlie4CaK2.jpeg?alt=media&token=e625ce37-7964-42c5-b0a5-49c595820c6d)`,
+                  backgroundImage: `url(${post.author?.avatarThumbUrl})`,
                 }}
               />
               <div className="post-author-name-wrapper">
-                <div className="post-author-name">Yury Nedomolkin</div>
-                <div className="post-author-role">UI designer</div>
+                <div className="post-author-name">
+                  {post.author.firstName} {post.author.lastName}
+                </div>
+                {post.author.role && (
+                  <div className="post-author-role">{post.author.role}</div>
+                )}
               </div>
             </div>
             <div className="post-description">{post.description}</div>
@@ -37,6 +41,7 @@ const PostModal = ({ post, onClose }) => {
                   <span className="comment-author-name">Yury</span>
                   <span>hello my friend of mine</span>
                 </div>
+                <div className="comment-reply-button">Reply</div>
               </div>
             </div>
           </div>
