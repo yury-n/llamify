@@ -23,6 +23,8 @@ const firestore = firebase.firestore();
 
 const GRID_POSTS_PER_PAGE = 20;
 
+export const ActionsContext = React.createContext({});
+
 const Index = () => {
   const router = useRouter();
   const rootDiv = useRef(null);
@@ -422,100 +424,108 @@ const Index = () => {
     }
   }
 
+  const onCommentSubmit = () => {
+    console.log("+++");
+  };
+
+  const actions = { onCommentSubmit };
+
   return (
     <>
-      <Head teamName={teamState.data?.teamName} />
-      <link rel="stylesheet" media="screen, projection" href="/home.css" />
-      <div
-        className={c("home-page", showForm && "home-sisu-page")}
-        ref={rootDiv}
-      >
-        {teamState.isFetched && (
-          <StickyBar
-            isTeamEditable={user.id === teamState.data?.teamId}
-            teamName={teamState.data?.teamName}
-            teamId={teamState.data?.teamId}
-            teamLogo={teamState.data?.teamLogo}
-            onTeamEditSubmit={updateTeam}
-            viewMode={viewMode}
-            onSetViewMode={onSetViewMode}
-          />
-        )}
-        {openModal && (
-          <PostModal
-            image="https://source.unsplash.com/random?6"
-            description="This wonderfull view I had when I visited Croatia with my team of frontend and backend developers this autumn."
-          />
-        )}
-        {showJoinTeamForm && <JoinTeamForm onJoinTeam={joinTeam} />}
-        {showStartTeamForm && <StartTeamForm onStartTeam={startTeam} />}
-        {showTeamDirectoty && (
-          <div className="directory">
-            <div className="input-wrapper input-search-wrapper">
-              <img src="/icons/magnifying_glass.svg" />
-              <input
-                className="input input-search"
-                id="email"
-                type="text"
-                autoComplete="off"
-                spellCheck={false}
-                placeholder="Search by name or role"
-                value={searchString}
-                onChange={(e) => setSearchString(e.target.value)}
-              />
-            </div>
-            <NewPostsToggle
-              timeframe={timeframe}
-              onSetTimeframe={onSetTimeframe}
+      <ActionsContext.Provider value={actions}>
+        <Head teamName={teamState.data?.teamName} />
+        <link rel="stylesheet" media="screen, projection" href="/home.css" />
+        <div
+          className={c("home-page", showForm && "home-sisu-page")}
+          ref={rootDiv}
+        >
+          {teamState.isFetched && (
+            <StickyBar
+              isTeamEditable={user.id === teamState.data?.teamId}
+              teamName={teamState.data?.teamName}
+              teamId={teamState.data?.teamId}
+              teamLogo={teamState.data?.teamLogo}
+              onTeamEditSubmit={updateTeam}
+              viewMode={viewMode}
+              onSetViewMode={onSetViewMode}
             />
-            {viewMode === "list" && teamMembersArray && (
-              <Humans
-                humans={teamMembersArray}
-                teamId={teamState.data?.teamId}
-                currentUserId={user.id}
-                onHumanEditSubmit={updateHuman}
-                onShowPostSubmitModal={onShowPostSubmitModal}
-                onPostRemove={onPostRemove}
-                searchString={
-                  searchString && searchString.length >= 2 && searchString
-                }
-              />
-            )}
-            {viewMode === "grid" && (
-              <div className="grid-view">
-                <PostsGrid posts={posts} onPostRemove={onPostRemove} />
-                {posts.length > 0 && postsHasMore && (
-                  <button
-                    className="button-wrapper load-more-button-wrapper"
-                    onClick={() => fetchPosts(teamState.data?.teamId)}
-                  >
-                    <span
-                      className={c(
-                        "button button-secondary button-white",
-                        isFetching && "busy"
-                      )}
-                      tabIndex="-1"
-                    >
-                      Load more
-                    </span>
-                  </button>
-                )}
+          )}
+          {openModal && (
+            <PostModal
+              image="https://source.unsplash.com/random?6"
+              description="This wonderfull view I had when I visited Croatia with my team of frontend and backend developers this autumn."
+            />
+          )}
+          {showJoinTeamForm && <JoinTeamForm onJoinTeam={joinTeam} />}
+          {showStartTeamForm && <StartTeamForm onStartTeam={startTeam} />}
+          {showTeamDirectoty && (
+            <div className="directory">
+              <div className="input-wrapper input-search-wrapper">
+                <img src="/icons/magnifying_glass.svg" />
+                <input
+                  className="input input-search"
+                  id="email"
+                  type="text"
+                  autoComplete="off"
+                  spellCheck={false}
+                  placeholder="Search by name or role"
+                  value={searchString}
+                  onChange={(e) => setSearchString(e.target.value)}
+                />
               </div>
-            )}
-          </div>
+              <NewPostsToggle
+                timeframe={timeframe}
+                onSetTimeframe={onSetTimeframe}
+              />
+              {viewMode === "list" && teamMembersArray && (
+                <Humans
+                  humans={teamMembersArray}
+                  teamId={teamState.data?.teamId}
+                  currentUserId={user.id}
+                  onHumanEditSubmit={updateHuman}
+                  onShowPostSubmitModal={onShowPostSubmitModal}
+                  onPostRemove={onPostRemove}
+                  searchString={
+                    searchString && searchString.length >= 2 && searchString
+                  }
+                />
+              )}
+              {viewMode === "grid" && (
+                <div className="grid-view">
+                  <PostsGrid posts={posts} onPostRemove={onPostRemove} />
+                  {posts.length > 0 && postsHasMore && (
+                    <button
+                      className="button-wrapper load-more-button-wrapper"
+                      onClick={() => fetchPosts(teamState.data?.teamId)}
+                    >
+                      <span
+                        className={c(
+                          "button button-secondary button-white",
+                          isFetching && "busy"
+                        )}
+                        tabIndex="-1"
+                      >
+                        Load more
+                      </span>
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        {showPostSubmitModal && (
+          <PostSubmitModal
+            userId={user.id}
+            teamId={teamState.data?.teamId}
+            imageFile={droppedFile}
+            imagePreview={droppedFile && getImageFilePreview(droppedFile)}
+            onPostSubmit={onPostSubmit}
+            onClose={onClosePostSubmitModal}
+            isDragActive={isDragActive}
+          />
         )}
-      </div>
-      {showPostSubmitModal && (
-        <PostSubmitModal
-          userId={user.id}
-          teamId={teamState.data?.teamId}
-          imageFile={droppedFile}
-          imagePreview={droppedFile && getImageFilePreview(droppedFile)}
-          onPostSubmit={onPostSubmit}
-          onClose={onClosePostSubmitModal}
-          isDragActive={isDragActive}
-        />
-      )}
+      </ActionsContext.Provider>
     </>
   );
 };
