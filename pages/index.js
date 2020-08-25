@@ -83,7 +83,7 @@ const Index = () => {
 
     let query = firestore
       .collection(`/teams/${teamId}/posts`)
-      .orderBy("postTimestamp", "asc");
+      .orderBy("postTimestamp", "desc");
 
     if (posts.length) {
       query = query.startAfter(posts[posts.length - 1].timestamp);
@@ -285,6 +285,7 @@ const Index = () => {
     post.description = description || "";
     const currentUser = teamState.data.teamMembers[user.id];
     post.author = {
+      id: currentUser.id,
       firstName: currentUser.firstName,
       lastName: currentUser.lastName,
       role: currentUser.role,
@@ -426,7 +427,40 @@ const Index = () => {
     }
   }
 
-  const onCommentSubmit = ({ teamId, postId, newComment }) => {
+  const updateCommentCount = ({
+    teamId,
+    postId,
+    postAuthorId,
+    newCommentCount,
+  }) => {
+    const post = teamState.data.teamMembers[postAuthorId].posts[postId];
+    const updatedPost = {
+      ...post,
+      commentCount: newCommentCount,
+    };
+    const newTeamState = { ...teamState };
+    teamState.data.teamMembers[postAuthorId].posts[postId] = updatedPost;
+    setTeamState(newTeamState);
+    const postIndex = posts.findIndex((p) => p.postId === postId);
+    const newPosts = [...posts];
+    newPosts[postIndex] = updatedPost;
+    setPosts(newPosts);
+
+    firestore.doc(`/teams/${teamId}/`).update({
+      [`teamMembers.${postAuthorId}.posts.${postId}.commentCount`]: newCommentCount,
+    });
+    firestore.doc(`/teams/${teamId}/posts/${postId}`).update({
+      ["postData.commentCount"]: newCommentCount,
+    });
+  };
+
+  const onCommentSubmit = ({
+    teamId,
+    postAuthorId,
+    postId,
+    newComment,
+    newCommentCount,
+  }) => {
     firestore
       .doc(
         `/teams/${teamId}/postComments/${postId}/comments/${newComment.commentId}`
@@ -435,9 +469,29 @@ const Index = () => {
         commentTimestamp: newComment.timestamp,
         commentData: newComment,
       });
+
+    updateCommentCount({
+      teamId,
+      postId,
+      postAuthorId,
+      newCommentCount,
+    });
   };
 
-  const actions = { onCommentSubmit };
+  const onCommentRemove = ({
+    teamId,
+    postId,
+    postAuthorId,
+    commentId,
+    newCommentCount,
+  }) => {
+    updateCommentCount({ teamId, postId, postAuthorId, newCommentCount });
+    firestore
+      .doc(`/teams/${teamId}/postComments/${postId}/comments/${commentId}`)
+      .delete();
+  };
+
+  const actions = { onCommentSubmit, onCommentRemove };
 
   const currentUser = user.id ? teamState.data?.teamMembers[user.id] : {};
   // console.log({ currentUser });

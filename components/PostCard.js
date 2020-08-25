@@ -27,8 +27,18 @@ const PostCard = ({ post, onPostRemove }) => {
         <div className="post-thumb-image">
           <img src={post.thumbImageUrl} loading="lazy" onLoad={onImageLoad} />
         </div>
-        {post.description && (
-          <div className="post-thumb-description">{post.description}</div>
+        {(post.description || post.commentCount) && (
+          <div className="post-thumb-details">
+            {post.description && (
+              <div className="post-thumb-description">{post.description}</div>
+            )}
+            {post.commentCount && (
+              <div className="post-thumb-comments">
+                <img className="icon" src="/icons/comment.svg" />
+                {post.commentCount}
+              </div>
+            )}
+          </div>
         )}
       </div>
       {showPostModal && (
@@ -36,6 +46,7 @@ const PostCard = ({ post, onPostRemove }) => {
       )}
       {showRemoveModal && (
         <RemoveConfirmationModal
+          text="Are you sure you want to remove this post?"
           onClose={() => setShowRemoveModal(false)}
           onRemove={() => {
             setShowRemoveModal(false);

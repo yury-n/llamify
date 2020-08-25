@@ -312,7 +312,7 @@
   width: 40px;
 }
 
-.post-thumb-description {
+.post-thumb-details {
   white-space: nowrap;
   position: absolute;
   bottom: 6px;
@@ -326,11 +326,23 @@
   font-size: 13px;
   transition: all ease 300ms;
   max-height: 120px;
+  display: flex;
 }
 
-.post-thumb-description .icon {
+.post-thumb-description {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-thumb-comments {
+  width: auto;
+  margin-left: auto;
+}
+
+.post-thumb-details .icon {
   width: 12px;
-  margin-right: 2px;
+  margin-right: 4px;
 }
 
 .post-thumb:hover .post-thumb-remove {
@@ -487,10 +499,10 @@
 }
 
 .comment + .comment {
-  margin-top: 40px;
+  margin-top: 32px;
 }
 
-.comment:hover .comment-reply-button {
+.comment:hover .comment-action-button {
   opacity: 1;
 }
 
@@ -518,9 +530,9 @@
   margin-right: 8px;
 }
 
-.comment-reply-button {
+.comment-action-button {
   position: absolute;
-  bottom: -20px;
+  bottom: -18px;
   left: 52px;
   font-size: 13px;
   color: #989898;

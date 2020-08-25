@@ -3,17 +3,20 @@ import database from "firebase/database";
 import firebase from "firebase/app";
 import { useState, useRef, useContext, useEffect } from "react";
 import { ActionsContext, TeamContext, CurrentUserContext } from "../pages";
+import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 
 const firestore = firebase.firestore();
 
-const CommentsArea = ({ postId }) => {
-  const { onCommentSubmit } = useContext(ActionsContext);
+const CommentsArea = ({ postId, postAuthorId }) => {
+  const { onCommentSubmit, onCommentRemove } = useContext(ActionsContext);
   const { teamId } = useContext(TeamContext);
   const { currentUser } = useContext(CurrentUserContext);
   const textareaRef = useRef(null);
   const [textareaValue, setTextareaValue] = useState("");
   const [isTextareaFocused, setIsTextareaFocused] = useState(false);
   const [comments, setComments] = useState([]);
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [currentCommentId, setCurrentCommentId] = useState();
 
   console.log({ currentUser });
 
@@ -62,60 +65,104 @@ const CommentsArea = ({ postId }) => {
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     };
     console.log({ newComment });
-    onCommentSubmit({ newComment, teamId, postId });
+    onCommentSubmit({
+      newComment,
+      newCommentCount: comments.length + 1,
+      teamId,
+      postId,
+      postAuthorId,
+    });
     setComments([...comments, newComment]);
     clearAndBlurTextarea();
   };
 
+  const onCommentRemoveHandler = () => {
+    onCommentRemove({
+      teamId,
+      postId,
+      postAuthorId,
+      commentId: currentCommentId,
+      newCommentCount: comments.length - 1,
+    });
+    setComments(comments.filter((c) => c.commentId !== currentCommentId));
+    setShowRemoveModal(false);
+    setCurrentCommentId(null);
+  };
+
   return (
-    <div className="comments-area">
-      <div className="comments">
-        {comments.map((comment) => (
-          <div key={comment.commentId} className="comment">
-            <div
-              className="comment-author-avatar"
-              style={{
-                backgroundImage:
-                  comment.author.avatarThumbUrl &&
-                  `url(${comment.author.avatarThumbUrl})`,
-              }}
-            />
-            <div>
-              <span className="comment-author-name">
-                {comment.author.firstName}
-              </span>
-              <span>{comment.content}</span>
+    <>
+      <div className="comments-area">
+        <div className="comments">
+          {comments.map((comment) => {
+            const isCommentAuthor = comment.author.id == currentUser.id;
+            return (
+              <div key={comment.commentId} className="comment">
+                <div
+                  className="comment-author-avatar"
+                  style={{
+                    backgroundImage:
+                      comment.author.avatarThumbUrl &&
+                      `url(${comment.author.avatarThumbUrl})`,
+                  }}
+                />
+                <div>
+                  <span className="comment-author-name">
+                    {comment.author.firstName}
+                  </span>
+                  <span>{comment.content}</span>
+                </div>
+                {isCommentAuthor && (
+                  <div
+                    className="comment-action-button"
+                    onClick={() => {
+                      setCurrentCommentId(comment.commentId);
+                      setShowRemoveModal(true);
+                    }}
+                  >
+                    Remove
+                  </div>
+                )}
+                {!isCommentAuthor && (
+                  <div className="comment-action-button">Reply</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div className="comment-textarea-wrapper">
+          <textarea
+            ref={textareaRef}
+            className="textarea comment-textarea"
+            rows={isTextareaFocused ? 2 : 1}
+            placeholder="Add a comment"
+            onFocus={() => setIsTextareaFocused(true)}
+            value={textareaValue}
+            onChange={(e) => setTextareaValue(e.target.value)}
+          />
+          {isTextareaFocused && (
+            <div className="form-buttons">
+              <button className="button-wrapper" onClick={onSubmit}>
+                <span className="button button-primary" tabIndex="-1">
+                  Submit
+                </span>
+              </button>
+              <button className="button-wrapper" onClick={onCancel}>
+                <span className="button button-secondary" tabIndex="-1">
+                  Cancel
+                </span>
+              </button>
             </div>
-            <div className="comment-reply-button">Reply</div>
-          </div>
-        ))}
+          )}
+        </div>
       </div>
-      <div className="comment-textarea-wrapper">
-        <textarea
-          ref={textareaRef}
-          className="textarea comment-textarea"
-          rows={isTextareaFocused ? 2 : 1}
-          placeholder="Add a comment"
-          onFocus={() => setIsTextareaFocused(true)}
-          value={textareaValue}
-          onChange={(e) => setTextareaValue(e.target.value)}
+      {showRemoveModal && (
+        <RemoveConfirmationModal
+          text="Are you sure you want to remove this comment?"
+          onClose={() => setShowRemoveModal(false)}
+          onRemove={onCommentRemoveHandler}
         />
-        {isTextareaFocused && (
-          <div className="form-buttons">
-            <button className="button-wrapper" onClick={onSubmit}>
-              <span className="button button-primary" tabIndex="-1">
-                Submit
-              </span>
-            </button>
-            <button className="button-wrapper" onClick={onCancel}>
-              <span className="button button-secondary" tabIndex="-1">
-                Cancel
-              </span>
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

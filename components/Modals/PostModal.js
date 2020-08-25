@@ -32,7 +32,7 @@ const PostModal = ({ post, onClose }) => {
             <div className="post-description">{post.description}</div>
           </div>
           <div className="post-sidebar-bottom">
-            <CommentsArea postId={post.postId} />
+            <CommentsArea postId={post.postId} postAuthorId={post.author.id} />
           </div>
         </div>
       </div>
