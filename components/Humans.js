@@ -9,18 +9,24 @@ export const Humans = ({
   onPostRemove,
   searchString,
 }) => {
-  return humans.map((human) => (
-    <Human
-      key={human.id}
-      human={human}
-      teamId={teamId}
-      isOwner={human.id === currentUserId}
-      onHumanEditSubmit={onHumanEditSubmit}
-      onShowPostSubmitModal={onShowPostSubmitModal}
-      onPostRemove={onPostRemove}
-      searchString={searchString && searchString.length >= 2 && searchString}
-    />
-  ));
+  return (
+    <div className="humans">
+      {humans.map((human) => (
+        <Human
+          key={human.id}
+          human={human}
+          teamId={teamId}
+          isOwner={human.id === currentUserId}
+          onHumanEditSubmit={onHumanEditSubmit}
+          onShowPostSubmitModal={onShowPostSubmitModal}
+          onPostRemove={onPostRemove}
+          searchString={
+            searchString && searchString.length >= 2 && searchString
+          }
+        />
+      ))}
+    </div>
+  );
 };
 
 export default Humans;

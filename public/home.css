@@ -614,3 +614,28 @@ svg.new-notifications-icon {
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
 }
+
+.timeframe-mode .role,
+.timeframe-mode .post-thumb-remove {
+  display: none;
+}
+
+.timeframe-mode .human {
+  flex-direction: column;
+}
+
+.timeframe-mode .name {
+  font-size: 24px;
+}
+
+.timeframe-mode .posts-stream {
+  display: block;
+  position: relative;
+}
+
+.timeframe-mode .post-thumb {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  padding-top: 0;
+}

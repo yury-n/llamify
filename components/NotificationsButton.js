@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 
 const NotificationsButton = () => {
   const buttonRef = useRef();
-  const [isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState(false);
   const hasNewNotifications = false;
   useEffect(() => {
     const makeInactive = (e) =>
