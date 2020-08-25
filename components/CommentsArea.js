@@ -1,38 +1,94 @@
-import { useState, useRef, useContext } from "react";
-import { ActionsContext } from "../pages";
+import "firebase/firestore";
+import database from "firebase/database";
+import firebase from "firebase/app";
+import { useState, useRef, useContext, useEffect } from "react";
+import { ActionsContext, TeamContext, CurrentUserContext } from "../pages";
 
-const CommentsArea = () => {
+const firestore = firebase.firestore();
+
+const CommentsArea = ({ postId }) => {
   const { onCommentSubmit } = useContext(ActionsContext);
+  const { teamId } = useContext(TeamContext);
+  const { currentUser } = useContext(CurrentUserContext);
   const textareaRef = useRef(null);
   const [textareaValue, setTextareaValue] = useState("");
   const [isTextareaFocused, setIsTextareaFocused] = useState(false);
+  const [comments, setComments] = useState([]);
 
-  const onCancel = () => {
+  console.log({ currentUser });
+
+  useEffect(() => {
+    fetchComments();
+  }, []);
+
+  const fetchComments = () => {
+    firestore
+      .collection(`/teams/${teamId}/postComments/${postId}/comments`)
+      .get()
+      .then((commentsSnapshot) => {
+        const fetchedComments = [];
+        commentsSnapshot.forEach((comment) => {
+          fetchedComments.push(comment.data().commentData);
+        });
+        setComments(fetchedComments);
+      });
+  };
+
+  const clearAndBlurTextarea = () => {
     setTextareaValue("");
     setIsTextareaFocused(false);
     textareaRef.current.blur();
   };
 
+  const onCancel = () => {
+    clearAndBlurTextarea();
+  };
+
   const onSubmit = () => {
-    onCommentSubmit();
+    const db = firebase.database();
+    const commentsRef = db.ref(
+      `/teams/${teamId}/postComments/${postId}/comments`
+    );
+    const commentId = commentsRef.push().key;
+    const newComment = {
+      commentId,
+      content: textareaValue,
+      author: {
+        id: currentUser.id,
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+        avatarThumbUrl: currentUser.avatarThumbUrl,
+      },
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    console.log({ newComment });
+    onCommentSubmit({ newComment, teamId, postId });
+    setComments([...comments, newComment]);
+    clearAndBlurTextarea();
   };
 
   return (
     <div className="comments-area">
       <div className="comments">
-        <div className="comment">
-          <div
-            className="comment-author-avatar"
-            style={{
-              backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/llamify.appspot.com/o/userAvatars%2F6VeGb1I3PANCkHi4q7EVudv85592%2Fthumb%2FOmDHMXlbFNTWeaqBeabLlie4CaK2.jpeg?alt=media&token=e625ce37-7964-42c5-b0a5-49c595820c6d)`,
-            }}
-          />
-          <div>
-            <span className="comment-author-name">Yury</span>
-            <span>hello my friend of mine</span>
+        {comments.map((comment) => (
+          <div key={comment.commentId} className="comment">
+            <div
+              className="comment-author-avatar"
+              style={{
+                backgroundImage:
+                  comment.author.avatarThumbUrl &&
+                  `url(${comment.author.avatarThumbUrl})`,
+              }}
+            />
+            <div>
+              <span className="comment-author-name">
+                {comment.author.firstName}
+              </span>
+              <span>{comment.content}</span>
+            </div>
+            <div className="comment-reply-button">Reply</div>
           </div>
-          <div className="comment-reply-button">Reply</div>
-        </div>
+        ))}
       </div>
       <div className="comment-textarea-wrapper">
         <textarea
