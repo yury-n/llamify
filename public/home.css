@@ -549,3 +549,68 @@
 .load-more-button-wrapper .button {
   width: 200px;
 }
+
+svg.new-notifications-icon {
+  position: absolute;
+  top: -4px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 80%;
+  color: #f56e2c;
+}
+
+.notifications-button-wrapper {
+  position: relative;
+  margin-right: 8px;
+}
+
+.notifications-popover {
+  position: absolute;
+  width: 350px;
+  box-sizing: border-box;
+  padding: 15px 0;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 6px 20px 0px;
+  border-radius: 15px;
+  background: white;
+  right: -40px;
+  top: 52px;
+  overflow: hidden;
+}
+
+.notification {
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.notification:hover {
+  box-shadow: rgb(0 0 0 / 7%) 0px 4px 24px 0px;
+}
+
+.notification-thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.notification .comment {
+  width: 100%;
+  margin-top: 0;
+  font-size: 14px;
+}
+
+.notification .comment-body {
+  max-height: 53px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+}

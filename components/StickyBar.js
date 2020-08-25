@@ -3,6 +3,7 @@ import { useUser } from "../utils/auth/useUser";
 import { useState } from "react";
 import TeamEditModal from "./Modals/TeamEditModal";
 import InviteModal from "./Modals/InviteModal";
+import NotificationsButton from "./NotificationsButton";
 
 const StickyBar = ({
   teamId,
@@ -93,19 +94,7 @@ const StickyBar = ({
           {teamId && renderViewModeButtons()}
         </div>
         <div className="sticky-bar-buttons buttons">
-          {teamId && (
-            <button className="button-wrapper" title="Notifcations">
-              <span
-                className="button icon-button button-secondary button-white"
-                tabIndex="-1"
-              >
-                <img
-                  src="/icons/bell.svg"
-                  style={{ transform: "scale(1.15)" }}
-                />
-              </span>
-            </button>
-          )}
+          {teamId && <NotificationsButton />}
           <button
             className="button-wrapper"
             onClick={() => logout()}
