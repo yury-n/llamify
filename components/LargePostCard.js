@@ -1,21 +1,20 @@
-const { default: Modal } = require("./Modal");
-const { default: CommentsArea } = require("../CommentsArea");
+import { useState } from "react";
+import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
+import CommentsArea from "./CommentsArea";
 
-const PostModal = ({ post, onClose }) => {
+const LargePostCard = ({ post, onPostRemove }) => {
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+
+  const onImageLoad = (e) => {
+    e.target.style.opacity = 1;
+  };
+
   return (
-    <Modal
-      modalClassname="post-modal"
-      width={860}
-      height={630}
-      onClose={onClose}
-    >
-      <div className="post post-view">
-        <div
-          className="post-image"
-          style={{
-            backgroundImage: `url(${post.fullImageUrl})`,
-          }}
-        ></div>
+    <>
+      <div className="large-post-thumb post-view">
+        <div className="post-image post-image-lazy">
+          <img src={post.fullImageUrl} loading="lazy" onLoad={onImageLoad} />
+        </div>
         <div className="post-sidebar">
           <div className="post-sidebar-top">
             <div className="post-author-block">
@@ -40,13 +39,23 @@ const PostModal = ({ post, onClose }) => {
             <CommentsArea
               postId={post.postId}
               postAuthorId={post.author.id}
-              loadComments
+              commentCount={post.commentCount}
             />
           </div>
         </div>
       </div>
-    </Modal>
+      {showRemoveModal && (
+        <RemoveConfirmationModal
+          text="Are you sure you want to remove this post?"
+          onClose={() => setShowRemoveModal(false)}
+          onRemove={() => {
+            setShowRemoveModal(false);
+            onPostRemove(post.postId);
+          }}
+        />
+      )}
+    </>
   );
 };
 
-export default PostModal;
+export default LargePostCard;

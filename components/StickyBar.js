@@ -72,13 +72,13 @@ const StickyBar = ({
       </button>
       <button
         className="button-wrapper grid-view-button"
-        onClick={() => onSetViewMode("full")}
-        title="Full View"
+        onClick={() => onSetViewMode("feed")}
+        title="Feed View"
       >
         <span
           className={c(
             "button icon-button button-secondary button-white",
-            viewMode === "full" && "active"
+            viewMode === "feed" && "active"
           )}
           tabIndex="-1"
         >
@@ -90,7 +90,7 @@ const StickyBar = ({
             xmlns="http://www.w3.org/2000/svg"
             style={{ transform: "scale(1.05)" }}
           >
-            <g clip-path="url(#clip0)">
+            <g clipPath="url(#clip0)">
               <rect
                 x="1"
                 y="4.375"
@@ -98,7 +98,7 @@ const StickyBar = ({
                 height="9.25"
                 rx="2"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
               />
               <rect
                 x="1"
@@ -107,12 +107,12 @@ const StickyBar = ({
                 height="9.25"
                 rx="2"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
               />
               <path
                 d="M3 17.875H13C14.1046 17.875 15 18.7704 15 19.875V23.75H1V19.875C1 18.7704 1.89543 17.875 3 17.875Z"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
               />
             </g>
             <defs>
@@ -128,7 +128,9 @@ const StickyBar = ({
 
   return (
     <>
-      <img src="/images/logo.svg" className="home-logo" />
+      <a href="/">
+        <img src="/images/logo.svg" className="home-logo" />
+      </a>
       <div className="sticky-bar">
         <div className="sticky-bar-left-side">
           <div

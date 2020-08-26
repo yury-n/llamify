@@ -17,6 +17,7 @@ import Humans from "../components/Humans";
 import PostSubmitModal from "../components/Modals/PostSubmitModal";
 import getImageFilePreview from "../utils/getImageFilePreview";
 import PostsGrid from "../components/PostsGrid";
+import PostsFeed from "../components/PostsFeed";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -156,7 +157,7 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    if (viewMode === "grid" && !posts.length) {
+    if (["grid", "feed"].includes(viewMode) && !posts.length) {
       fetchPosts(teamState.data?.teamId);
     }
   }, [viewMode, teamState]);
@@ -562,7 +563,11 @@ const Index = () => {
                     )}
                     {viewMode === "grid" && (
                       <div className="grid-view">
-                        <PostsGrid posts={posts} onPostRemove={onPostRemove} />
+                        <PostsGrid
+                          posts={posts}
+                          onShowPostSubmitModal={onShowPostSubmitModal}
+                          onPostRemove={onPostRemove}
+                        />
                         {posts.length > 0 && postsHasMore && (
                           <button
                             className="button-wrapper load-more-button-wrapper"
@@ -579,6 +584,11 @@ const Index = () => {
                             </span>
                           </button>
                         )}
+                      </div>
+                    )}
+                    {viewMode === "feed" && (
+                      <div className="feed-view">
+                        <PostsFeed posts={posts} onPostRemove={onPostRemove} />
                       </div>
                     )}
                   </div>

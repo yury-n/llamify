@@ -7,7 +7,7 @@ import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 
 const firestore = firebase.firestore();
 
-const CommentsArea = ({ postId, postAuthorId }) => {
+const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
   const { onCommentSubmit, onCommentRemove } = useContext(ActionsContext);
   const { teamId } = useContext(TeamContext);
   const { currentUser } = useContext(CurrentUserContext);
@@ -18,10 +18,18 @@ const CommentsArea = ({ postId, postAuthorId }) => {
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [currentCommentId, setCurrentCommentId] = useState();
 
-  console.log({ currentUser });
-
   useEffect(() => {
-    fetchComments();
+    loadComments && fetchComments();
+    const onKeyDown = (e) => {
+      if (e.keyCode === 13 && e.metaKey) {
+        e.preventDefault();
+        onSubmit();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
   }, []);
 
   const fetchComments = () => {
@@ -92,6 +100,19 @@ const CommentsArea = ({ postId, postAuthorId }) => {
   return (
     <>
       <div className="comments-area">
+        {!loadComments && commentCount && (
+          <div className="post-comments-collapsed">
+            <button class="button-wrapper" title="Show comments">
+              <span
+                class="button icon-button button-secondary button-white"
+                tabIndex="-1"
+              >
+                <img className="icon" src="/icons/comment.svg" />
+                {commentCount} {commentCount === 1 ? "Comment" : "Comments"}
+              </span>
+            </button>
+          </div>
+        )}
         <div className="comments">
           {comments.map((comment) => {
             const isCommentAuthor = comment.author.id == currentUser.id;
