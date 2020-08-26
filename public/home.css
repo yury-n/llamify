@@ -516,6 +516,11 @@
   opacity: 1;
 }
 
+.comment-content {
+  position: relative;
+  top: 1px;
+}
+
 .comment-author {
   display: inline-flex;
   align-items: center;
@@ -529,6 +534,7 @@
   overflow: hidden;
   margin-top: -3px;
   margin-right: 14px;
+  background: #f3f3f4;
   background-size: cover;
   display: inline-block;
   flex-shrink: 0;
@@ -542,7 +548,7 @@
 
 .comment-action-button {
   position: absolute;
-  bottom: -18px;
+  bottom: -21px;
   left: 52px;
   font-size: 13px;
   color: #989898;

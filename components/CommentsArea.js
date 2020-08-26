@@ -1,7 +1,7 @@
 import "firebase/firestore";
 import database from "firebase/database";
 import firebase from "firebase/app";
-import { useState, useRef, useContext, useEffect } from "react";
+import { useState, useRef, useContext, useEffect, useCallback } from "react";
 import { ActionsContext, TeamContext, CurrentUserContext } from "../pages";
 import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 
@@ -17,12 +17,17 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
   const [comments, setComments] = useState([]);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [currentCommentId, setCurrentCommentId] = useState();
+  const [currentReplyToAuthor, setCurrentReplyToAuthor] = useState();
 
   useEffect(() => {
     loadComments && fetchComments();
+  }, []);
+
+  useEffect(() => {
     const onKeyDown = (e) => {
       if (e.keyCode === 13 && e.metaKey) {
         e.preventDefault();
+        e.stopPropagation();
         onSubmit();
       }
     };
@@ -30,7 +35,7 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
     return () => {
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, []);
+  }, [textareaValue, comments]);
 
   const fetchComments = () => {
     firestore
@@ -45,6 +50,17 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
       });
   };
 
+  const onTextareaChange = (e) => {
+    setTextareaValue(e.target.value);
+    if (currentReplyToAuthor) {
+      if (e.target.value.indexOf(currentReplyToAuthor.firstName) !== 0) {
+        setCurrentCommentId(null);
+        setCurrentReplyToAuthor(null);
+        console.log("cancel");
+      }
+    }
+  };
+
   const clearAndBlurTextarea = () => {
     setTextareaValue("");
     setIsTextareaFocused(false);
@@ -53,6 +69,8 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
 
   const onCancel = () => {
     clearAndBlurTextarea();
+    setCurrentCommentId(null);
+    setCurrentReplyToAuthor(null);
   };
 
   const onSubmit = () => {
@@ -68,18 +86,27 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
         id: currentUser.id,
         firstName: currentUser.firstName,
         lastName: currentUser.lastName,
-        avatarThumbUrl: currentUser.avatarThumbUrl,
       },
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     };
+    if (currentUser.avatarThumbUrl) {
+      newComment.author.avatarThumbUrl = currentUser.avatarThumbUrl;
+    }
     console.log({ newComment });
-    onCommentSubmit({
+    const params = {
       newComment,
       newCommentCount: comments.length + 1,
       teamId,
       postId,
       postAuthorId,
-    });
+    };
+    if (currentReplyToAuthor) {
+      params.newComment.replyToCommentId = currentCommentId;
+      params.replyToAuthor = currentReplyToAuthor;
+    }
+    console.log({ params });
+    onCommentSubmit(params);
+    console.log({ comments });
     setComments([...comments, newComment]);
     clearAndBlurTextarea();
   };
@@ -126,7 +153,7 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
                       `url(${comment.author.avatarThumbUrl})`,
                   }}
                 />
-                <div>
+                <div className="comment-content">
                   <span className="comment-author-name">
                     {comment.author.firstName}
                   </span>
@@ -144,7 +171,17 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
                   </div>
                 )}
                 {!isCommentAuthor && (
-                  <div className="comment-action-button">Reply</div>
+                  <div
+                    className="comment-action-button"
+                    onClick={() => {
+                      setCurrentCommentId(comment.commentId);
+                      setCurrentReplyToAuthor(comment.author);
+                      setTextareaValue(`${comment.author.firstName}, `);
+                      textareaRef.current.focus();
+                    }}
+                  >
+                    Reply
+                  </div>
                 )}
               </div>
             );
@@ -158,7 +195,7 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
             placeholder="Add a comment"
             onFocus={() => setIsTextareaFocused(true)}
             value={textareaValue}
-            onChange={(e) => setTextareaValue(e.target.value)}
+            onChange={onTextareaChange}
           />
           {isTextareaFocused && (
             <div className="form-buttons">

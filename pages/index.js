@@ -287,7 +287,7 @@ const Index = () => {
       role: currentUser.role,
       avatarThumbUrl: currentUser.avatarThumbUrl,
     };
-    post.timestamp = new Date().getTime();
+    post.timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
     setTeamState({
       isFetched: true,
@@ -350,7 +350,6 @@ const Index = () => {
 
     firestore.doc(`/teams/${teamId}/`).update({
       [`teamMembers.${userId}.postIds`]: postIds,
-      // TODO: use the same for timestamp
       [`teamMembers.${userId}.posts.${postId}`]: firebase.firestore.FieldValue.delete(),
     });
     firestore.doc(`/teams/${teamId}/posts/${postId}`).delete();

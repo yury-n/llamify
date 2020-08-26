@@ -1,9 +1,8 @@
 import c from "classnames";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import CreatePostButton from "./CreatePostButton";
 import PostCard from "./PostCard";
 import FullAvatarModal from "./Modals/FullAvatarModal";
-import { ViewPropsContext } from "../pages";
 const { default: HumanEditModal } = require("./Modals/HumanEditModal");
 
 const Human = ({
@@ -15,23 +14,17 @@ const Human = ({
   onPostRemove,
   searchString,
 }) => {
-  const { timeframe } = useContext(ViewPropsContext);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
 
   let requiredNumOfCards = isOwner ? 5 : 6;
-  if (timeframe) {
-    requiredNumOfCards = 3; // max
-  }
   const posts = (human.postIds || [])
     .map((postId) => human.posts[postId])
     .slice(0, requiredNumOfCards);
 
-  if (!timeframe) {
-    const emptyPostCardsToAdd = requiredNumOfCards - posts.length;
-    for (var i = 0; i < emptyPostCardsToAdd; i++) {
-      posts.push(null);
-    }
+  const emptyPostCardsToAdd = requiredNumOfCards - posts.length;
+  for (var i = 0; i < emptyPostCardsToAdd; i++) {
+    posts.push(null);
   }
 
   const name = `${human.firstName} ${human.lastName}`;
