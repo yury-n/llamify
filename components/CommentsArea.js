@@ -140,53 +140,65 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
             </button>
           </div>
         )}
-        <div className="comments">
-          {comments.map((comment) => {
-            const isCommentAuthor = comment.author.id == currentUser.id;
-            return (
-              <div key={comment.commentId} className="comment">
-                <div
-                  className="comment-author-avatar"
-                  style={{
-                    backgroundImage:
-                      comment.author.avatarThumbUrl &&
-                      `url(${comment.author.avatarThumbUrl})`,
-                  }}
-                />
-                <div className="comment-content">
-                  <span className="comment-author-name">
-                    {comment.author.firstName}
-                  </span>
-                  <span>{comment.content}</span>
-                </div>
-                {isCommentAuthor && (
-                  <div
-                    className="comment-action-button"
-                    onClick={() => {
-                      setCurrentCommentId(comment.commentId);
-                      setShowRemoveModal(true);
-                    }}
-                  >
-                    Remove
-                  </div>
-                )}
-                {!isCommentAuthor && (
-                  <div
-                    className="comment-action-button"
-                    onClick={() => {
-                      setCurrentCommentId(comment.commentId);
-                      setCurrentReplyToAuthor(comment.author);
-                      setTextareaValue(`${comment.author.firstName}, `);
-                      textareaRef.current.focus();
-                    }}
-                  >
-                    Reply
-                  </div>
-                )}
+        {commentCount > 0 && comments.length == 0 && (
+          <div className="comments">
+            {new Array(commentCount).fill(null).map((comment, index) => (
+              <div key={index} className="comment loading-comment">
+                <div className="comment-author-avatar" />
+                <div className="comment-content"></div>
               </div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        )}
+        {comments.length > 0 && (
+          <div className="comments">
+            {comments.map((comment) => {
+              const isCommentAuthor = comment.author.id == currentUser.id;
+              return (
+                <div key={comment.commentId} className="comment">
+                  <div
+                    className="comment-author-avatar"
+                    style={{
+                      backgroundImage:
+                        comment.author.avatarThumbUrl &&
+                        `url(${comment.author.avatarThumbUrl})`,
+                    }}
+                  />
+                  <div className="comment-content">
+                    <span className="comment-author-name">
+                      {comment.author.firstName}
+                    </span>
+                    <span>{comment.content}</span>
+                  </div>
+                  {isCommentAuthor && (
+                    <div
+                      className="comment-action-button"
+                      onClick={() => {
+                        setCurrentCommentId(comment.commentId);
+                        setShowRemoveModal(true);
+                      }}
+                    >
+                      Remove
+                    </div>
+                  )}
+                  {!isCommentAuthor && (
+                    <div
+                      className="comment-action-button"
+                      onClick={() => {
+                        setCurrentCommentId(comment.commentId);
+                        setCurrentReplyToAuthor(comment.author);
+                        setTextareaValue(`${comment.author.firstName}, `);
+                        textareaRef.current.focus();
+                      }}
+                    >
+                      Reply
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
         <div className="comment-textarea-wrapper">
           <textarea
             ref={textareaRef}

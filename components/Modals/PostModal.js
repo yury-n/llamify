@@ -40,6 +40,7 @@ const PostModal = ({ post, onClose }) => {
             <CommentsArea
               postId={post.postId}
               postAuthorId={post.author.id}
+              commentCount={post.commentCount}
               loadComments
             />
           </div>

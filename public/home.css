@@ -507,6 +507,22 @@
   box-sizing: border-box;
 }
 
+.loading-comment {
+  animation: pulse 2s infinite;
+}
+
+.loading-comment .comment-author-avatar {
+  background: #efeff0;
+}
+
+.loading-comment .comment-content {
+  width: 70%;
+  height: 8px;
+  background: #efeff0;
+  top: 7px;
+  border-radius: 4px;
+}
+
 .comment {
   position: relative;
   display: flex;
@@ -707,7 +723,8 @@ svg.new-notifications-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 17px;
+  margin-bottom: -10px;
 }
 
 .newsletter-checkbox-label {

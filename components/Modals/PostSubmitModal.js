@@ -30,10 +30,16 @@ const PostSubmitModal = ({
   } = useImageUpload(imagePreviewProp, imageFileProp);
 
   const [description, setDescription] = useState(descriptionProp);
+  const [includeInNewsletter, setIncludeInNewsletter] = useState(false);
 
   const imagePreview = imagePreviewProp || imagePreviewFromInput;
 
   console.log({ imagePreview });
+
+  const onTextareaChange = (e) => {
+    setDescription(e.target.value);
+    setIncludeInNewsletter(true);
+  };
 
   const onSubmit = (e) => {
     submitButton.current.childNodes[0].classList.add("busy");
@@ -109,14 +115,21 @@ const PostSubmitModal = ({
             className="textarea description-textarea"
             rows="3"
             placeholder="Description"
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={onTextareaChange}
           >
             {description}
           </textarea>
           <div className="newsletter-checkbox-wrapper">
             <label className="newsletter-checkbox-label" for="newsletter">
               Include in newsletter
-              <input id="newsletter" type="checkbox" />
+              <input
+                id="newsletter"
+                type="checkbox"
+                checked={includeInNewsletter}
+                onChange={() => {
+                  setIncludeInNewsletter(!includeInNewsletter);
+                }}
+              />
               <span class="checkmark"></span>
             </label>
           </div>

@@ -128,9 +128,13 @@ const StickyBar = ({
 
   return (
     <>
-      <a href="/">
-        <img src="/images/logo.svg" className="home-logo" />
-      </a>
+      <img
+        src="/images/logo.svg"
+        className="home-logo"
+        onClick={() => {
+          window.scrollTo(0, 0);
+        }}
+      />
       <div className="sticky-bar">
         <div className="sticky-bar-left-side">
           <div
