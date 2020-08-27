@@ -1,3 +1,11 @@
+.home-page.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding-top: 0;
+}
+
 .input-search-wrapper {
   z-index: 0;
 }
@@ -663,4 +671,127 @@ svg.new-notifications-icon {
 .post-comments-collapsed .button {
   box-shadow: none;
   font-size: 14px;
+}
+
+.spinner-box {
+  margin-top: -100px;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  transition: 300ms ease;
+}
+
+.circle-border {
+  width: 120px;
+  height: 120px;
+  padding: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: linear-gradient(0deg, #b8bbfa1c 33%, #b8bbfab8 100%);
+  animation: spin 1s linear 0s infinite;
+}
+
+.circle-core {
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 50%;
+}
+
+.newsletter-checkbox-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.newsletter-checkbox-label {
+  display: inline-block;
+  position: relative;
+  font-size: 15px;
+  color: #747474;
+  padding-left: 34px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.newsletter-checkbox-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #f0f0f1;
+  border-radius: 9px;
+  transform: scale(0.9);
+  border: 2px solid white;
+}
+
+.newsletter-checkbox-label:hover input ~ .checkmark {
+  background-color: #e7e7e7;
+}
+
+.newsletter-checkbox-label input:focus ~ .checkmark {
+  box-shadow: 0 0 0px 6px #e7e1ff99;
+}
+
+/* When the checkbox is checked, add a blue background */
+.newsletter-checkbox-label input:checked ~ .checkmark {
+  background-color: #8f88f7;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.newsletter-checkbox-label input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.newsletter-checkbox-label .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+@keyframes spin3D {
+  from {
+    transform: rotate3d(0.5, 0.5, 0.5, 360deg);
+  }
+  to {
+    transform: rotate3d(0deg);
+  }
 }

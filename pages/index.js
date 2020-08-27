@@ -32,6 +32,7 @@ export const ViewPropsContext = React.createContext({});
 const Index = () => {
   const router = useRouter();
   const rootDiv = useRef(null);
+  const spinnerDiv = useRef(null);
   const { user, isUserFetched } = useUser();
   const [timeframe, setTimeframe] = useState(null);
   const [viewMode, setViewMode] = useState("list");
@@ -171,6 +172,11 @@ const Index = () => {
   useEffect(() => {
     if (user) {
       fetchTeam(user.id);
+      setTimeout(() => {
+        if (spinnerDiv.current) {
+          spinnerDiv.current.style.opacity = 1;
+        }
+      }, 1500);
     }
   }, [user]);
 
@@ -504,9 +510,24 @@ const Index = () => {
                 href="/home.css"
               />
               <div
-                className={c("home-page", showForm && "home-sisu-page")}
+                className={c(
+                  "home-page",
+                  showForm && "home-sisu-page",
+                  !teamState.isFetched && "loading"
+                )}
                 ref={rootDiv}
               >
+                {!teamState.isFetched && (
+                  <div
+                    ref={spinnerDiv}
+                    className="spinner-box"
+                    style={{ opacity: 0 }}
+                  >
+                    <div className="circle-border">
+                      <div className="circle-core"></div>
+                    </div>
+                  </div>
+                )}
                 {teamState.isFetched && (
                   <StickyBar
                     isTeamEditable={user.id === teamState.data?.teamId}

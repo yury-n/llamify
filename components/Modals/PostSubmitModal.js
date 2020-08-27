@@ -113,6 +113,13 @@ const PostSubmitModal = ({
           >
             {description}
           </textarea>
+          <div className="newsletter-checkbox-wrapper">
+            <label className="newsletter-checkbox-label" for="newsletter">
+              Include in newsletter
+              <input id="newsletter" type="checkbox" />
+              <span class="checkmark"></span>
+            </label>
+          </div>
           <div className="form-buttons">
             <button
               className="button-wrapper"
