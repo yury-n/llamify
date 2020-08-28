@@ -60,6 +60,8 @@ const Index = () => {
   }
 
   const fetchTeam = (teamId) => {
+    // kwxmofFGMFeC1qYzFPLebNKmq2k1
+
     firestore
       .doc(`/teams/${teamId}`)
       .get()
@@ -191,15 +193,20 @@ const Index = () => {
     return null;
   }
 
-  const startTeam = ({ firstName, lastName, teamName }) => {
+  const startTeam = ({ firstName, lastName, teamName, teamLogo, teamId }) => {
     const teamData = {
-      teamId: user.id,
+      teamId,
       teamName,
+      teamLogo,
       teamMembers: {
         [`${user.id}`]: { id: user.id, firstName, lastName },
       },
     };
-    firestore.doc(`/teams/${user.id}`).set(teamData);
+    firestore.doc(`/teams/${teamId}`).set(teamData);
+    firestore.doc(`/users/${user.id}`).set({
+      teamId,
+      role: "admin",
+    });
     setTeamState({
       isFetched: true,
       data: teamData,
@@ -285,7 +292,7 @@ const Index = () => {
       post.thumbImageUrl = thumbImageUrl;
     }
     post.description = description || "";
-    const currentUser = teamState.data.teamMembers[user.id];
+    const currentUser = teamState.data.teamMembers[user.id] || { id: user.id };
     post.author = {
       id: currentUser.id,
       firstName: currentUser.firstName,

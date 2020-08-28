@@ -11,6 +11,10 @@ const useImageUpload = (initImagePreview, initImageFile) => {
   console.log({ initImageFile });
   console.log(">>", initImageFile instanceof Blob);
 
+  const onFileButtonClick = (e) => {
+    e.currentTarget.children[0].click();
+  };
+
   const onFileChange = (e) => {
     const file = e.target.files[0];
     setImageFile(file);
@@ -64,6 +68,33 @@ const useImageUpload = (initImagePreview, initImageFile) => {
     imagePreview: imagePreview || initImagePreview,
     onFileChange,
     uploadToFirebase,
+    standardFileUploadButtonWithPreview: (
+      <div className="image-field-form-wrapper">
+        {imagePreview && (
+          <div
+            className="image-field-form-preview"
+            style={{ backgroundImage: `url(${imagePreview.src})` }}
+          />
+        )}
+        <button
+          className="button-wrapper file-button-wrapper"
+          onClick={onFileButtonClick}
+        >
+          <input
+            type="file"
+            name="file"
+            id="file"
+            className="file-input"
+            accept="image/x-png,image/gif,image/jpeg"
+            onChange={onFileChange}
+            tabIndex="-1"
+          />
+          <span className="button button-secondary button-white" tabIndex="-1">
+            Select Image
+          </span>
+        </button>
+      </div>
+    ),
   };
 };
 

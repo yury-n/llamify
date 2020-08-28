@@ -129,7 +129,7 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
       <div className="comments-area">
         {!loadComments && commentCount && (
           <div className="post-comments-collapsed">
-            <button class="button-wrapper" title="Show comments">
+            <button class="button-wrapper">
               <span
                 class="button icon-button button-secondary button-white"
                 tabIndex="-1"

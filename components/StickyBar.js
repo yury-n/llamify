@@ -23,7 +23,8 @@ const StickyBar = ({
       <button
         className="button-wrapper list-view-button"
         onClick={() => onSetViewMode("list")}
-        title="List View"
+        aria-label="List View"
+        data-balloon-pos="down"
       >
         <span
           className={c(
@@ -48,7 +49,8 @@ const StickyBar = ({
       <button
         className="button-wrapper grid-view-button"
         onClick={() => onSetViewMode("grid")}
-        title="Grid View"
+        aria-label="Grid View"
+        data-balloon-pos="down"
       >
         <span
           className={c(
@@ -73,7 +75,8 @@ const StickyBar = ({
       <button
         className="button-wrapper grid-view-button"
         onClick={() => onSetViewMode("feed")}
-        title="Feed View"
+        aria-label="Feed View"
+        data-balloon-pos="down"
       >
         <span
           className={c(
@@ -157,7 +160,8 @@ const StickyBar = ({
           <button
             className="button-wrapper"
             onClick={() => logout()}
-            title="Logout"
+            aria-label="Logout"
+            data-balloon-pos="down"
           >
             <span
               className="button icon-button button-secondary button-white"
@@ -173,7 +177,8 @@ const StickyBar = ({
             <button
               className="button-wrapper"
               onClick={() => setShowInviteModal(true)}
-              title="Invite to join the team"
+              aria-label="Invite to join the team"
+              data-balloon-pos="down"
             >
               <span
                 className="button button-hollow"
