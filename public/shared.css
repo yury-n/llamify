@@ -2,6 +2,7 @@
   --primary-color: #7c3cfc;
   --secondary-color: #f6f6f6;
   --border-radius: 8px;
+  --footer-height: 60px;
 }
 
 html,
@@ -11,9 +12,32 @@ textarea,
   font-family: "Poppins", sans-serif;
 }
 
+.footer {
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 30px;
+  align-items: center;
+  height: var(--footer-height);
+  font-size: 14px;
+}
+
+.footer-buttons a {
+  text-decoration: none;
+  color: #000000;
+}
+
+.footer-buttons a + a {
+  margin-left: 20px;
+}
+
+.llamify-com {
+  font-size: 14px;
+}
+
 .sisu-page {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - var(--footer-height));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,37 +59,13 @@ textarea,
   display: flex;
 }
 
-.home-page {
-  padding-top: 90px;
-}
-
-.home-sisu-page {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-}
-
-.home-page::before {
-  display: block;
-  content: "";
-  width: 100%;
-  height: 40vh;
-  z-index: -1;
-  bottom: 0;
-  background: linear-gradient(to bottom, white, #e6eeffad);
-  position: fixed;
-}
-
 .sisu-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 350px;
+  margin-top: 20px;
 }
 
 .sisu-logo {

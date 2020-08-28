@@ -10,7 +10,7 @@
     "classnames": "^2.2.6",
     "firebase": "^7.15.5",
     "firebase-admin": "^8.12.1",
-    "js-cookie": "2.2.1",
+    "js-cookie": "^2.2.1",
     "lodash.orderby": "^4.6.0",
     "next": "latest",
     "react": "^16.13.1",

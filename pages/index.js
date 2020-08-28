@@ -1,5 +1,6 @@
 import c from "classnames";
 import orderBy from "lodash.orderby";
+import cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useUser } from "../utils/auth/useUser";
 import StickyBar from "../components/StickyBar";
@@ -18,6 +19,7 @@ import PostSubmitModal from "../components/Modals/PostSubmitModal";
 import getImageFilePreview from "../utils/getImageFilePreview";
 import PostsGrid from "../components/PostsGrid";
 import PostsFeed from "../components/PostsFeed";
+import Footer from "../components/Footer";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -152,6 +154,12 @@ const Index = () => {
     window.document.addEventListener("dragenter", onDragEnter);
     window.document.addEventListener("dragover", onDragOver);
     window.document.addEventListener("drop", onDrop);
+
+    // hack: extend auth cookie expiration date
+    setTimeout(() => {
+      cookies.set("auth", cookies.get("auth"), { expires: 1000 });
+    }, 1000);
+
     return () => {
       window.document.removeEventListener("dragenter", onDragEnter);
       window.document.removeEventListener("dragover", onDragOver);
@@ -197,11 +205,13 @@ const Index = () => {
     const teamData = {
       teamId,
       teamName,
-      teamLogo,
       teamMembers: {
         [`${user.id}`]: { id: user.id, firstName, lastName },
       },
     };
+    if (teamLogo) {
+      teamData.teamLogo = teamLogo;
+    }
     firestore.doc(`/teams/${teamId}`).set(teamData);
     firestore.doc(`/users/${user.id}`).set({
       teamId,
@@ -621,6 +631,7 @@ const Index = () => {
                   </div>
                 )}
               </div>
+              <Footer />
               {showPostSubmitModal && (
                 <PostSubmitModal
                   userId={user.id}

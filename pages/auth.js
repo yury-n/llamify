@@ -1,5 +1,6 @@
 import FirebaseAuth from "../components/FirebaseAuth";
 import Head from "./_head";
+import Footer from "../components/Footer";
 
 const Auth = () => {
   return (
@@ -13,6 +14,7 @@ const Auth = () => {
       <div className="sisu-page">
         <FirebaseAuth />
       </div>
+      <Footer />
     </>
   );
 };
