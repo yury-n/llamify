@@ -46,7 +46,6 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
         commentsSnapshot.forEach((comment) => {
           fetchedComments.push(comment.data().commentData);
         });
-        setComments(fetchedComments);
       });
   };
 

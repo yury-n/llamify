@@ -8,7 +8,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/database";
 import Head from "./_head";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import initFirebase from "../utils/auth/initFirebase";
 import PostModal from "../components/Modals/PostModal";
 import StartTeamForm from "../components/StartTeamForm";
@@ -43,17 +43,18 @@ const Index = () => {
   const [droppedFile, setDroppedFile] = useState();
   const [searchString, setSearchString] = useState();
   const [openModal] = useState(false);
-  const [teamState, setTeamState] = useState({
-    isFetched: false,
-    data: {
+  const [isFetched, setIsFetched] = useState(false);
+  const [isFetchingMore, setisFetchingMore] = useState(false);
+  const [dbState, setDbState] = useState({
+    team: {
       teamId: null,
       teamName: null,
-      teamMembers: [],
     },
+    userRole: null,
+    teamMembersWithRecentPosts: [],
+    posts: [],
+    postsHasMore: true,
   });
-  const [posts, setPosts] = useState([]);
-  const [isFetching, setIsFetching] = useState(false);
-  const [postsHasMore, setPostsHasMore] = useState(true);
 
   let teamIdFromURL;
   if (typeof window !== "undefined") {
@@ -61,22 +62,54 @@ const Index = () => {
     teamIdFromURL = urlParams.get("team");
   }
 
-  const fetchTeam = (teamId) => {
-    // kwxmofFGMFeC1qYzFPLebNKmq2k1
+  const fetchUserTeam = (userId) => {
+    firestore
+      .doc(`/userTeams/${userId}`)
+      .get()
+      .then((doc) => {
+        const data = doc.data();
+        if (data) {
+          setDbState({
+            ...dbState,
+            userRole: data.role,
+          });
+          fetchTeam(data.teamId);
+          fetchTeamMembersWithRecentPosts(data.teamId);
+        } else {
+          setIsFetched(true);
+        }
+      });
+  };
 
+  const fetchTeam = (teamId) => {
     firestore
       .doc(`/teams/${teamId}`)
       .get()
       .then((doc) => {
         const data = doc.data();
-        if (data && data.joinedTeamId) {
-          fetchTeam(data.joinedTeamId);
-          return;
+        console.log({ data });
+        if (data) {
+          setDbState({
+            ...dbState,
+            team: data,
+          });
         }
-        console.log("teamData", data);
-        setTeamState({
-          isFetched: true,
-          data,
+        setIsFetched(true);
+      });
+  };
+
+  const fetchTeamMembersWithRecentPosts = (teamId) => {
+    firestore
+      .collection(`/teams/${teamId}/teamMembersWithRecentPosts`)
+      .get()
+      .then((membersSnapshot) => {
+        const fetchedMembers = [];
+        membersSnapshot.forEach((member) => {
+          fetchedMembers.push(member.data());
+        });
+        setDbState({
+          ...dbState,
+          teamMembersWithRecentPosts: fetchedMembers,
         });
       });
   };
@@ -86,7 +119,7 @@ const Index = () => {
       return;
     }
 
-    setIsFetching(true);
+    setisFetchingMore(true);
 
     let query = firestore
       .collection(`/teams/${teamId}/posts`)
@@ -106,11 +139,12 @@ const Index = () => {
       if (fetchHasMore) {
         fetchedPosts.pop();
       }
-      setPosts([...posts, ...fetchedPosts]);
-      setIsFetching(false);
-      if (!fetchHasMore) {
-        setPostsHasMore(fetchHasMore);
-      }
+      setDbState({
+        ...dbState,
+        posts: [...dbState.posts, ...fetchedPosts],
+        postsHasMore: fetchHasMore,
+      });
+      setisFetchingMore(false);
     });
   };
 
@@ -169,9 +203,9 @@ const Index = () => {
 
   useEffect(() => {
     if (["grid", "feed"].includes(viewMode) && !posts.length) {
-      fetchPosts(teamState.data?.teamId);
+      fetchPosts(dbState.team.teamId);
     }
-  }, [viewMode, teamState]);
+  }, [viewMode, dbState]);
 
   useEffect(() => {
     if (searchString && searchString.length >= 2 && viewMode !== "list") {
@@ -180,15 +214,15 @@ const Index = () => {
   }, [searchString]);
 
   useEffect(() => {
-    if (user) {
-      fetchTeam(user.id);
+    if (user && !isFetched) {
+      fetchUserTeam(user.id);
       setTimeout(() => {
         if (spinnerDiv.current) {
           spinnerDiv.current.style.opacity = 1;
         }
       }, 1500);
     }
-  }, [user]);
+  }, [user, isFetched, dbState]);
 
   if (!user) {
     if (isUserFetched) {
@@ -205,35 +239,59 @@ const Index = () => {
     const teamData = {
       teamId,
       teamName,
-      teamMembers: {
-        [`${user.id}`]: { id: user.id, firstName, lastName },
-      },
     };
     if (teamLogo) {
       teamData.teamLogo = teamLogo;
     }
-    firestore.doc(`/teams/${teamId}`).set(teamData);
-    firestore.doc(`/users/${user.id}`).set({
+    const teamMember = {
+      id: user.id,
+      firstName,
+      lastName,
+      lastPosts: [],
+      totalPostCount: 0,
+    };
+    firestore
+      .doc(`/teams/${teamId}`)
+      .set(teamData)
+      .then(() => {
+        firestore
+          .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${user.id}`)
+          .set(teamMember);
+      });
+    firestore.doc(`/userTeams/${user.id}`).set({
       teamId,
       role: "admin",
     });
-    setTeamState({
-      isFetched: true,
-      data: teamData,
+    setDbState({
+      ...dbState,
+      userRole: "admin",
+      teamMembersWithRecentPosts: { [user.id]: teamMember },
     });
+    setIsFetched(true);
   };
 
   const joinTeam = ({ firstName, lastName }) => {
-    firestore.doc(`/teams/${user.id}`).set({ joinedTeamId: teamIdFromURL });
     firestore
-      .doc(`/teams/${teamIdFromURL}`)
-      .update({
-        [`teamMembers.${user.id}.id`]: user.id,
-        [`teamMembers.${user.id}.firstName`]: firstName,
-        [`teamMembers.${user.id}.lastName`]: lastName,
-      })
+      .doc(`/userTeams/${user.id}`)
+      .set({ teamId: teamIdFromURL, role: "member" })
       .then(() => {
-        fetchTeam(teamIdFromURL);
+        firestore
+          .doc(`/teams/${teamIdFromURL}/teamMembersWithRecentPosts/${user.id}`)
+          .set({
+            id,
+            firstName,
+            lastName,
+            lastPosts: [],
+            totalPostCount: 0,
+          })
+          .then(() => {
+            setDbState({
+              ...dbState,
+              userRole: "member",
+            });
+            fetchTeam(teamIdFromURL);
+            fetchTeamMembersWithRecentPosts(teamIdFromURL);
+          });
       });
   };
 
@@ -244,30 +302,31 @@ const Index = () => {
     avatarThumbUrl,
     avatarFullUrl,
   }) => {
-    if (!teamState.data?.teamId) {
+    if (!dbState.team.teamId) {
       return;
     }
-    firestore.doc(`/teams/${teamState.data?.teamId}`).update({
-      [`teamMembers.${user.id}.firstName`]: firstName,
-      [`teamMembers.${user.id}.lastName`]: lastName,
-      [`teamMembers.${user.id}.role`]: role || null,
-      [`teamMembers.${user.id}.avatarThumbUrl`]: avatarThumbUrl || null,
-      [`teamMembers.${user.id}.avatarFullUrl`]: avatarFullUrl || null,
-    });
-    setTeamState({
-      isFetched: true,
-      data: {
-        ...teamState.data,
-        teamMembers: {
-          ...teamState.data.teamMembers,
-          [`${user.id}`]: {
-            ...teamState.data.teamMembers[user.id],
-            firstName,
-            lastName,
-            role,
-            avatarThumbUrl,
-            avatarFullUrl,
-          },
+    firestore
+      .doc(
+        `/teams/${dbState.team.teamId}/teamMembersWithRecentPosts/${user.id}`
+      )
+      .update({
+        firstName,
+        lastName,
+        role: role || null,
+        avatarThumbUrl: avatarThumbUrl || null,
+        avatarFullUrl: avatarFullUrl || null,
+      });
+    setDbState({
+      ...dbState,
+      teamMembersWithRecentPosts: {
+        ...dbState.teamMembersWithRecentPosts,
+        [`${user.id}`]: {
+          ...dbState.teamMembersWithRecentPosts[user.id],
+          firstName,
+          lastName,
+          role,
+          avatarThumbUrl,
+          avatarFullUrl,
         },
       },
     });
@@ -289,7 +348,8 @@ const Index = () => {
     thumbImageUrl,
     description,
   }) => {
-    const allUserPostIds = teamState.data?.teamMembers[userId].postIds || [];
+    const allUserPostIds =
+      dbState.teamMembersWithRecentPosts[userId].postIds || [];
     const isNewPost = !allUserPostIds.includes(postId);
     if (isNewPost) {
       allUserPostIds.unshift(postId);
@@ -302,7 +362,9 @@ const Index = () => {
       post.thumbImageUrl = thumbImageUrl;
     }
     post.description = description || "";
-    const currentUser = teamState.data.teamMembers[user.id] || { id: user.id };
+    const currentUser = dbState.teamMembersWithRecentPosts[user.id] || {
+      id: user.id,
+    };
     post.author = {
       id: currentUser.id,
       firstName: currentUser.firstName,
@@ -312,29 +374,28 @@ const Index = () => {
     };
     post.timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
-    setTeamState({
-      isFetched: true,
-      data: {
-        ...teamState.data,
-        teamMembers: {
-          ...teamState.data.teamMembers,
-          [`${user.id}`]: {
-            ...teamState.data.teamMembers[user.id],
-            postIds: allUserPostIds,
-            posts: {
-              ...teamState.data.teamMembers[user.id].posts,
-              [postId]: post,
-            },
+    setDbState({
+      ...dbState,
+      teamMembersWithRecentPosts: {
+        ...dbState.teamMembersWithRecentPosts,
+        [`${user.id}`]: {
+          ...dbState.teamMembersWithRecentPosts[user.id],
+          postIds: allUserPostIds,
+          posts: {
+            ...dbState.teamMembersWithRecentPosts[user.id].posts,
+            [postId]: post,
           },
         },
       },
     });
     setPosts([post, ...posts]);
 
-    firestore.doc(`/teams/${teamId}/`).update({
-      [`teamMembers.${userId}.postIds`]: allUserPostIds,
-      [`teamMembers.${userId}.posts.${postId}`]: post,
-    });
+    firestore
+      .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${userId}`)
+      .update({
+        postIds: allUserPostIds,
+        [`posts.${postId}`]: post,
+      });
 
     if (isNewPost) {
       firestore.doc(`/teams/${teamId}/posts/${postId}`).set({
@@ -346,24 +407,21 @@ const Index = () => {
 
   const onPostRemove = (postId) => {
     const userId = user.id;
-    const teamId = teamState.data?.teamId;
+    const teamId = dbState.team.teamId;
     if (!userId || !teamId) {
       return;
     }
-    const postIds = teamState.data?.teamMembers[userId].postIds.filter(
+    const postIds = dbState.teamMembersWithRecentPosts[userId].postIds.filter(
       (pId) => pId !== postId
     );
 
-    setTeamState({
-      isFetched: true,
-      data: {
-        ...teamState.data,
-        teamMembers: {
-          ...teamState.data.teamMembers,
-          [`${user.id}`]: {
-            ...teamState.data.teamMembers[user.id],
-            postIds,
-          },
+    setDbState({
+      ...dbState,
+      teamMembersWithRecentPosts: {
+        ...teamMembersWithRecentPosts,
+        [user.id]: {
+          ...teamMembersWithRecentPosts[user.id],
+          postIds,
         },
       },
     });
@@ -371,13 +429,13 @@ const Index = () => {
     const postsFiltered = posts.filter((p) => p.postId !== postId);
     setPosts(postsFiltered);
 
-    firestore.doc(`/teams/${teamId}/`).update({
-      [`teamMembers.${userId}.postIds`]: postIds,
-      [`teamMembers.${userId}.posts.${postId}`]: firebase.firestore.FieldValue.delete(),
-    });
+    firestore
+      .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${userId}`)
+      .update({
+        postIds,
+        [`posts.${postId}`]: firebase.firestore.FieldValue.delete(),
+      });
     firestore.doc(`/teams/${teamId}/posts/${postId}`).delete();
-
-    // TODO: remove from team.posts
   };
 
   const updateTeam = ({ teamId, teamName, teamLogo }) => {
@@ -385,9 +443,12 @@ const Index = () => {
     if (teamLogo) {
       updates.teamLogo = teamLogo;
     }
-    setTeamState({
-      ...teamState,
-      data: { ...teamState.data, ...updates },
+    setDbState({
+      ...dbState,
+      team: {
+        ...dbState.team,
+        ...updates,
+      },
     });
     firestore.doc(`/teams/${teamId}/`).update(updates);
   };
@@ -406,22 +467,25 @@ const Index = () => {
     }
   };
 
+  console.log({ dbState });
+
   const showStartTeamForm =
-    teamState.isFetched && !teamState.data && !teamIdFromURL;
-  const showJoinTeamForm =
-    teamState.isFetched && !teamState.data && teamIdFromURL;
-  const showTeamDirectoty = teamState.isFetched && teamState.data;
+    isFetched && !dbState.team?.teamId && !teamIdFromURL;
+  const showJoinTeamForm = isFetched && !dbState.team?.teamId && teamIdFromURL;
+  const showTeamDirectoty =
+    isFetched && dbState.teamMembersWithRecentPosts?.length > 0;
 
   const showForm = showStartTeamForm || showJoinTeamForm;
 
   let teamMembersArray;
 
   const teamMembersArrayUnsorted = [];
-  if (teamState.data?.teamMembers) {
-    Object.keys(teamState.data.teamMembers).forEach((key) => {
-      teamMembersArrayUnsorted.push(teamState.data.teamMembers[key]);
+  if (dbState.teamMembersWithRecentPosts) {
+    Object.keys(dbState.teamMembersWithRecentPosts).forEach((key) => {
+      teamMembersArrayUnsorted.push(dbState.teamMembersWithRecentPosts[key]);
     });
 
+    // TODO: sort in firebase
     teamMembersArray = orderBy(
       teamMembersArrayUnsorted,
       [(u) => `${u.firstName.toLowerCase()} ${u.lastName.toLowerCase()}`],
@@ -451,22 +515,36 @@ const Index = () => {
     postAuthorId,
     newCommentCount,
   }) => {
-    const post = teamState.data.teamMembers[postAuthorId].posts[postId];
+    const post = dbState.teamMembersWithRecentPosts[postAuthorId].posts[postId];
+    const indexInPosts = dbState.posts.findIndex((p) => p.postId === postId);
+
     const updatedPost = {
       ...post,
       commentCount: newCommentCount,
     };
-    const newTeamState = { ...teamState };
-    teamState.data.teamMembers[postAuthorId].posts[postId] = updatedPost;
-    setTeamState(newTeamState);
-    const postIndex = posts.findIndex((p) => p.postId === postId);
-    const newPosts = [...posts];
-    newPosts[postIndex] = updatedPost;
-    setPosts(newPosts);
+    const updatesPosts = [...posts];
+    updatesPosts[postIndex] = updatedPost;
 
-    firestore.doc(`/teams/${teamId}/`).update({
-      [`teamMembers.${postAuthorId}.posts.${postId}.commentCount`]: newCommentCount,
+    setDbState({
+      ...dbState,
+      teamMembersWithRecentPosts: {
+        ...dbState.teamMembersWithRecentPosts,
+        [postAuthorId]: {
+          ...dbState.teamMembersWithRecentPosts[postAuthorId],
+          posts: {
+            ...dbState.teamMembersWithRecentPosts[postAuthorId].posts,
+            [postId]: updatedPost,
+          },
+        },
+      },
+      posts: updatesPosts,
     });
+
+    firestore
+      .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${postAuthorId}`)
+      .update({
+        [`posts.${postId}.commentCount`]: newCommentCount,
+      });
     firestore.doc(`/teams/${teamId}/posts/${postId}`).update({
       ["postData.commentCount"]: newCommentCount,
     });
@@ -511,16 +589,17 @@ const Index = () => {
 
   const actions = { onCommentSubmit, onCommentRemove };
 
-  const currentUser = user.id ? teamState.data?.teamMembers[user.id] : {};
-  // console.log({ currentUser });
+  const currentUser = user.id
+    ? dbState.teamMembersWithRecentPosts[user.id]
+    : {};
 
   return (
     <>
       <ActionsContext.Provider value={actions}>
-        <TeamContext.Provider value={{ teamId: teamState.data?.teamId }}>
+        <TeamContext.Provider value={{ teamId: dbState.team.teamId }}>
           <CurrentUserContext.Provider value={{ currentUser }}>
             <ViewPropsContext.Provider value={{ timeframe }}>
-              <Head teamName={teamState.data?.teamName} />
+              <Head teamName={dbState.team.teamName} />
               <link
                 rel="stylesheet"
                 media="screen, projection"
@@ -530,11 +609,11 @@ const Index = () => {
                 className={c(
                   "home-page",
                   showForm && "home-sisu-page",
-                  !teamState.isFetched && "loading"
+                  !isFetched && "loading"
                 )}
                 ref={rootDiv}
               >
-                {!teamState.isFetched && (
+                {!isFetched && (
                   <div
                     ref={spinnerDiv}
                     className="spinner-box"
@@ -545,12 +624,12 @@ const Index = () => {
                     </div>
                   </div>
                 )}
-                {teamState.isFetched && (
+                {isFetched && (
                   <StickyBar
-                    isTeamEditable={user.id === teamState.data?.teamId}
-                    teamName={teamState.data?.teamName}
-                    teamId={teamState.data?.teamId}
-                    teamLogo={teamState.data?.teamLogo}
+                    isTeamEditable={dbState.userRole === "admin"}
+                    teamName={dbState.team.teamName}
+                    teamId={dbState.team.teamId}
+                    teamLogo={dbState.team.teamLogo}
                     onTeamEditSubmit={updateTeam}
                     viewMode={viewMode}
                     onSetViewMode={onSetViewMode}
@@ -586,7 +665,7 @@ const Index = () => {
                     {viewMode === "list" && teamMembersArray && (
                       <Humans
                         humans={teamMembersArray}
-                        teamId={teamState.data?.teamId}
+                        teamId={dbState.team.teamId}
                         currentUserId={user.id}
                         onHumanEditSubmit={updateHuman}
                         onShowPostSubmitModal={onShowPostSubmitModal}
@@ -608,12 +687,12 @@ const Index = () => {
                         {posts.length > 0 && postsHasMore && (
                           <button
                             className="button-wrapper load-more-button-wrapper"
-                            onClick={() => fetchPosts(teamState.data?.teamId)}
+                            onClick={() => fetchPosts(dbState.team.teamId)}
                           >
                             <span
                               className={c(
                                 "button button-secondary button-white",
-                                isFetching && "busy"
+                                isFetchingMore && "busy"
                               )}
                               tabIndex="-1"
                             >
@@ -635,7 +714,7 @@ const Index = () => {
               {showPostSubmitModal && (
                 <PostSubmitModal
                   userId={user.id}
-                  teamId={teamState.data?.teamId}
+                  teamId={dbState.team.teamId}
                   imageFile={droppedFile}
                   imagePreview={droppedFile && getImageFilePreview(droppedFile)}
                   onPostSubmit={onPostSubmit}
