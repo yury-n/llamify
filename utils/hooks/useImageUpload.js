@@ -8,9 +8,6 @@ const useImageUpload = (initImagePreview, initImageFile) => {
   const [imageFile, setImageFile] = useState(initImageFile);
   const [imagePreview, setImagePreview] = useState(initImagePreview);
 
-  console.log({ initImageFile });
-  console.log(">>", initImageFile instanceof Blob);
-
   const onFileButtonClick = (e) => {
     e.currentTarget.children[0].click();
   };

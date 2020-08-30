@@ -1,14 +1,15 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import Modal from "./Modal";
 import useImageUpload from "../../utils/hooks/useImageUpload";
+import { ActionsContext } from "../../pages";
 
 const TeamEditModal = ({
   teamId,
   teamName: teamNameProp,
   teamLogo: teamLogoProp,
-  onSubmit: onSubmitProp,
   onClose,
 }) => {
+  const { updateTeam } = useContext(ActionsContext);
   const submitButton = useRef(null);
   const [teamName, setTeamName] = useState(teamNameProp);
   const {
@@ -28,19 +29,20 @@ const TeamEditModal = ({
     submitButton.current.childNodes[0].classList.add("busy");
     if (imageFile) {
       uploadToFirebase(`teamLogos/${teamId}`, 64, (url) => {
-        onSubmitProp({
+        updateTeam({
           teamId,
           teamName,
           teamLogo: url,
         });
+        onClose();
       });
     } else {
-      onSubmitProp({
+      updateTeam({
         teamId,
         teamName,
       });
+      onClose();
     }
-    e.preventDefault();
   };
 
   return (

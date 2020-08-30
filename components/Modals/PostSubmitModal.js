@@ -1,5 +1,5 @@
 import c from "classnames";
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import useImageUpload from "../../utils/hooks/useImageUpload";
 const { default: Modal } = require("./Modal");
 import firebase from "firebase/app";
@@ -7,6 +7,7 @@ import database from "firebase/database";
 import initFirebase from "../../utils/auth/initFirebase";
 import "firebase/firestore";
 import ButtonShine from "../ButtonShine";
+import { TeamContext } from "../../pages";
 
 const PostSubmitModal = ({
   postId,
@@ -19,6 +20,7 @@ const PostSubmitModal = ({
   onClose,
   onPostSubmit,
 }) => {
+  const { newsletter: teamNewsletter } = useContext(TeamContext);
   const submitButton = useRef(null);
   const imagePreviewDiv = useRef(null);
   const textarea = useRef(null);
@@ -33,8 +35,6 @@ const PostSubmitModal = ({
   const [includeInNewsletter, setIncludeInNewsletter] = useState(false);
 
   const imagePreview = imagePreviewProp || imagePreviewFromInput;
-
-  console.log({ imagePreview });
 
   const onTextareaChange = (e) => {
     setDescription(e.target.value);
@@ -51,7 +51,6 @@ const PostSubmitModal = ({
       const db = firebase.database();
       const postsRef = db.ref(`/teams/${teamId}/teamMembers/${userId}/posts`);
       const newPostId = postsRef.push().key;
-      console.log({ newPostId });
       uploadToFirebase(
         `posts/${teamId}/full/${userId}/${newPostId}`,
         1080,
@@ -67,6 +66,7 @@ const PostSubmitModal = ({
                 fullImageUrl,
                 thumbImageUrl,
                 description,
+                includeInNewsletter,
               });
               onClose();
             }
@@ -119,20 +119,22 @@ const PostSubmitModal = ({
           >
             {description}
           </textarea>
-          <div className="newsletter-checkbox-wrapper">
-            <label className="newsletter-checkbox-label" htmlFor="newsletter">
-              Include in newsletter
-              <input
-                id="newsletter"
-                type="checkbox"
-                checked={includeInNewsletter}
-                onChange={() => {
-                  setIncludeInNewsletter(!includeInNewsletter);
-                }}
-              />
-              <span class="checkmark"></span>
-            </label>
-          </div>
+          {teamNewsletter && (
+            <div className="newsletter-checkbox-wrapper">
+              <label className="newsletter-checkbox-label" htmlFor="newsletter">
+                Include in newsletter
+                <input
+                  id="newsletter"
+                  type="checkbox"
+                  checked={includeInNewsletter}
+                  onChange={() => {
+                    setIncludeInNewsletter(!includeInNewsletter);
+                  }}
+                />
+                <span className="checkmark"></span>
+              </label>
+            </div>
+          )}
           <div className="form-buttons">
             <button
               className="button-wrapper"

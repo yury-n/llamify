@@ -101,6 +101,7 @@
 .owner-name-wrapper .name,
 .owner-name-wrapper .avatar {
   pointer-events: all;
+  cursor: pointer;
 }
 
 .avatar {
@@ -135,10 +136,6 @@
   position: relative;
   display: flex;
   align-items: center;
-  cursor: pointer;
-}
-
-.owner-name-wrapper {
   margin-bottom: 30px;
 }
 
@@ -159,6 +156,7 @@
   width: 25px;
   margin-left: 16px;
   transition: opacity 300ms ease;
+  cursor: pointer;
 }
 
 .team-name-wrapper .icon {
@@ -742,7 +740,7 @@ svg.new-notifications-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 17px;
+  margin-top: 13px;
   margin-bottom: -10px;
 }
 

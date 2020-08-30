@@ -65,7 +65,6 @@ const StartTeamForm = ({ onStartTeam }) => {
     if (imageFile) {
       uploadToFirebase(`teamLogos/${teamId}`, 64, (url) => {
         submitParams.teamLogo = url;
-        console.log({ submitParams });
         onStartTeam(submitParams);
       });
     } else {

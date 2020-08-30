@@ -26,7 +26,6 @@ const Modal = ({
       newWidth = window.innerWidth - 140;
       newHeight = newWidth / modalAspectRatio;
     }
-    console.log({ newWidth, newHeight });
     if (newWidth || newHeight) {
       setSize({
         width: newWidth,

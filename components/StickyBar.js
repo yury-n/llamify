@@ -131,14 +131,14 @@ const StickyBar = ({
 
   return (
     <>
-      <img
-        src="/images/logo.svg"
-        className="home-logo"
-        onClick={() => {
-          window.scrollTo(0, 0);
-        }}
-      />
       <div className="sticky-bar">
+        <img
+          src="/images/logo.svg"
+          className="home-logo"
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+        />
         <div className="sticky-bar-left-side">
           <div
             className={c(
@@ -196,10 +196,6 @@ const StickyBar = ({
           teamId={teamId}
           teamName={teamName}
           teamLogo={teamLogo}
-          onSubmit={(payload) => {
-            onTeamEditSubmit(payload);
-            setShowTeamEditModal(false);
-          }}
           onClose={() => setShowTeamEditModal(false)}
         />
       )}

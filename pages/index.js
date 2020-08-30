@@ -20,6 +20,7 @@ import getImageFilePreview from "../utils/getImageFilePreview";
 import PostsGrid from "../components/PostsGrid";
 import PostsFeed from "../components/PostsFeed";
 import Footer from "../components/Footer";
+import { RECENT_POSTS_COUNT } from "../utils/consts";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -97,8 +98,9 @@ const Index = () => {
       .get()
       .then((membersSnapshot) => {
         const fetchedMembers = [];
-        membersSnapshot.forEach((member) => {
-          fetchedMembers.push(member.data());
+        membersSnapshot.forEach((m) => {
+          const member = m.data();
+          fetchedMembers[member.id] = member;
         });
         setTeamMembersWithRecentPosts(fetchedMembers);
       });
@@ -129,7 +131,7 @@ const Index = () => {
       if (fetchHasMore) {
         fetchedPosts.pop();
       }
-      setPosts([...dbState.posts, ...fetchedPosts]);
+      setPosts([...posts, ...fetchedPosts]);
       if (!fetchHasMore) {
         setPostsHasMore(false);
       }
@@ -265,7 +267,7 @@ const Index = () => {
         firestore
           .doc(`/teams/${teamIdFromURL}/teamMembersWithRecentPosts/${user.id}`)
           .set({
-            id,
+            id: user.id,
             firstName,
             lastName,
             lastPosts: [],
@@ -290,9 +292,7 @@ const Index = () => {
       return;
     }
     firestore
-      .doc(
-        `/teams/${dbState.team.teamId}/teamMembersWithRecentPosts/${user.id}`
-      )
+      .doc(`/teams/${team.teamId}/teamMembersWithRecentPosts/${user.id}`)
       .update({
         firstName,
         lastName,
@@ -300,9 +300,10 @@ const Index = () => {
         avatarThumbUrl: avatarThumbUrl || null,
         avatarFullUrl: avatarFullUrl || null,
       });
+
     setTeamMembersWithRecentPosts({
       ...teamMembersWithRecentPosts,
-      [`${user.id}`]: {
+      [user.id]: {
         ...teamMembersWithRecentPosts[user.id],
         firstName,
         lastName,
@@ -328,11 +329,13 @@ const Index = () => {
     fullImageUrl,
     thumbImageUrl,
     description,
+    includeInNewsletter,
   }) => {
-    const allUserPostIds = teamMembersWithRecentPosts[userId].postIds || [];
-    const isNewPost = !allUserPostIds.includes(postId);
+    let recentPosts = teamMembersWithRecentPosts[userId].posts || {};
+    let recentPostIds = teamMembersWithRecentPosts[userId].recentPostIds || [];
+    const isNewPost = !recentPostIds.includes(postId);
     if (isNewPost) {
-      allUserPostIds.unshift(postId);
+      recentPostIds.unshift(postId);
     }
     const post = {
       postId,
@@ -342,27 +345,38 @@ const Index = () => {
       post.thumbImageUrl = thumbImageUrl;
     }
     post.description = description || "";
-    const currentUser = teamMembersWithRecentPosts[user.id] || {
-      id: user.id,
+    const currentUser = teamMembersWithRecentPosts[userId] || {
+      id: userId,
     };
     post.author = {
-      id: currentUser.id,
+      id: userId,
       firstName: currentUser.firstName,
       lastName: currentUser.lastName,
       role: currentUser.role,
       avatarThumbUrl: currentUser.avatarThumbUrl,
     };
     post.timestamp = firebase.firestore.FieldValue.serverTimestamp();
+    if (includeInNewsletter) {
+      post.includeInNewsletter = true;
+    }
+
+    recentPostIds = recentPostIds.slice(0, RECENT_POSTS_COUNT);
+    recentPosts = { ...recentPosts, [postId]: post };
+
+    Object.keys(recentPosts).forEach((key) => {
+      const p = recentPosts[key];
+      if (!recentPostIds.includes(p.postId)) {
+        recentPosts[key] = firebase.firestore.FieldValue.delete();
+      }
+    });
 
     setTeamMembersWithRecentPosts({
       ...teamMembersWithRecentPosts,
-      [user.id]: {
-        ...teamMembersWithRecentPosts[user.id],
-        postIds: allUserPostIds,
-        posts: {
-          ...teamMembersWithRecentPosts[user.id].posts,
-          [postId]: post,
-        },
+      [userId]: {
+        ...teamMembersWithRecentPosts[userId],
+        recentPostIds,
+        recentPosts: recentPosts,
+        totalPostCount: teamMembersWithRecentPosts[userId].totalPostCount + 1,
       },
     });
     setPosts([post, ...posts]);
@@ -370,12 +384,16 @@ const Index = () => {
     firestore
       .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${userId}`)
       .update({
-        postIds: allUserPostIds,
-        [`posts.${postId}`]: post,
+        recentPostIds,
+        recentPosts,
       });
 
     if (isNewPost) {
       firestore.doc(`/teams/${teamId}/posts/${postId}`).set({
+        postTimestamp: post.timestamp,
+        postData: post,
+      });
+      firestore.doc(`/users/${userId}/posts/${postId}`).set({
         postTimestamp: post.timestamp,
         postData: post,
       });
@@ -440,7 +458,8 @@ const Index = () => {
 
   const showStartTeamForm = isFetched && !team?.teamId && !teamIdFromURL;
   const showJoinTeamForm = isFetched && !team?.teamId && teamIdFromURL;
-  const showTeamDirectoty = isFetched && teamMembersWithRecentPosts?.length > 0;
+  const showTeamDirectoty =
+    isFetched && Object.keys(teamMembersWithRecentPosts).length > 0;
 
   const showForm = showStartTeamForm || showJoinTeamForm;
 
@@ -552,14 +571,15 @@ const Index = () => {
       .delete();
   };
 
-  const actions = { onCommentSubmit, onCommentRemove };
+  // TODO: naming consistency
+  const actions = { onCommentSubmit, onCommentRemove, updateTeam };
 
   const currentUser = user.id ? teamMembersWithRecentPosts[user.id] : {};
 
   return (
     <>
       <ActionsContext.Provider value={actions}>
-        <TeamContext.Provider value={{ teamId: team?.teamId }}>
+        <TeamContext.Provider value={team}>
           <CurrentUserContext.Provider value={{ currentUser }}>
             <ViewPropsContext.Provider value={{ timeframe }}>
               <Head teamName={team?.teamName} />
@@ -593,7 +613,6 @@ const Index = () => {
                     teamName={team?.teamName}
                     teamId={team?.teamId}
                     teamLogo={team?.teamLogo}
-                    onTeamEditSubmit={updateTeam}
                     viewMode={viewMode}
                     onSetViewMode={onSetViewMode}
                   />

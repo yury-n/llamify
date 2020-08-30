@@ -3,6 +3,7 @@ import { useState } from "react";
 import CreatePostButton from "./CreatePostButton";
 import PostCard from "./PostCard";
 import FullAvatarModal from "./Modals/FullAvatarModal";
+import { RECENT_POSTS_COUNT } from "../utils/consts";
 const { default: HumanEditModal } = require("./Modals/HumanEditModal");
 
 const Human = ({
@@ -17,7 +18,9 @@ const Human = ({
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
 
-  let requiredNumOfCards = isOwner ? 5 : 6;
+  let requiredNumOfCards = isOwner
+    ? RECENT_POSTS_COUNT - 1
+    : RECENT_POSTS_COUNT;
   const posts = (human.postIds || [])
     .map((postId) => human.posts[postId])
     .slice(0, requiredNumOfCards);

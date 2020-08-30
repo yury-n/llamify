@@ -77,7 +77,7 @@ textarea,
 }
 
 .home-logo {
-  position: fixed;
+  position: absolute;
   width: 48px;
   left: 50%;
   margin-left: -28px;

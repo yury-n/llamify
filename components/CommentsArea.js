@@ -55,7 +55,6 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
       if (e.target.value.indexOf(currentReplyToAuthor.firstName) !== 0) {
         setCurrentCommentId(null);
         setCurrentReplyToAuthor(null);
-        console.log("cancel");
       }
     }
   };
@@ -91,7 +90,6 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
     if (currentUser.avatarThumbUrl) {
       newComment.author.avatarThumbUrl = currentUser.avatarThumbUrl;
     }
-    console.log({ newComment });
     const params = {
       newComment,
       newCommentCount: comments.length + 1,
@@ -103,9 +101,7 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
       params.newComment.replyToCommentId = currentCommentId;
       params.replyToAuthor = currentReplyToAuthor;
     }
-    console.log({ params });
     onCommentSubmit(params);
-    console.log({ comments });
     setComments([...comments, newComment]);
     clearAndBlurTextarea();
   };
