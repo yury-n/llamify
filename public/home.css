@@ -298,6 +298,10 @@
   z-index: -1;
 }
 
+.post-thumb-disabled {
+  pointer-events: none;
+}
+
 .post-thumb-more-button {
   position: absolute;
   top: 0;
@@ -491,6 +495,7 @@
   margin-right: 14px;
   background: white;
   background-size: cover;
+  box-shadow: 0px 1px 4px -1px hsl(0deg 0% 0% / 24%);
 }
 
 .post-author-name {

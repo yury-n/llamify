@@ -25,11 +25,15 @@ const PostSubmitModal = ({
   const imagePreviewDiv = useRef(null);
   const textarea = useRef(null);
 
+  const onFileChangeCallback = () => {
+    textarea.current.focus();
+  };
+
   const {
     imagePreview: imagePreviewFromInput,
     onFileChange,
     uploadToFirebase,
-  } = useImageUpload(imagePreviewProp, imageFileProp);
+  } = useImageUpload(imagePreviewProp, imageFileProp, onFileChangeCallback);
 
   const [description, setDescription] = useState(descriptionProp);
   const [includeInNewsletter, setIncludeInNewsletter] = useState(false);
@@ -41,11 +45,10 @@ const PostSubmitModal = ({
     setIncludeInNewsletter(true);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = () => {
     submitButton.current.childNodes[0].classList.add("busy");
     imagePreviewDiv.current.classList.add("busy");
     textarea.current.readOnly = true;
-    e.preventDefault();
     if (!postId) {
       initFirebase();
       const db = firebase.database();
@@ -73,6 +76,12 @@ const PostSubmitModal = ({
           );
         }
       );
+    }
+  };
+
+  const onFieldKeyDown = (e) => {
+    if (e.nativeEvent.metaKey && e.nativeEvent.code === "Enter") {
+      onSubmit();
     }
   };
 
@@ -116,6 +125,7 @@ const PostSubmitModal = ({
             rows="3"
             placeholder="Description"
             onChange={onTextareaChange}
+            onKeyDown={onFieldKeyDown}
           >
             {description}
           </textarea>

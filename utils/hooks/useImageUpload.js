@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/storage";
 import getImageFilePreview from "../getImageFilePreview";
 
-const useImageUpload = (initImagePreview, initImageFile) => {
+const useImageUpload = (
+  initImagePreview,
+  initImageFile,
+  onFileChangeCallback
+) => {
   // ^ these props are to inject a file that arrived from DnD
   const [imageFile, setImageFile] = useState(initImageFile);
   const [imagePreview, setImagePreview] = useState(initImagePreview);
@@ -16,9 +20,16 @@ const useImageUpload = (initImagePreview, initImageFile) => {
     const file = e.target.files[0];
     setImageFile(file);
     setImagePreview(getImageFilePreview(file));
+    onFileChangeCallback && onFileChangeCallback();
     e.preventDefault();
     e.stopPropagation();
   };
+
+  useEffect(() => {
+    if (initImageFile) {
+      onFileChangeCallback && onFileChangeCallback();
+    }
+  }, [initImageFile]);
 
   const uploadToFirebase = (path, maxSize = 50, callback) => {
     var reader = new FileReader();

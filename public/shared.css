@@ -80,8 +80,8 @@ textarea,
   position: absolute;
   width: 48px;
   left: 50%;
-  margin-left: -28px;
-  top: 18px;
+  margin-left: -24px;
+  top: 19px;
   z-index: 100;
   transition: 300ms ease;
   cursor: pointer;

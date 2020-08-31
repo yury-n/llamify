@@ -21,13 +21,18 @@ const Human = ({
   let requiredNumOfCards = isOwner
     ? RECENT_POSTS_COUNT - 1
     : RECENT_POSTS_COUNT;
-  const posts = (human.postIds || [])
-    .map((postId) => human.posts[postId])
+  const recentPosts = (human.recentPostIds || [])
+    .map((recentPostId) => human.recentPosts[recentPostId])
     .slice(0, requiredNumOfCards);
 
-  const emptyPostCardsToAdd = requiredNumOfCards - posts.length;
+  let morePostsCount = human.totalPostCount - recentPosts.length;
+  if (morePostsCount > 0) {
+    morePostsCount++; // because the last one will have an overlay above it
+  }
+
+  const emptyPostCardsToAdd = requiredNumOfCards - recentPosts.length;
   for (var i = 0; i < emptyPostCardsToAdd; i++) {
-    posts.push(null);
+    recentPosts.push(null);
   }
 
   const name = `${human.firstName} ${human.lastName}`;
@@ -90,11 +95,14 @@ const Human = ({
           {isOwner && (
             <CreatePostButton onShowPostSubmitModal={onShowPostSubmitModal} />
           )}
-          {posts.map((post, index) => (
+          {recentPosts.map((post, index) => (
             <PostCard
               key={`${index}-${post?.id}`}
               post={post}
               onPostRemove={onPostRemove}
+              morePostsCount={
+                index === recentPosts.length - 1 ? morePostsCount : undefined
+              }
             />
           ))}
         </div>

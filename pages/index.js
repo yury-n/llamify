@@ -51,8 +51,8 @@ const Index = () => {
     teamName: null,
   });
   const [userRole, setUserRole] = useState(null);
-  const [posts, setPosts] = useState([]);
-  const [postsHasMore, setPostsHasMore] = useState(true);
+  const [teamPosts, setTeamPosts] = useState([]);
+  const [teamPostsHasMore, setTeamPostsHasMore] = useState(true);
   const [teamMembersWithRecentPosts, setTeamMembersWithRecentPosts] = useState(
     []
   );
@@ -106,7 +106,7 @@ const Index = () => {
       });
   };
 
-  const fetchPosts = (teamId) => {
+  const fetchTeamPosts = (teamId) => {
     if (!teamId) {
       return;
     }
@@ -131,9 +131,9 @@ const Index = () => {
       if (fetchHasMore) {
         fetchedPosts.pop();
       }
-      setPosts([...posts, ...fetchedPosts]);
+      setTeamPosts([...teamPosts, ...fetchedPosts]);
       if (!fetchHasMore) {
-        setPostsHasMore(false);
+        setTeamPostsHasMore(false);
       }
       setIsFetchingMore(false);
     });
@@ -194,7 +194,7 @@ const Index = () => {
 
   useEffect(() => {
     if (["grid", "feed"].includes(viewMode) && !isFetched) {
-      fetchPosts(team?.teamId);
+      fetchTeamPosts(team?.teamId);
     }
   }, [viewMode, isFetched]);
 
@@ -238,7 +238,7 @@ const Index = () => {
       id: user.id,
       firstName,
       lastName,
-      lastPosts: [],
+      recentPosts: [],
       totalPostCount: 0,
     };
     firestore
@@ -270,7 +270,7 @@ const Index = () => {
             id: user.id,
             firstName,
             lastName,
-            lastPosts: [],
+            recentPosts: [],
             totalPostCount: 0,
           })
           .then(() => {
@@ -331,7 +331,7 @@ const Index = () => {
     description,
     includeInNewsletter,
   }) => {
-    let recentPosts = teamMembersWithRecentPosts[userId].posts || {};
+    let recentPosts = teamMembersWithRecentPosts[userId].recentPosts || {};
     let recentPostIds = teamMembersWithRecentPosts[userId].recentPostIds || [];
     const isNewPost = !recentPostIds.includes(postId);
     if (isNewPost) {
@@ -350,23 +350,27 @@ const Index = () => {
     };
     post.author = {
       id: userId,
-      firstName: currentUser.firstName,
-      lastName: currentUser.lastName,
-      role: currentUser.role,
-      avatarThumbUrl: currentUser.avatarThumbUrl,
+      firstName: currentUser.firstName || null,
+      lastName: currentUser.lastName || null,
+      role: currentUser.role || null,
+      avatarThumbUrl: currentUser.avatarThumbUrl || null,
     };
     post.timestamp = firebase.firestore.FieldValue.serverTimestamp();
     if (includeInNewsletter) {
       post.includeInNewsletter = true;
     }
 
+    const totalPostCount =
+      teamMembersWithRecentPosts[userId].totalPostCount + 1;
     recentPostIds = recentPostIds.slice(0, RECENT_POSTS_COUNT);
     recentPosts = { ...recentPosts, [postId]: post };
+
+    console.log({ recentPostIds });
 
     Object.keys(recentPosts).forEach((key) => {
       const p = recentPosts[key];
       if (!recentPostIds.includes(p.postId)) {
-        recentPosts[key] = firebase.firestore.FieldValue.delete();
+        delete recentPosts[key];
       }
     });
 
@@ -375,17 +379,18 @@ const Index = () => {
       [userId]: {
         ...teamMembersWithRecentPosts[userId],
         recentPostIds,
-        recentPosts: recentPosts,
-        totalPostCount: teamMembersWithRecentPosts[userId].totalPostCount + 1,
+        recentPosts,
+        totalPostCount,
       },
     });
-    setPosts([post, ...posts]);
+    setTeamPosts([post, ...teamPosts]);
 
     firestore
       .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${userId}`)
       .update({
         recentPostIds,
         recentPosts,
+        totalPostCount,
       });
 
     if (isNewPost) {
@@ -406,28 +411,62 @@ const Index = () => {
     if (!userId || !teamId) {
       return;
     }
-    const postIds = teamMembersWithRecentPosts[userId].postIds.filter(
-      (pId) => pId !== postId
-    );
 
+    // quick update
+    const recentPostIds = teamMembersWithRecentPosts[
+      userId
+    ].recentPostIds.filter((pId) => pId !== postId);
+
+    const newTotalPostCount =
+      teamMembersWithRecentPosts[userId].totalPostCount - 1;
     setTeamMembersWithRecentPosts({
       ...teamMembersWithRecentPosts,
       [user.id]: {
-        ...teamMembersWithRecentPosts[user.id],
-        postIds,
+        ...teamMembersWithRecentPosts[userId],
+        recentPostIds,
+        newTotalPostCount,
       },
     });
 
-    const postsFiltered = posts.filter((p) => p.postId !== postId);
-    setPosts(postsFiltered);
+    const postsFiltered = teamPosts.filter((p) => p.postId !== postId);
+    setTeamPosts(postsFiltered);
 
-    firestore
-      .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${userId}`)
-      .update({
-        postIds,
-        [`posts.${postId}`]: firebase.firestore.FieldValue.delete(),
-      });
     firestore.doc(`/teams/${teamId}/posts/${postId}`).delete();
+    firestore
+      .doc(`/users/${userId}/posts/${postId}`)
+      .delete()
+      .then(() => {
+        const query = firestore
+          .collection(`/users/${userId}/posts`)
+          .orderBy("postTimestamp", "desc")
+          .limit(RECENT_POSTS_COUNT);
+        query.get().then((postsSnapshot) => {
+          const newRecentPosts = {};
+          const newRecentPostIds = [];
+          postsSnapshot.forEach((post) => {
+            const postData = post.data().postData; // <3
+            newRecentPostIds.push(postData.postId);
+            newRecentPosts[postData.postId] = postData;
+
+            setTeamMembersWithRecentPosts({
+              ...teamMembersWithRecentPosts,
+              [user.id]: {
+                ...teamMembersWithRecentPosts[user.id],
+                recentPostIds: newRecentPostIds,
+                recentPosts: newRecentPosts,
+              },
+            });
+
+            firestore
+              .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${userId}`)
+              .update({
+                recentPostIds: newRecentPostIds,
+                recentPosts: newRecentPosts,
+                totalPostCount: newTotalPostCount,
+              });
+          });
+        });
+      });
   };
 
   const updateTeam = ({ teamId, teamName, teamLogo }) => {
@@ -501,28 +540,30 @@ const Index = () => {
     postAuthorId,
     newCommentCount,
   }) => {
-    const post = teamMembersWithRecentPosts[postAuthorId].posts[postId];
-    const indexInPosts = posts.findIndex((p) => p.postId === postId);
+    // TODO: might be a comment in grid view
+    const post = teamMembersWithRecentPosts[postAuthorId].recentPosts[postId];
+    const indexInPosts = teamPosts.findIndex((p) => p.postId === postId);
 
     const updatedPost = {
       ...post,
       commentCount: newCommentCount,
     };
-    const updatesPosts = [...posts];
+    const updatesPosts = [...teamPosts];
     updatesPosts[indexInPosts] = updatedPost;
 
     setTeamMembersWithRecentPosts({
       ...teamMembersWithRecentPosts,
       [postAuthorId]: {
         ...teamMembersWithRecentPosts[postAuthorId],
-        posts: {
-          ...teamMembersWithRecentPosts[postAuthorId].posts,
+        // TODO: this is not right
+        recentPosts: {
+          ...teamMembersWithRecentPosts[postAuthorId].recentPosts,
           [postId]: updatedPost,
         },
       },
     });
 
-    setPosts(updatesPosts);
+    setTeamPosts(updatesPosts);
 
     firestore
       .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${postAuthorId}`)
@@ -664,14 +705,14 @@ const Index = () => {
                     {viewMode === "grid" && (
                       <div className="grid-view">
                         <PostsGrid
-                          posts={posts}
+                          posts={teamPosts}
                           onShowPostSubmitModal={onShowPostSubmitModal}
                           onPostRemove={onPostRemove}
                         />
-                        {posts.length > 0 && postsHasMore && (
+                        {teamPosts.length > 0 && teamPostsHasMore && (
                           <button
                             className="button-wrapper load-more-button-wrapper"
-                            onClick={() => fetchPosts(team?.teamId)}
+                            onClick={() => fetchTeamPosts(team?.teamId)}
                           >
                             <span
                               className={c(
@@ -688,7 +729,10 @@ const Index = () => {
                     )}
                     {viewMode === "feed" && (
                       <div className="feed-view">
-                        <PostsFeed posts={posts} onPostRemove={onPostRemove} />
+                        <PostsFeed
+                          posts={teamPosts}
+                          onPostRemove={onPostRemove}
+                        />
                       </div>
                     )}
                   </div>

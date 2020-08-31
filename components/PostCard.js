@@ -1,8 +1,9 @@
+import c from "classnames";
 import { useState } from "react";
 import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 import PostModal from "./Modals/PostModal";
 
-const PostCard = ({ post, onPostRemove }) => {
+const PostCard = ({ post, onPostRemove, morePostsCount }) => {
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
   if (!post) {
@@ -14,7 +15,10 @@ const PostCard = ({ post, onPostRemove }) => {
 
   return (
     <>
-      <div className="post-thumb" onClick={() => setShowPostModal(true)}>
+      <div
+        className={c("post-thumb", morePostsCount && "post-thumb-disabled")}
+        onClick={() => setShowPostModal(true)}
+      >
         <div
           className="post-thumb-remove"
           onClick={(e) => {
@@ -25,7 +29,12 @@ const PostCard = ({ post, onPostRemove }) => {
           <img src="/icons/x.svg" />
         </div>
         <div className="post-thumb-image">
-          <img src={post.thumbImageUrl} loading="lazy" onLoad={onImageLoad} />
+          <img
+            key={`thumb-${post.postId}`}
+            src={post.thumbImageUrl}
+            loading="lazy"
+            onLoad={onImageLoad}
+          />
         </div>
         {(post.description || post.commentCount > 0) && (
           <div className="post-thumb-details">
@@ -38,6 +47,12 @@ const PostCard = ({ post, onPostRemove }) => {
                 {post.commentCount}
               </div>
             )}
+          </div>
+        )}
+        {!!morePostsCount && (
+          <div class="post-thumb-more-button">
+            <span>+</span>
+            {morePostsCount}
           </div>
         )}
       </div>
