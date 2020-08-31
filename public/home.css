@@ -711,6 +711,13 @@ svg.new-notifications-icon {
   font-size: 14px;
 }
 
+.spinner-box-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
 .spinner-box {
   margin-top: -100px;
   width: 300px;

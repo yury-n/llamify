@@ -44,7 +44,8 @@ const Index = () => {
   const [droppedFile, setDroppedFile] = useState();
   const [searchString, setSearchString] = useState();
   const [openModal] = useState(false);
-  const [isFetched, setIsFetched] = useState(false);
+  const [isTeamFetched, setIsTeamFetched] = useState(false);
+  const [areTeamPostsFetched, setAreTeamPostsFetched] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [team, setTeam] = useState({
     teamId: null,
@@ -74,7 +75,7 @@ const Index = () => {
           fetchTeam(data.teamId);
           fetchTeamMembersWithRecentPosts(data.teamId);
         } else {
-          setIsFetched(true);
+          setIsTeamFetched(true);
         }
       });
   };
@@ -88,7 +89,7 @@ const Index = () => {
         if (data) {
           setTeam(data);
         }
-        setIsFetched(true);
+        setIsTeamFetched(true);
       });
   };
 
@@ -117,7 +118,7 @@ const Index = () => {
       .collection(`/teams/${teamId}/posts`)
       .orderBy("postTimestamp", "desc");
 
-    if (posts.length) {
+    if (teamPosts.length) {
       query = query.startAfter(posts[posts.length - 1].timestamp);
     }
     query = query.limit(GRID_POSTS_PER_PAGE + 1);
@@ -132,6 +133,7 @@ const Index = () => {
         fetchedPosts.pop();
       }
       setTeamPosts([...teamPosts, ...fetchedPosts]);
+      setAreTeamPostsFetched(true);
       if (!fetchHasMore) {
         setTeamPostsHasMore(false);
       }
@@ -193,10 +195,10 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    if (["grid", "feed"].includes(viewMode) && !isFetched) {
+    if (["grid", "feed"].includes(viewMode) && !areTeamPostsFetched) {
       fetchTeamPosts(team?.teamId);
     }
-  }, [viewMode, isFetched]);
+  }, [viewMode, isTeamFetched]);
 
   useEffect(() => {
     if (searchString && searchString.length >= 2 && viewMode !== "list") {
@@ -205,7 +207,7 @@ const Index = () => {
   }, [searchString]);
 
   useEffect(() => {
-    if (user && !isFetched) {
+    if (user && !isTeamFetched) {
       fetchUserTeam(user.id);
       setTimeout(() => {
         if (spinnerDiv.current) {
@@ -213,7 +215,7 @@ const Index = () => {
         }
       }, 1500);
     }
-  }, [user, isFetched]);
+  }, [user, isTeamFetched]);
 
   if (!user) {
     if (isUserFetched) {
@@ -256,7 +258,7 @@ const Index = () => {
     setUserRole("admin");
     setTeam(teamData);
     setTeamMembersWithRecentPosts({ [user.id]: teamMember });
-    setIsFetched(true);
+    setIsTeamFetched(true);
   };
 
   const joinTeam = ({ firstName, lastName }) => {
@@ -495,10 +497,10 @@ const Index = () => {
     }
   };
 
-  const showStartTeamForm = isFetched && !team?.teamId && !teamIdFromURL;
-  const showJoinTeamForm = isFetched && !team?.teamId && teamIdFromURL;
+  const showStartTeamForm = isTeamFetched && !team?.teamId && !teamIdFromURL;
+  const showJoinTeamForm = isTeamFetched && !team?.teamId && teamIdFromURL;
   const showTeamDirectoty =
-    isFetched && Object.keys(teamMembersWithRecentPosts).length > 0;
+    isTeamFetched && Object.keys(teamMembersWithRecentPosts).length > 0;
 
   const showForm = showStartTeamForm || showJoinTeamForm;
 
@@ -548,8 +550,8 @@ const Index = () => {
       ...post,
       commentCount: newCommentCount,
     };
-    const updatesPosts = [...teamPosts];
-    updatesPosts[indexInPosts] = updatedPost;
+    const updatedTeamPosts = [...teamPosts];
+    updatedTeamPosts[indexInPosts] = updatedPost;
 
     setTeamMembersWithRecentPosts({
       ...teamMembersWithRecentPosts,
@@ -563,14 +565,17 @@ const Index = () => {
       },
     });
 
-    setTeamPosts(updatesPosts);
+    setTeamPosts(updatedTeamPosts);
 
     firestore
-      .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${postAuthorId}`)
+      .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${postAuthorId}/`)
       .update({
-        [`posts.${postId}.commentCount`]: newCommentCount,
+        [`recentPosts.${postId}.commentCount`]: newCommentCount,
       });
     firestore.doc(`/teams/${teamId}/posts/${postId}`).update({
+      ["postData.commentCount"]: newCommentCount,
+    });
+    firestore.doc(`/users/${postAuthorId}/posts/${postId}`).update({
       ["postData.commentCount"]: newCommentCount,
     });
   };
@@ -633,11 +638,11 @@ const Index = () => {
                 className={c(
                   "home-page",
                   showForm && "home-sisu-page",
-                  !isFetched && "loading"
+                  !isTeamFetched && "loading"
                 )}
                 ref={rootDiv}
               >
-                {!isFetched && (
+                {!isTeamFetched && (
                   <div
                     ref={spinnerDiv}
                     className="spinner-box"
@@ -648,7 +653,7 @@ const Index = () => {
                     </div>
                   </div>
                 )}
-                {isFetched && (
+                {isTeamFetched && (
                   <StickyBar
                     isTeamEditable={userRole === "admin"}
                     teamName={team?.teamName}
@@ -704,11 +709,22 @@ const Index = () => {
                     )}
                     {viewMode === "grid" && (
                       <div className="grid-view">
-                        <PostsGrid
-                          posts={teamPosts}
-                          onShowPostSubmitModal={onShowPostSubmitModal}
-                          onPostRemove={onPostRemove}
-                        />
+                        {!areTeamPostsFetched && (
+                          <div className="spinner-box-wrapper">
+                            <div className="spinner-box">
+                              <div className="circle-border">
+                                <div className="circle-core"></div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {areTeamPostsFetched && (
+                          <PostsGrid
+                            posts={teamPosts}
+                            onShowPostSubmitModal={onShowPostSubmitModal}
+                            onPostRemove={onPostRemove}
+                          />
+                        )}
                         {teamPosts.length > 0 && teamPostsHasMore && (
                           <button
                             className="button-wrapper load-more-button-wrapper"
