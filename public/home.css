@@ -113,7 +113,7 @@
   margin-left: 4px;
   background: white;
   background-size: cover;
-  box-shadow: 0px 1px 4px -1px hsl(0deg 0% 0% / 32%);
+  box-shadow: 0px 1px 4px -1px rgba(0, 0, 0, 0.32);
   transition: 300ms ease;
   cursor: pointer;
 }
@@ -224,6 +224,7 @@
   cursor: default;
   box-shadow: none;
   color: #7c3cfc;
+  filter: hue-rotate(-6deg);
 }
 
 .new-posts-toggle .toggle-control {
@@ -316,6 +317,7 @@
   align-items: center;
   font-weight: 500;
   cursor: pointer;
+  border-radius: 12px;
 }
 
 .post-thumb-more-button span {
@@ -337,10 +339,18 @@
   font-size: 42px;
   font-weight: 500;
   cursor: pointer;
+  flex-direction: column;
 }
 
 .post-thumb-add-button img {
   width: 40px;
+  margin-top: 10px;
+}
+
+.post-thumb-add-button span {
+  font-size: 14px;
+  font-weight: normal;
+  margin-top: 15px;
 }
 
 .post-thumb-details {
@@ -414,7 +424,7 @@
 
 .post-sidebar {
   width: 280px;
-  height: 100%;
+  height: calc(100% - 73px);
   padding-left: 20px;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -423,7 +433,12 @@
 }
 
 .post-sidebar-bottom {
+  flex-shrink: 0;
+}
+
+.post-sidebar-bottom {
   height: 100%;
+  flex-shrink: 1;
 }
 
 .comments-area {
@@ -580,10 +595,10 @@
   overflow: hidden;
   margin-top: -3px;
   margin-right: 14px;
-  background: #f3f3f4;
   background-size: cover;
   display: inline-block;
   flex-shrink: 0;
+  box-shadow: 0px 1px 4px -1px hsl(0deg 0% 0% / 24%);
 }
 
 .comment-author-name {
@@ -685,7 +700,7 @@ svg.new-notifications-icon {
   box-sizing: border-box;
   display: flex;
   margin: auto;
-  box-shadow: rgb(0 0 0 / 8%) 0px 2px 28px 0px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 28px 0px;
   background: white;
 }
 
@@ -698,7 +713,7 @@ svg.new-notifications-icon {
 
 .post-comments-collapsed .icon {
   width: 13px;
-  margin-right: 4px;
+  margin-right: 8px;
   position: relative;
 }
 
@@ -822,6 +837,27 @@ svg.new-notifications-icon {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+.feed-submit-post-button {
+  width: 860px;
+  box-sizing: border-box;
+  padding: 18px 22px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  margin-bottom: 70px;
+  margin-top: -10px;
+}
+
+.feed-submit-post-button img {
+  margin-right: 8px;
+  width: 20px;
+}
+
+.feed-submit-post-button span {
+  font-weight: normal;
 }
 
 @keyframes spin {

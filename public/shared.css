@@ -295,7 +295,7 @@ button:active {
 .button.button-white {
   background: white;
   border-color: #dbdbdb;
-  box-shadow: 0px 3px 6px -1px hsl(0deg 0% 0% / 8%);
+  box-shadow: 0px 3px 6px -1px rgba(0, 0, 0, 0.08);
 }
 
 .button:not(.busy):not(.disabled):hover {
@@ -323,6 +323,7 @@ button:active {
   box-shadow: none;
   color: #7c3cfc;
   pointer-events: none;
+  filter: hue-rotate(-6deg);
 }
 
 .icon-button img,
@@ -414,7 +415,7 @@ button:active {
   box-sizing: content-box;
   padding: 9px 20px;
   color: hsl(260, 93%, 35%);
-  box-shadow: 0px 3px 6px -1px hsl(0deg 0% 0% / 18%);
+  box-shadow: 0px 3px 6px -1px rgba(0, 0, 0, 0.18);
   background: #f9f9f9;
 }
 

@@ -7,7 +7,12 @@ import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 
 const firestore = firebase.firestore();
 
-const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
+const CommentsArea = ({
+  postId,
+  postAuthorId,
+  withLoadedComments,
+  commentCount,
+}) => {
   const { onCommentSubmit, onCommentRemove } = useContext(ActionsContext);
   const { teamId } = useContext(TeamContext);
   const { currentUser } = useContext(CurrentUserContext);
@@ -18,9 +23,10 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [currentCommentId, setCurrentCommentId] = useState();
   const [currentReplyToAuthor, setCurrentReplyToAuthor] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    loadComments && fetchComments();
+    commentCount > 0 && withLoadedComments && fetchComments();
   }, []);
 
   useEffect(() => {
@@ -38,6 +44,7 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
   }, [textareaValue, comments]);
 
   const fetchComments = () => {
+    setIsLoading(true);
     firestore
       .collection(`/teams/${teamId}/postComments/${postId}/comments`)
       .get()
@@ -46,13 +53,15 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
         commentsSnapshot.forEach((comment) => {
           fetchedComments.push(comment.data().commentData);
         });
+        setComments(fetchedComments);
+        setIsLoading(false);
       });
   };
 
   const onTextareaChange = (e) => {
     setTextareaValue(e.target.value);
     if (currentReplyToAuthor) {
-      if (e.target.value.indexOf(currentReplyToAuthor.firstName) !== 0) {
+      if (e.target.value.indexOf(`@${currentReplyToAuthor.firstName}`) !== 0) {
         setCurrentCommentId(null);
         setCurrentReplyToAuthor(null);
       }
@@ -106,6 +115,13 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
     clearAndBlurTextarea();
   };
 
+  const onClickReply = () => {
+    setCurrentCommentId(comment.commentId);
+    setCurrentReplyToAuthor(comment.author);
+    setTextareaValue(`@${comment.author.firstName}, `);
+    textareaRef.current.focus();
+  };
+
   const onCommentRemoveHandler = () => {
     onCommentRemove({
       teamId,
@@ -122,9 +138,9 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
   return (
     <>
       <div className="comments-area">
-        {!loadComments && commentCount && (
+        {!withLoadedComments && commentCount && !comments.length && !isLoading && (
           <div className="post-comments-collapsed">
-            <button class="button-wrapper">
+            <button class="button-wrapper" onClick={fetchComments}>
               <span
                 class="button icon-button button-secondary button-white"
                 tabIndex="-1"
@@ -135,65 +151,62 @@ const CommentsArea = ({ postId, postAuthorId, loadComments, commentCount }) => {
             </button>
           </div>
         )}
-        {commentCount > 0 && comments.length == 0 && (
-          <div className="comments">
-            {new Array(commentCount).fill(null).map((comment, index) => (
-              <div key={index} className="comment loading-comment">
-                <div className="comment-author-avatar" />
-                <div className="comment-content"></div>
-              </div>
-            ))}
-          </div>
-        )}
-        {comments.length > 0 && (
-          <div className="comments">
-            {comments.map((comment) => {
-              const isCommentAuthor = comment.author.id == currentUser.id;
-              return (
-                <div key={comment.commentId} className="comment">
-                  <div
-                    className="comment-author-avatar"
-                    style={{
-                      backgroundImage:
-                        comment.author.avatarThumbUrl &&
-                        `url(${comment.author.avatarThumbUrl})`,
-                    }}
-                  />
-                  <div className="comment-content">
-                    <span className="comment-author-name">
-                      {comment.author.firstName}
-                    </span>
-                    <span>{comment.content}</span>
-                  </div>
-                  {isCommentAuthor && (
-                    <div
-                      className="comment-action-button"
-                      onClick={() => {
-                        setCurrentCommentId(comment.commentId);
-                        setShowRemoveModal(true);
-                      }}
-                    >
-                      Remove
-                    </div>
-                  )}
-                  {!isCommentAuthor && (
-                    <div
-                      className="comment-action-button"
-                      onClick={() => {
-                        setCurrentCommentId(comment.commentId);
-                        setCurrentReplyToAuthor(comment.author);
-                        setTextareaValue(`${comment.author.firstName}, `);
-                        textareaRef.current.focus();
-                      }}
-                    >
-                      Reply
-                    </div>
-                  )}
+        <div className="comments">
+          {isLoading && (
+            <>
+              {new Array(commentCount).fill(null).map((comment, index) => (
+                <div key={index} className="comment loading-comment">
+                  <div className="comment-author-avatar" />
+                  <div className="comment-content"></div>
                 </div>
-              );
-            })}
-          </div>
-        )}
+              ))}
+            </>
+          )}
+          {comments.length > 0 && (
+            <>
+              {comments.map((comment) => {
+                const isCommentAuthor = comment.author.id == currentUser.id;
+                return (
+                  <div key={comment.commentId} className="comment">
+                    <div
+                      className="comment-author-avatar"
+                      style={{
+                        backgroundImage:
+                          comment.author.avatarThumbUrl &&
+                          `url(${comment.author.avatarThumbUrl})`,
+                      }}
+                    />
+                    <div className="comment-content">
+                      <span className="comment-author-name">
+                        {comment.author.firstName}
+                      </span>
+                      <span>{comment.content}</span>
+                    </div>
+                    {isCommentAuthor && (
+                      <div
+                        className="comment-action-button"
+                        onClick={() => {
+                          setCurrentCommentId(comment.commentId);
+                          setShowRemoveModal(true);
+                        }}
+                      >
+                        Remove
+                      </div>
+                    )}
+                    {!isCommentAuthor && (
+                      <div
+                        className="comment-action-button"
+                        onClick={onClickReply}
+                      >
+                        Reply
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
         <div className="comment-textarea-wrapper">
           <textarea
             ref={textareaRef}

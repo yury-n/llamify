@@ -21,6 +21,7 @@ import PostsGrid from "../components/PostsGrid";
 import PostsFeed from "../components/PostsFeed";
 import Footer from "../components/Footer";
 import { RECENT_POSTS_COUNT } from "../utils/consts";
+import LoadingIndicator from "../components/LoadingIndicator";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -35,7 +36,6 @@ export const ViewPropsContext = React.createContext({});
 const Index = () => {
   const router = useRouter();
   const rootDiv = useRef(null);
-  const spinnerDiv = useRef(null);
   const { user, isUserFetched } = useUser();
   const [timeframe, setTimeframe] = useState(null);
   const [viewMode, setViewMode] = useState("list");
@@ -107,7 +107,7 @@ const Index = () => {
       });
   };
 
-  const fetchTeamPosts = (teamId) => {
+  const fetchTeamPosts = (teamId, fetchMore) => {
     if (!teamId) {
       return;
     }
@@ -118,8 +118,8 @@ const Index = () => {
       .collection(`/teams/${teamId}/posts`)
       .orderBy("postTimestamp", "desc");
 
-    if (teamPosts.length) {
-      query = query.startAfter(posts[posts.length - 1].timestamp);
+    if (fetchMore) {
+      query = query.startAfter(teamPosts[teamPosts.length - 1].timestamp);
     }
     query = query.limit(GRID_POSTS_PER_PAGE + 1);
 
@@ -209,11 +209,6 @@ const Index = () => {
   useEffect(() => {
     if (user && !isTeamFetched) {
       fetchUserTeam(user.id);
-      setTimeout(() => {
-        if (spinnerDiv.current) {
-          spinnerDiv.current.style.opacity = 1;
-        }
-      }, 1500);
     }
   }, [user, isTeamFetched]);
 
@@ -386,6 +381,7 @@ const Index = () => {
       },
     });
     setTeamPosts([post, ...teamPosts]);
+    window.scrollTo(0, 0);
 
     firestore
       .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${userId}`)
@@ -449,24 +445,23 @@ const Index = () => {
             const postData = post.data().postData; // <3
             newRecentPostIds.push(postData.postId);
             newRecentPosts[postData.postId] = postData;
-
-            setTeamMembersWithRecentPosts({
-              ...teamMembersWithRecentPosts,
-              [user.id]: {
-                ...teamMembersWithRecentPosts[user.id],
-                recentPostIds: newRecentPostIds,
-                recentPosts: newRecentPosts,
-              },
-            });
-
-            firestore
-              .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${userId}`)
-              .update({
-                recentPostIds: newRecentPostIds,
-                recentPosts: newRecentPosts,
-                totalPostCount: newTotalPostCount,
-              });
           });
+          setTeamMembersWithRecentPosts({
+            ...teamMembersWithRecentPosts,
+            [user.id]: {
+              ...teamMembersWithRecentPosts[user.id],
+              recentPostIds: newRecentPostIds,
+              recentPosts: newRecentPosts,
+            },
+          });
+
+          firestore
+            .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${userId}`)
+            .update({
+              recentPostIds: newRecentPostIds,
+              recentPosts: newRecentPosts,
+              totalPostCount: newTotalPostCount,
+            });
         });
       });
   };
@@ -642,17 +637,7 @@ const Index = () => {
                 )}
                 ref={rootDiv}
               >
-                {!isTeamFetched && (
-                  <div
-                    ref={spinnerDiv}
-                    className="spinner-box"
-                    style={{ opacity: 0 }}
-                  >
-                    <div className="circle-border">
-                      <div className="circle-core"></div>
-                    </div>
-                  </div>
-                )}
+                {!isTeamFetched && <LoadingIndicator showWithDelay />}
                 {isTeamFetched && (
                   <StickyBar
                     isTeamEditable={userRole === "admin"}
@@ -710,13 +695,7 @@ const Index = () => {
                     {viewMode === "grid" && (
                       <div className="grid-view">
                         {!areTeamPostsFetched && (
-                          <div className="spinner-box-wrapper">
-                            <div className="spinner-box">
-                              <div className="circle-border">
-                                <div className="circle-core"></div>
-                              </div>
-                            </div>
-                          </div>
+                          <LoadingIndicator withWrapper />
                         )}
                         {areTeamPostsFetched && (
                           <PostsGrid
@@ -728,7 +707,7 @@ const Index = () => {
                         {teamPosts.length > 0 && teamPostsHasMore && (
                           <button
                             className="button-wrapper load-more-button-wrapper"
-                            onClick={() => fetchTeamPosts(team?.teamId)}
+                            onClick={() => fetchTeamPosts(team?.teamId, true)}
                           >
                             <span
                               className={c(
@@ -745,10 +724,24 @@ const Index = () => {
                     )}
                     {viewMode === "feed" && (
                       <div className="feed-view">
-                        <PostsFeed
-                          posts={teamPosts}
-                          onPostRemove={onPostRemove}
-                        />
+                        {!areTeamPostsFetched && (
+                          <LoadingIndicator withWrapper />
+                        )}
+                        {areTeamPostsFetched && (
+                          <>
+                            <span
+                              className="button button-secondary button-white feed-submit-post-button"
+                              tabindex="-1"
+                            >
+                              <img src="/icons/plus.svg" />
+                              <span>Submit a Post</span>
+                            </span>
+                            <PostsFeed
+                              posts={teamPosts}
+                              onPostRemove={onPostRemove}
+                            />
+                          </>
+                        )}
                       </div>
                     )}
                   </div>

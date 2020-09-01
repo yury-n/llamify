@@ -22,7 +22,9 @@ const PostModal = ({ post, onClose }) => {
               <div
                 className="post-author-avatar"
                 style={{
-                  backgroundImage: `url(${post.author?.avatarThumbUrl})`,
+                  backgroundImage: post.author?.avatarThumbUrl
+                    ? `url(${post.author?.avatarThumbUrl})`
+                    : undefined,
                 }}
               />
               <div className="post-author-name-wrapper">
@@ -41,7 +43,7 @@ const PostModal = ({ post, onClose }) => {
               postId={post.postId}
               postAuthorId={post.author.id}
               commentCount={post.commentCount}
-              loadComments
+              withLoadedComments
             />
           </div>
         </div>
