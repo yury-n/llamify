@@ -57,8 +57,14 @@
 .grid-view,
 .feed-view {
   margin-top: 100px;
+  margin-bottom: 350px;
   display: flex;
   flex-direction: column;
+}
+
+.posts-feed,
+.posts-grid {
+  margin-bottom: 50px;
 }
 
 .directory {
@@ -66,6 +72,7 @@
   flex-direction: column;
   margin: 40px;
   margin-top: 30px;
+  margin-bottom: 100px;
 }
 
 .human {
@@ -231,7 +238,8 @@
   margin-right: 14px;
 }
 
-.posts-stream {
+.posts-stream,
+.posts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 2%;
@@ -348,7 +356,7 @@
 }
 
 .post-thumb-add-button span {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: normal;
   margin-top: 15px;
 }
@@ -424,7 +432,6 @@
 
 .post-sidebar {
   width: 280px;
-  height: calc(100% - 73px);
   padding-left: 20px;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -434,6 +441,7 @@
 
 .post-sidebar-bottom {
   flex-shrink: 0;
+  height: calc(100% - 73px);
 }
 
 .post-sidebar-bottom {
@@ -616,15 +624,6 @@
   cursor: pointer;
   opacity: 0;
   transition: opacity 300ms ease;
-}
-
-.load-more-button-wrapper {
-  margin-top: 80px;
-  margin-bottom: 40px;
-}
-
-.load-more-button-wrapper .button {
-  width: 200px;
 }
 
 svg.new-notifications-icon {
@@ -839,7 +838,7 @@ svg.new-notifications-icon {
   transform: rotate(45deg);
 }
 
-.feed-submit-post-button {
+.a-real-large-button {
   width: 860px;
   box-sizing: border-box;
   padding: 18px 22px;
@@ -847,17 +846,24 @@ svg.new-notifications-icon {
   justify-content: center;
   align-items: center;
   margin: auto;
-  margin-bottom: 70px;
-  margin-top: -10px;
 }
 
-.feed-submit-post-button img {
+.a-real-large-button img {
   margin-right: 8px;
   width: 20px;
 }
 
-.feed-submit-post-button span {
+.a-real-large-button span {
   font-weight: normal;
+}
+
+.load-more-button {
+  margin-top: 40px;
+}
+
+.feed-submit-post-button {
+  margin-bottom: 70px;
+  margin-top: -10px;
 }
 
 @keyframes spin {

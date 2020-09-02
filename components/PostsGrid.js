@@ -3,7 +3,7 @@ import CreatePostButton from "./CreatePostButton";
 
 const PostsGrid = ({ posts, onShowPostSubmitModal, onPostRemove }) => {
   return (
-    <div className="posts-stream">
+    <div className="posts-grid">
       <CreatePostButton onShowPostSubmitModal={onShowPostSubmitModal} />
       {posts.map((post) => (
         <PostCard key={post.postId} post={post} onPostRemove={onPostRemove} />

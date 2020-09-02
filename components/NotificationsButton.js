@@ -67,15 +67,13 @@ const NotificationsButton = () => {
             <div
               className="notification-thumb"
               style={{
-                backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/llamify.appspot.com/o/posts%2FkwxmofFGMFeC1qYzFPLebNKmq2k1%2Fthumb%2FkwxmofFGMFeC1qYzFPLebNKmq2k1%2F-MFVlvFTZQVrniuSKuM1.png?alt=media&token=1c84d0d7-ba4c-4587-81ba-7e875a2c4700)`,
+                backgroundImage: `url(https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)`,
               }}
             />
             <div className="comment">
               <div className="comment-body">
                 <span className="comment-author-name">Yury</span>
-                <span>
-                  That's a pretty awesome car here pretty awesome car here
-                </span>
+                <span>Love the thick table top, makes it real cozy</span>
               </div>
             </div>
           </div>

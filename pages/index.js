@@ -20,13 +20,11 @@ import getImageFilePreview from "../utils/getImageFilePreview";
 import PostsGrid from "../components/PostsGrid";
 import PostsFeed from "../components/PostsFeed";
 import Footer from "../components/Footer";
-import { RECENT_POSTS_COUNT } from "../utils/consts";
+import { RECENT_POSTS_COUNT, TEAM_POSTS_PER_PAGE } from "../utils/consts";
 import LoadingIndicator from "../components/LoadingIndicator";
 
 initFirebase();
 const firestore = firebase.firestore();
-
-const GRID_POSTS_PER_PAGE = 20;
 
 export const ActionsContext = React.createContext({});
 export const TeamContext = React.createContext({});
@@ -112,7 +110,7 @@ const Index = () => {
       return;
     }
 
-    setIsFetchingMore(true);
+    fetchMore && setIsFetchingMore(true);
 
     let query = firestore
       .collection(`/teams/${teamId}/posts`)
@@ -121,14 +119,14 @@ const Index = () => {
     if (fetchMore) {
       query = query.startAfter(teamPosts[teamPosts.length - 1].timestamp);
     }
-    query = query.limit(GRID_POSTS_PER_PAGE + 1);
+    query = query.limit(TEAM_POSTS_PER_PAGE + 1);
 
     query.get().then((postsSnapshot) => {
       const fetchedPosts = [];
       postsSnapshot.forEach((post) => {
         fetchedPosts.push(post.data().postData); // <3
       });
-      const fetchHasMore = fetchedPosts.length === GRID_POSTS_PER_PAGE + 1;
+      const fetchHasMore = fetchedPosts.length === TEAM_POSTS_PER_PAGE + 1;
       if (fetchHasMore) {
         fetchedPosts.pop();
       }
@@ -137,7 +135,7 @@ const Index = () => {
       if (!fetchHasMore) {
         setTeamPostsHasMore(false);
       }
-      setIsFetchingMore(false);
+      fetchMore && setIsFetchingMore(false);
     });
   };
 
@@ -699,27 +697,28 @@ const Index = () => {
                         )}
                         {areTeamPostsFetched && (
                           <PostsGrid
-                            posts={teamPosts}
+                            posts={
+                              // unless the last page, show -1 num of items to leave room for the "+" button
+                              teamPostsHasMore
+                                ? teamPosts.slice(0, teamPosts.length - 1)
+                                : teamPosts
+                            }
                             onShowPostSubmitModal={onShowPostSubmitModal}
                             onPostRemove={onPostRemove}
                           />
                         )}
-                        {teamPosts.length > 0 && teamPostsHasMore && (
-                          <button
-                            className="button-wrapper load-more-button-wrapper"
-                            onClick={() => fetchTeamPosts(team?.teamId, true)}
-                          >
-                            <span
-                              className={c(
-                                "button button-secondary button-white",
-                                isFetchingMore && "busy"
-                              )}
-                              tabIndex="-1"
+                        {isFetchingMore && <LoadingIndicator withWrapper />}
+                        {teamPosts.length > 0 &&
+                          teamPostsHasMore &&
+                          !isFetchingMore && (
+                            <button
+                              className="button button-secondary button-white a-real-large-button load-more-button"
+                              tabindex="-1"
+                              onClick={() => fetchTeamPosts(team?.teamId, true)}
                             >
-                              Load more
-                            </span>
-                          </button>
-                        )}
+                              <span>Load more</span>
+                            </button>
+                          )}
                       </div>
                     )}
                     {viewMode === "feed" && (
@@ -729,17 +728,32 @@ const Index = () => {
                         )}
                         {areTeamPostsFetched && (
                           <>
-                            <span
-                              className="button button-secondary button-white feed-submit-post-button"
+                            <button
+                              className="button button-secondary button-white feed-submit-post-button a-real-large-button"
                               tabindex="-1"
+                              onClick={onShowPostSubmitModal}
                             >
                               <img src="/icons/plus.svg" />
                               <span>Submit a Post</span>
-                            </span>
+                            </button>
                             <PostsFeed
                               posts={teamPosts}
                               onPostRemove={onPostRemove}
                             />
+                            {isFetchingMore && <LoadingIndicator withWrapper />}
+                            {teamPosts.length > 0 &&
+                              teamPostsHasMore &&
+                              !isFetchingMore && (
+                                <button
+                                  className="button button-secondary button-white a-real-large-button load-more-button"
+                                  tabindex="-1"
+                                  onClick={() =>
+                                    fetchTeamPosts(team?.teamId, true)
+                                  }
+                                >
+                                  <span>Load more</span>
+                                </button>
+                              )}
                           </>
                         )}
                       </div>
