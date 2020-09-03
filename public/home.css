@@ -75,6 +75,10 @@
   margin-bottom: 100px;
 }
 
+.humans {
+  margin-top: -30px;
+}
+
 .human {
   display: flex;
   flex-direction: column;

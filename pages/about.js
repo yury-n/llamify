@@ -52,14 +52,19 @@ const About = () => {
             <span></span>
             <span></span>
           </div>
+          <img
+            style={{ width: "100%" }}
+            src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/37abb01e-9eb0-4ceb-8e7f-c247caed05a6/de4hy49-01624576-e2a2-4964-a9a2-dd84a1a25bf2.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvMzdhYmIwMWUtOWViMC00Y2ViLThlN2YtYzI0N2NhZWQwNWE2XC9kZTRoeTQ5LTAxNjI0NTc2LWUyYTItNDk2NC1hOWEyLWRkODRhMWEyNWJmMi5wbmcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.ntUKr29UECvsFk4WtD7Xcra_9km6CRCKhkVlt_Nh9GQ"
+          />
         </div>
         <div className="secondary-text" style={{ maxWidth: 740 }}>
           <div
-            style={{ marginTop: 50 }}
             dangerouslySetInnerHTML={{
-              __html: `<div class="secondary-text-img-wrapper"><div class="secondary-text-img" style="position:absolute;left:0;top:0;background-image:url(https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);filter: blur(11px) brightness(2);"></div><div aria-label="A photo of an outdoor activity" data-balloon-pos="down" class="secondary-text-img" style="background-image:url(https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);filter:brightness(2.3);background-size: 220px;background-position: 150px -20px;opacity: 0.7;"></div><div class="secondary-text-img" style="position:absolute;background-image:url(https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);width:50px;height:50px;top: -31px;left: 111px;filter: blur(5px) brightness(2);transform: rotate(222deg);"></div><div class="secondary-text-img" style="position:absolute;background-image:url(https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);width:25px;height:25px;top: 69px;left: -49px;filter:blur(5px) brightness(2);"></div>
-              <div class="secondary-text-img" style="position:absolute;background-image:url(https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);width: 15px;height: 15px;top: -41px;left: -39px;filter: blur(2px) brightness(1.5);transform: rotate(155deg);"></div>
-              </div>`,
+              __html: `<div class="secondary-text-img-wrapper"><div class="post-thumb" style="
+              width: 200px;
+              transform: rotate(-2deg);
+              color: #eef8f5;
+          "><div class="post-thumb-image" style="background: url(/images/big-shoes-4.png);background-size: 200%;background-position-x: -152px;"></div></div></div>`,
             }}
           />
           <div>
@@ -108,19 +113,22 @@ const About = () => {
           </div>
           <div
             dangerouslySetInnerHTML={{
-              __html: `<div class="secondary-text-img-wrapper">
-              <div aria-label="A result of an indoor activity" data-balloon-pos="down" class="secondary-text-img" style="background-image:url(https://images.unsplash.com/photo-1573333515743-56d57731dd1f?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);filter:brightness(1.6) contrast(0.8);box-shadow: inset 0 0 18px 8px #7c7874;"></div>
-              <div class="secondary-text-img" style="background-image:url(https://images.unsplash.com/photo-1573333515743-56d57731dd1f?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);filter:brightness(1.6) contrast(0.8);position: absolute;top: 0;left: 0;filter: blur(14px);z-index: -1;"></div>
-              <div class="secondary-text-img" style="background-image:url(https://images.unsplash.com/photo-1573333515743-56d57731dd1f?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);filter:brightness(1.6) contrast(0.8);position: absolute;top: 120px;left: 140px;filter: blur(4px) brightness(1.9) saturate(0.4);z-index: -1;width: 20px;height: 20px;opacity: 0.6;"></div><div class="secondary-text-img" style="background-image:url(https://images.unsplash.com/photo-1573333515743-56d57731dd1f?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);filter:brightness(1.6) contrast(0.8);position: absolute;top: -30px;left: 200px;filter: blur(2px) brightness(1.9) saturate(0.4);z-index: -1;width: 10px;height: 10px;opacity: 0.6;"></div></div>`,
+              __html: `<div class="secondary-text-img-wrapper"><div class="post-thumb" style="
+              width: 200px;
+              transform: rotate(2deg);
+              color: #eef8f5;
+          "><div class="post-thumb-image" style="background: url(/images/big-shoes-6.png);background-size: 200%;background-position-x: -162px;"></div></div></div>`,
             }}
           ></div>
         </div>
         <div className="secondary-text more-productive">
           <div
             dangerouslySetInnerHTML={{
-              __html: `<div class="secondary-text-img-wrapper">
-              <div class="secondary-text-img" style="background-image:url(https://images.unsplash.com/photo-1580484144342-caee18aff064?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);filter:brightness(1.8) contrast(0.8);top: 0;left: 0;position: absolute;filter: blur(8px);opacity: 0.1;"></div><div class="secondary-text-img" style="position:absolute;left:0;top:0;background-image: url(https://images.unsplash.com/photo-1580484144342-caee18aff064?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);filter: blur(11px) brightness(2);"></div><div aria-label="An instrument for a virtual activity" data-balloon-pos="down" class="secondary-text-img" style="background-image: url(https://images.unsplash.com/photo-1580484144342-caee18aff064?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);filter:brightness(2.3);background-size: 220px;background-position: 150px -20px;opacity: 0.7;"></div><div class="secondary-text-img" style="position:absolute;background-image: url(https://images.unsplash.com/photo-1580484144342-caee18aff064?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);width: 10px;height: 40px;top: -31px;left: -19px;filter: blur(5px) brightness(2);transform: rotate(222deg);"></div><div class="secondary-text-img" style="position:absolute;background-image: url(https://images.unsplash.com/photo-1580484144342-caee18aff064?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);width: 9px;height: 12px;top: 23px;left: -72px;filter: blur(5px) brightness(1.3);background: #4b4b4b;"></div>
-                            <div class="secondary-text-img" style="position:absolute;background-image: url(https://images.unsplash.com/photo-1580484144342-caee18aff064?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=60);width: 15px;height: 15px;top: 129px;left: -19px;filter: blur(2px) brightness(1.5);transform: rotate(155deg);opacity: 0.4;"></div></div>`,
+              __html: `<div class="secondary-text-img-wrapper"><div class="post-thumb" style="
+              width: 170px;
+              transform: rotate(-7deg);
+              color: #eef8f5;
+          "><div class="post-thumb-image" style="background: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/37abb01e-9eb0-4ceb-8e7f-c247caed05a6/de4i19i-c489401c-c609-4b0d-89d4-50f61d234b40.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvMzdhYmIwMWUtOWViMC00Y2ViLThlN2YtYzI0N2NhZWQwNWE2XC9kZTRpMTlpLWM0ODk0MDFjLWM2MDktNGIwZC04OWQ0LTUwZjYxZDIzNGI0MC5wbmcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.d6Dp20eLPHLs1DYrl6-5wCXzPSTAersgWF-_4hkC1fI);background-size: cover;background-position-x: -70px;"></div></div></div>`,
             }}
           />
           <div>

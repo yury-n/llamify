@@ -70,7 +70,6 @@
 .mock-up {
   width: 100%;
   max-width: 1140px;
-  height: 500px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
     rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
   backface-visibility: hidden;
@@ -89,7 +88,7 @@
   align-items: center;
   background: rgb(255, 255, 255);
   padding: 0px 10px;
-  border-bottom: 1px solid #d5d8db;
+  margin-bottom: -10px;
 }
 
 .mock-up-bar span {
@@ -222,4 +221,30 @@
 .activity:nth-of-type(3)::before {
   background: #9066fa;
   transform: rotate(0deg);
+}
+
+.post-thumb {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  border-radius: 12px;
+  border: 1px white solid;
+  box-sizing: border-box;
+  background: white;
+  box-shadow: 0px 3px 6px -1px hsla(0, 0%, 0%, 0.14);
+  border-color: #dbdbdb47;
+  cursor: pointer;
+  transition: transform 300ms;
+}
+
+.post-thumb-image {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  transition: opacity 500ms;
+  overflow: hidden;
 }
