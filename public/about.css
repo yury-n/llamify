@@ -42,6 +42,7 @@
 
 .about-page {
   position: relative;
+  padding-bottom: 200px;
 }
 
 .about-page::before {
@@ -53,6 +54,17 @@
   z-index: -1;
   top: 0;
   background: linear-gradient(0deg, white, #e6eeff);
+}
+
+.about-page::after {
+  display: block;
+  content: "";
+  width: 100%;
+  height: 350px;
+  position: absolute;
+  z-index: -1;
+  bottom: 0;
+  background: linear-gradient(0deg, #e6eeff, white);
 }
 
 .mock-up {
@@ -67,6 +79,7 @@
   border-radius: 6px;
   overflow: hidden;
   background: white;
+  margin-bottom: 240px;
 }
 
 .mock-up-bar {
@@ -124,9 +137,10 @@
   width: 100%;
   max-width: 770px;
   display: flex;
-  margin: 150px auto;
+  margin: 220px auto;
   align-items: center;
   justify-content: space-between;
+  font-size: 17px;
 }
 
 .secondary-text h2 {
@@ -136,7 +150,7 @@
 }
 
 .secondary-text-block {
-  margin: 10px 0;
+  margin: 14px 0;
 }
 
 .secondary-text-img-wrapper {
@@ -153,13 +167,59 @@
   flex-shrink: 0;
 }
 
-.secondary-text-img-blur {
-  background-image: url(https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60);
+.final-cta {
+  margin: 50px auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+.space-for-updates {
+  width: 680px;
+}
+
+.more-productive {
+  width: 660px;
+  position: relative;
+}
+
+.bullet {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  border-radius: 100%;
+  margin-right: 12px;
+  filter: blur(2px);
+  margin-left: -20px;
+}
+
+.activity {
+  position: relative;
+}
+
+.activity::before {
+  display: block;
+  content: "";
+  width: 18px;
+  height: 6px;
+  border-radius: 5px;
+  background: #fb6ee4;
   position: absolute;
-  filter: blur(17px);
-  z-index: -1;
-  top: 19px;
-  left: 44px;
-  width: 150px;
-  height: 150px;
+  bottom: -82px;
+  left: 50%;
+  margin-left: -15px;
+  filter: blur(3px);
+  transform: rotate(6deg);
+}
+
+.activity:nth-of-type(2)::before {
+  background: #b6fa0b;
+  transform: rotate(-37deg);
+  bottom: -100px;
+  width: 22px;
+}
+
+.activity:nth-of-type(3)::before {
+  background: #9066fa;
+  transform: rotate(0deg);
 }
