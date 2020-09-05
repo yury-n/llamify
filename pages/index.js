@@ -22,6 +22,7 @@ import PostsFeed from "../components/PostsFeed";
 import Footer from "../components/Footer";
 import { RECENT_POSTS_COUNT, TEAM_POSTS_PER_PAGE } from "../utils/consts";
 import LoadingIndicator from "../components/LoadingIndicator";
+import getFromTimestamp from "../utils/getFromTimestamp";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -29,7 +30,7 @@ const firestore = firebase.firestore();
 export const ActionsContext = React.createContext({});
 export const TeamContext = React.createContext({});
 export const CurrentUserContext = React.createContext({});
-export const ViewPropsContext = React.createContext({});
+export const TimeframeContext = React.createContext({});
 
 const Index = () => {
   const router = useRouter();
@@ -44,6 +45,7 @@ const Index = () => {
   const [openModal] = useState(false);
   const [isTeamFetched, setIsTeamFetched] = useState(false);
   const [areTeamPostsFetched, setAreTeamPostsFetched] = useState(false);
+  const [isFetchingInitial, setIsFetchingInitial] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [team, setTeam] = useState({
     teamId: null,
@@ -114,11 +116,20 @@ const Index = () => {
       return;
     }
 
-    fetchMore && setIsFetchingMore(true);
+    fetchMore ? setIsFetchingMore(true) : setIsFetchingInitial(true);
 
     let query = firestore
       .collection(`/teams/${teamId}/posts`)
       .orderBy("postTimestamp", "desc");
+
+    if (timeframe) {
+      const fromTimestamp = getFromTimestamp(timeframe);
+      query = query.where(
+        "postTimestamp",
+        ">=",
+        firebase.firestore.Timestamp.fromDate(new Date(fromTimestamp * 1000))
+      );
+    }
 
     if (fetchMore) {
       query = query.startAfter(teamPosts[teamPosts.length - 1].timestamp);
@@ -149,7 +160,7 @@ const Index = () => {
       if (!fetchHasMore) {
         setTeamPostsHasMore(false);
       }
-      fetchMore && setIsFetchingMore(false);
+      fetchMore ? setIsFetchingMore(false) : setIsFetchingInitial(false);
     });
   };
 
@@ -211,6 +222,20 @@ const Index = () => {
       fetchTeamPosts(team?.teamId);
     }
   }, [viewMode, isTeamFetched]);
+
+  useEffect(() => {
+    if (
+      ["grid", "feed"].includes(viewMode) &&
+      timeframe &&
+      areTeamPostsFetched &&
+      !isFetchingInitial &&
+      team?.teamId
+    ) {
+      setTeamPosts([]);
+      setAreTeamPostsFetched(false);
+      fetchTeamPosts(team?.teamId);
+    }
+  }, [timeframe, viewMode, team, areTeamPostsFetched]);
 
   useEffect(() => {
     if (searchString && searchString.length >= 2 && viewMode !== "list") {
@@ -634,7 +659,12 @@ const Index = () => {
       <ActionsContext.Provider value={actions}>
         <TeamContext.Provider value={team}>
           <CurrentUserContext.Provider value={{ currentUser }}>
-            <ViewPropsContext.Provider value={{ timeframe }}>
+            <TimeframeContext.Provider
+              value={{
+                timeframe,
+                fromTimestamp: timeframe && getFromTimestamp(timeframe),
+              }}
+            >
               <Head teamName={team?.teamName} />
               <link
                 rel="stylesheet"
@@ -727,7 +757,7 @@ const Index = () => {
                           !isFetchingMore && (
                             <button
                               className="button button-secondary button-white a-real-large-button load-more-button"
-                              tabindex="-1"
+                              tabIndex="-1"
                               onClick={() => fetchTeamPosts(team?.teamId, true)}
                             >
                               <span>Load more</span>
@@ -744,7 +774,7 @@ const Index = () => {
                           <>
                             <button
                               className="button button-secondary button-white feed-submit-post-button a-real-large-button"
-                              tabindex="-1"
+                              tabIndex="-1"
                               onClick={onShowPostSubmitModal}
                             >
                               <img src="/icons/plus.svg" />
@@ -760,7 +790,7 @@ const Index = () => {
                               !isFetchingMore && (
                                 <button
                                   className="button button-secondary button-white a-real-large-button load-more-button"
-                                  tabindex="-1"
+                                  tabIndex="-1"
                                   onClick={() =>
                                     fetchTeamPosts(team?.teamId, true)
                                   }
@@ -787,7 +817,7 @@ const Index = () => {
                   isDragActive={isDragActive}
                 />
               )}
-            </ViewPropsContext.Provider>
+            </TimeframeContext.Provider>
           </CurrentUserContext.Provider>
         </TeamContext.Provider>
       </ActionsContext.Provider>

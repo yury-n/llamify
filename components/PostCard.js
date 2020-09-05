@@ -2,17 +2,30 @@ import c from "classnames";
 import { useState, useContext } from "react";
 import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 import PostModal from "./Modals/PostModal";
-import { CurrentUserContext } from "../pages";
+import { CurrentUserContext, TimeframeContext } from "../pages";
 
 const PostCard = ({ post, onPostRemove, morePostsCount }) => {
+  const { timeframe, fromTimestamp } = useContext(TimeframeContext);
   const { currentUser } = useContext(CurrentUserContext);
-  const isOwner = currentUser.id === post?.author?.id;
 
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
   if (!post) {
-    return <div className="post-thumb post-thumb-empty"></div>;
+    return (
+      <div
+        className={c(
+          "post-thumb post-thumb-empty",
+          timeframe && "post-before-timeframe"
+        )}
+      ></div>
+    );
   }
+
+  const isOwner = currentUser.id === post?.author?.id;
+  const isAfterTimestamp = fromTimestamp
+    ? post.timestamp.seconds > fromTimestamp
+    : true;
+
   const onImageLoad = (e) => {
     e.target.style.opacity = 1;
   };
@@ -20,7 +33,11 @@ const PostCard = ({ post, onPostRemove, morePostsCount }) => {
   return (
     <>
       <div
-        className={c("post-thumb", morePostsCount && "post-thumb-disabled")}
+        className={c(
+          "post-thumb",
+          (!isAfterTimestamp || morePostsCount) && "post-before-timeframe",
+          morePostsCount && "post-thumb-disabled"
+        )}
         onClick={() => setShowPostModal(true)}
       >
         {isOwner && (

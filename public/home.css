@@ -419,6 +419,14 @@
   width: 100%;
 }
 
+.post-before-timeframe {
+  opacity: 0.2;
+}
+
+.post-thumb-empty.post-before-timeframe {
+  opacity: 0.3;
+}
+
 .post-modal {
   padding: 25px;
 }
