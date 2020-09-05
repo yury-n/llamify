@@ -3,7 +3,6 @@ import Human from "../components/Human";
 export const Humans = ({
   humans,
   teamId,
-  currentUserId,
   onHumanEditSubmit,
   onShowPostSubmitModal,
   onPostRemove,
@@ -16,7 +15,6 @@ export const Humans = ({
           key={human.id}
           human={human}
           teamId={teamId}
-          isOwner={human.id === currentUserId}
           onHumanEditSubmit={onHumanEditSubmit}
           onShowPostSubmitModal={onShowPostSubmitModal}
           onPostRemove={onPostRemove}

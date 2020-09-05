@@ -1,9 +1,13 @@
 import c from "classnames";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 import PostModal from "./Modals/PostModal";
+import { CurrentUserContext } from "../pages";
 
 const PostCard = ({ post, onPostRemove, morePostsCount }) => {
+  const { currentUser } = useContext(CurrentUserContext);
+  const isOwner = currentUser.id === post?.author?.id;
+
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
   if (!post) {
@@ -19,15 +23,17 @@ const PostCard = ({ post, onPostRemove, morePostsCount }) => {
         className={c("post-thumb", morePostsCount && "post-thumb-disabled")}
         onClick={() => setShowPostModal(true)}
       >
-        <div
-          className="post-thumb-remove"
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowRemoveModal(true);
-          }}
-        >
-          <img src="/icons/x.svg" />
-        </div>
+        {isOwner && (
+          <div
+            className="post-thumb-remove"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowRemoveModal(true);
+            }}
+          >
+            <img src="/icons/x.svg" />
+          </div>
+        )}
         <div className="post-thumb-image">
           <img
             key={`thumb-${post.postId}`}

@@ -1,20 +1,23 @@
 import c from "classnames";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import CreatePostButton from "./CreatePostButton";
 import PostCard from "./PostCard";
 import FullAvatarModal from "./Modals/FullAvatarModal";
 import { RECENT_POSTS_COUNT } from "../utils/consts";
 const { default: HumanEditModal } = require("./Modals/HumanEditModal");
+import { CurrentUserContext } from "../pages/index";
 
 const Human = ({
   human,
   teamId,
-  isOwner,
   onHumanEditSubmit,
   onShowPostSubmitModal,
   onPostRemove,
   searchString,
 }) => {
+  const { currentUser } = useContext(CurrentUserContext);
+  const isOwner = human.id === currentUser.id;
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
 

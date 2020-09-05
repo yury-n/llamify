@@ -57,9 +57,13 @@ const Index = () => {
   );
 
   let teamIdFromURL;
+  let forNewsletterOnly = false;
   if (typeof window !== "undefined") {
     const urlParams = new URLSearchParams(window.location.search);
     teamIdFromURL = urlParams.get("team");
+    if (window.location.search.includes("newsletter")) {
+      forNewsletterOnly = true;
+    }
   }
 
   const fetchUserTeam = (userId) => {
@@ -124,13 +128,23 @@ const Index = () => {
     query.get().then((postsSnapshot) => {
       const fetchedPosts = [];
       postsSnapshot.forEach((post) => {
-        fetchedPosts.push(post.data().postData); // <3
+        const postData = post.data().postData; // <3
+        if (
+          !forNewsletterOnly ||
+          (forNewsletterOnly && postData.includeInNewsletter)
+        ) {
+          fetchedPosts.push(post.data().postData);
+        }
       });
       const fetchHasMore = fetchedPosts.length === TEAM_POSTS_PER_PAGE + 1;
       if (fetchHasMore) {
         fetchedPosts.pop();
       }
-      setTeamPosts([...teamPosts, ...fetchedPosts]);
+      if (fetchMore) {
+        setTeamPosts([...teamPosts, ...fetchedPosts]);
+      } else {
+        setTeamPosts(fetchedPosts);
+      }
       setAreTeamPostsFetched(true);
       if (!fetchHasMore) {
         setTeamPostsHasMore(false);
@@ -708,7 +722,7 @@ const Index = () => {
                           />
                         )}
                         {isFetchingMore && <LoadingIndicator withWrapper />}
-                        {teamPosts.length > 0 &&
+                        {areTeamPostsFetched &&
                           teamPostsHasMore &&
                           !isFetchingMore && (
                             <button
