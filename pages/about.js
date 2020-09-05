@@ -54,7 +54,7 @@ const About = () => {
           </div>
           <img
             style={{ width: "100%" }}
-            src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/37abb01e-9eb0-4ceb-8e7f-c247caed05a6/de4hy49-01624576-e2a2-4964-a9a2-dd84a1a25bf2.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvMzdhYmIwMWUtOWViMC00Y2ViLThlN2YtYzI0N2NhZWQwNWE2XC9kZTRoeTQ5LTAxNjI0NTc2LWUyYTItNDk2NC1hOWEyLWRkODRhMWEyNWJmMi5wbmcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.ntUKr29UECvsFk4WtD7Xcra_9km6CRCKhkVlt_Nh9GQ"
+            src="/images/app-screenshot-small.jpg"
           />
         </div>
         <div className="secondary-text" style={{ maxWidth: 740 }}>
@@ -70,25 +70,30 @@ const About = () => {
           <div>
             <h2>Your identity at work</h2>
             <div className="secondary-text-block">
-              Behind each username in your team there is a human.
+              Behind each username in your team there is a{" "}
+              <span className="human-span">human</span>.
             </div>
             <div className="secondary-text-block">
               With their strengths and weaknesses.
               <br />
-              With their cool and uncool* parts.
+              With their cool and uncool parts.
             </div>
             <div className="secondary-text-block">
               <span
                 className="bullet"
-                style={{ background: "rgb(159 212 255)", left: -14 }}
+                style={{
+                  background: "rgb(159 212 255)",
+                  left: -14,
+                  height: 16,
+                }}
               ></span>
-              get to know your colleagues better
+              Get to know your teammates better.
               <div style={{ marginTop: 2 }}>
                 <span
                   className="bullet"
                   style={{ background: "rgb(255 242 131)", left: -6 }}
                 ></span>
-                be yourself at work
+                Be yourself at work.
               </div>
             </div>
           </div>
@@ -101,14 +106,14 @@ const About = () => {
                 className="bullet"
                 style={{ background: "#ff8019", left: -12, top: -9 }}
               ></span>
-              Have control over what you share with your colleages
+              Have control over what you share with your colleages.
             </div>
             <div style={{ marginTop: 4 }}>
               <span
                 className="bullet"
                 style={{ background: "#53d870", left: -4, top: 5 }}
               ></span>
-              Consume updates from them at a comfortable pace
+              Consume updates from them at a comfortable pace.
             </div>
           </div>
           <div
@@ -125,10 +130,10 @@ const About = () => {
           <div
             dangerouslySetInnerHTML={{
               __html: `<div class="secondary-text-img-wrapper"><div class="post-thumb" style="
-              width: 170px;
-              transform: rotate(-7deg);
+              width: 200px;
+              transform: rotate(-3deg);
               color: #eef8f5;
-          "><div class="post-thumb-image" style="background: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/37abb01e-9eb0-4ceb-8e7f-c247caed05a6/de4i19i-c489401c-c609-4b0d-89d4-50f61d234b40.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvMzdhYmIwMWUtOWViMC00Y2ViLThlN2YtYzI0N2NhZWQwNWE2XC9kZTRpMTlpLWM0ODk0MDFjLWM2MDktNGIwZC04OWQ0LTUwZjYxZDIzNGI0MC5wbmcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.d6Dp20eLPHLs1DYrl6-5wCXzPSTAersgWF-_4hkC1fI);background-size: cover;background-position-x: -70px;"></div></div></div>`,
+          "><div class="post-thumb-image" style="background: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/37abb01e-9eb0-4ceb-8e7f-c247caed05a6/de4i19i-c489401c-c609-4b0d-89d4-50f61d234b40.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvMzdhYmIwMWUtOWViMC00Y2ViLThlN2YtYzI0N2NhZWQwNWE2XC9kZTRpMTlpLWM0ODk0MDFjLWM2MDktNGIwZC04OWQ0LTUwZjYxZDIzNGI0MC5wbmcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.d6Dp20eLPHLs1DYrl6-5wCXzPSTAersgWF-_4hkC1fI);background-size: cover;background-position-x: -85px;"></div></div></div>`,
             }}
           />
           <div>
@@ -156,7 +161,7 @@ const About = () => {
         </div>
         <div className="final-cta">
           <div style={{ marginTop: 30 }}>
-            *to be cool you don't really need to try to be cool{" "}
+            to be cool you don't really need to try to be cool{" "}
             <span
               style={{
                 fontSize: "20px",

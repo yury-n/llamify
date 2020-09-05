@@ -32,7 +32,7 @@
   text-decoration: none;
   color: black;
   font-size: 15px;
-  margin-right: 30px;
+  margin-right: 35px;
 }
 
 .llamify {
@@ -70,11 +70,11 @@
 .mock-up {
   width: 100%;
   max-width: 1140px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 35px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 20px 60px -30px;
   backface-visibility: hidden;
   transform: translateZ(0px);
-  margin: 70px auto 50px;
+  margin: 110px auto 50px;
   border-radius: 6px;
   overflow: hidden;
   background: white;
@@ -173,11 +173,11 @@
 }
 
 .space-for-updates {
-  width: 680px;
+  width: 710px;
 }
 
 .more-productive {
-  width: 660px;
+  width: 700px;
   position: relative;
 }
 
@@ -190,6 +190,25 @@
   margin-right: 12px;
   filter: blur(2px);
   margin-left: -20px;
+}
+
+.human-span {
+  position: relative;
+}
+
+.human-span::before {
+  display: block;
+  content: "";
+  width: 31px;
+  height: 3px;
+  border-radius: 5px;
+  background: #fb6ee4;
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  margin-left: -19px;
+  filter: blur(2px);
+  transform: rotate(-6deg);
 }
 
 .activity {
