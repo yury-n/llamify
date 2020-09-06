@@ -7,7 +7,7 @@ import database from "firebase/database";
 import initFirebase from "../../utils/auth/initFirebase";
 import "firebase/firestore";
 import ButtonShine from "../ButtonShine";
-import { TeamContext } from "../../pages";
+import { TeamContext } from "../../pages/app";
 
 const PostSubmitModal = ({
   postId,

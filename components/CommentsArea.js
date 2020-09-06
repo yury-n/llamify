@@ -2,7 +2,7 @@ import "firebase/firestore";
 import database from "firebase/database";
 import firebase from "firebase/app";
 import { useState, useRef, useContext, useEffect, useCallback } from "react";
-import { ActionsContext, TeamContext, CurrentUserContext } from "../pages";
+import { ActionsContext, TeamContext, CurrentUserContext } from "../pages/app";
 import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 
 const firestore = firebase.firestore();
@@ -13,7 +13,7 @@ const CommentsArea = ({
   withLoadedComments,
   commentCount,
 }) => {
-  const { onCommentSubmit, onCommentRemove } = useContext(ActionsContext);
+  const { submitComment, removeComment } = useContext(ActionsContext);
   const { teamId } = useContext(TeamContext);
   const { currentUser } = useContext(CurrentUserContext);
   const textareaRef = useRef(null);
@@ -110,7 +110,7 @@ const CommentsArea = ({
       params.newComment.replyToCommentId = currentCommentId;
       params.replyToAuthor = currentReplyToAuthor;
     }
-    onCommentSubmit(params);
+    submitComment(params);
     setComments([...comments, newComment]);
     clearAndBlurTextarea();
   };
@@ -123,7 +123,7 @@ const CommentsArea = ({
   };
 
   const onCommentRemoveHandler = () => {
-    onCommentRemove({
+    removeComment({
       teamId,
       postId,
       postAuthorId,

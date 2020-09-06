@@ -2,7 +2,7 @@ import c from "classnames";
 import { useState, useContext } from "react";
 import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 import PostModal from "./Modals/PostModal";
-import { CurrentUserContext, TimeframeContext } from "../pages";
+import { CurrentUserContext, TimeframeContext } from "../pages/app";
 
 const PostCard = ({ post, onPostRemove, morePostsCount }) => {
   const { timeframe, fromTimestamp } = useContext(TimeframeContext);

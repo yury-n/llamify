@@ -48,7 +48,7 @@ const useUser = () => {
     const userFromCookie = getUserFromCookie();
     if (!userFromCookie) {
       setIsUserFetched(true);
-      router.push("/");
+      router.push("/app");
       return;
     }
     setUser(userFromCookie);

@@ -1,7 +1,7 @@
 import { useState, useRef, useContext } from "react";
 import Modal from "./Modal";
 import useImageUpload from "../../utils/hooks/useImageUpload";
-import { ActionsContext } from "../../pages";
+import { ActionsContext } from "../../pages/app";
 
 const TeamEditModal = ({
   teamId,

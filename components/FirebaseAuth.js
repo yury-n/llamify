@@ -20,7 +20,7 @@ const firebaseAuthConfig = {
       requireDisplayName: false,
     },
   ],
-  signInSuccessUrl: "/",
+  signInSuccessUrl: "/app",
   credentialHelper: "none",
   callbacks: {
     signInSuccessWithAuthResult: async ({ user }, redirectUrl) => {
@@ -38,7 +38,7 @@ const FirebaseAuth = () => {
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
       const team = urlParams.get("team");
-      let redirectTo = team ? `/?team=${team}` : "/";
+      let redirectTo = team ? `/app?team=${team}` : "/app";
       firebaseAuthConfig.signInSuccessUrl = redirectTo;
       setRenderAuth(true);
     }

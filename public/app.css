@@ -1,10 +1,10 @@
-.home-page {
+.app-page {
   padding-top: 90px;
   box-sizing: border-box;
   min-height: calc(100vh - 60px);
 }
 
-.home-sisu-page {
+.app-sisu-page {
   width: 100vw;
   height: calc(100vh - 60px);
   display: flex;
@@ -16,7 +16,7 @@
   padding-top: 80px;
 }
 
-.home-page::before {
+.app-page::before {
   display: block;
   content: "";
   width: 100%;
@@ -27,7 +27,7 @@
   position: fixed;
 }
 
-.home-page.loading {
+.app-page.loading {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -530,7 +530,7 @@
   margin-right: 14px;
   background: white;
   background-size: cover;
-  box-shadow: 0px 1px 4px -1px hsl(0deg 0% 0% / 24%);
+  box-shadow: 0px 1px 4px -1px rgba(0, 0, 0, 0.24);
 }
 
 .post-author-name {

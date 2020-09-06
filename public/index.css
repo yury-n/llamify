@@ -8,6 +8,7 @@
 .header .button-hollow {
   width: 60px;
   background: #f7f8fa;
+  font-size: 14px;
 }
 
 .header-left-side,
@@ -22,7 +23,7 @@
 
 .about-logo {
   width: 50px;
-  margin-right: 18px;
+  margin-right: 16px;
   border-radius: 100%;
   box-shadow: 0 0 110px 80px #ffffffe8;
   box-shadow: 0 0 600px 220px #ffffffed;
@@ -31,13 +32,13 @@
 .header-link {
   text-decoration: none;
   color: black;
-  font-size: 15px;
+  font-size: 14px;
   margin-right: 35px;
 }
 
 .llamify {
   font-weight: 700;
-  font-size: 23px;
+  font-size: 22px;
 }
 
 .about-page {

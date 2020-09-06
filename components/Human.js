@@ -5,7 +5,7 @@ import PostCard from "./PostCard";
 import FullAvatarModal from "./Modals/FullAvatarModal";
 import { RECENT_POSTS_COUNT } from "../utils/consts";
 const { default: HumanEditModal } = require("./Modals/HumanEditModal");
-import { CurrentUserContext } from "../pages/index";
+import { CurrentUserContext } from "../pages/app";
 
 const Human = ({
   human,

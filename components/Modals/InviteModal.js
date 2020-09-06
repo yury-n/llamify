@@ -8,7 +8,7 @@ const InviteModal = ({ teamId, onClose }) => {
         <input
           class="input"
           type="text"
-          value={`http://llamify.com/?team=${teamId}`}
+          value={`http://llamify.com/app?team=${teamId}`}
           style={{ width: 330 }}
           readOnly
         />
