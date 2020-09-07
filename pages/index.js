@@ -14,7 +14,7 @@ const About = () => {
       <div className="about-page">
         <div className="header">
           <div className="header-left-side">
-            <img className="about-logo" src="/images/logo.svg" />
+            <img className="about-logo" src="/images/logo-alt.svg" />
             <span className="llamify">llamify</span>
           </div>
           <div className="header-right-side">
@@ -36,7 +36,7 @@ const About = () => {
               Contact
             </a>
             <a
-              href="void(0)"
+              href="javascript:void(0)"
               onClick={() => router.push("/app")}
               className="header-link"
             >
@@ -74,7 +74,7 @@ const About = () => {
           </div>
           <img
             style={{ width: "100%" }}
-            src="/images/app-screenshot-small.jpg"
+            src="/images/app-screenshot-small-simple.jpg"
           />
         </div>
         <div className="secondary-text" style={{ maxWidth: 740 }}>

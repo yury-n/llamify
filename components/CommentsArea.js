@@ -115,7 +115,7 @@ const CommentsArea = ({
     clearAndBlurTextarea();
   };
 
-  const onClickReply = () => {
+  const onClickReply = (comment) => {
     setCurrentCommentId(comment.commentId);
     setCurrentReplyToAuthor(comment.author);
     setTextareaValue(`@${comment.author.firstName}, `);
@@ -196,7 +196,7 @@ const CommentsArea = ({
                     {!isCommentAuthor && (
                       <div
                         className="comment-action-button"
-                        onClick={onClickReply}
+                        onClick={() => onClickReply(comment)}
                       >
                         Reply
                       </div>

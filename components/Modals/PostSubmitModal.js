@@ -49,6 +49,8 @@ const PostSubmitModal = ({
     submitButton.current.childNodes[0].classList.add("busy");
     imagePreviewDiv.current.classList.add("busy");
     textarea.current.readOnly = true;
+    textarea.current.classList.add("read-only");
+    textarea.current.classList.add("busy");
     if (!postId) {
       initFirebase();
       const db = firebase.database();

@@ -40,9 +40,21 @@ const Human = ({
 
   const name = `${human.firstName} ${human.lastName}`;
 
-  const nameParts = name.split(new RegExp(searchString, "i"));
-  const regexp = name.match(new RegExp(searchString, "i"));
-  const highlightedNamePart = regexp && regexp[0];
+  let nameParts = [];
+  let highlightedNamePart;
+  if (searchString) {
+    nameParts = name.split(new RegExp(searchString, "i"));
+    const nameRegexp = name.match(new RegExp(searchString, "i"));
+    highlightedNamePart = nameRegexp && nameRegexp[0];
+  }
+
+  let roleParts = [];
+  let highlightedRolePart;
+  if (!highlightedNamePart && searchString && human.role) {
+    roleParts = human.role.split(new RegExp(searchString, "i"));
+    const roleRegexp = human.role.match(new RegExp(searchString, "i"));
+    highlightedRolePart = roleRegexp && roleRegexp[0];
+  }
 
   const onAvatarClick = () => {
     isOwner ? setShowEditModal(true) : setShowAvatarModal(true);
@@ -89,7 +101,19 @@ const Human = ({
               style={{ backgroundColor: "#86fc3c" }}
             ></div>
           </div>
-          {human.role && <div className="role">{human.role}</div>}
+          {human.role && (
+            <div className="role">
+              {highlightedRolePart ? (
+                <>
+                  {roleParts[0]}
+                  <span>{highlightedRolePart}</span>
+                  {roleParts[1]}
+                </>
+              ) : (
+                human.role
+              )}
+            </div>
+          )}
           {isOwner && (
             <img className="icon" src="/icons/edit.svg" onClick={onEditClick} />
           )}

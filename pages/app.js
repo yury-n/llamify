@@ -12,7 +12,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import initFirebase from "../utils/auth/initFirebase";
 import PostModal from "../components/Modals/PostModal";
 import StartTeamForm from "../components/StartTeamForm";
-import NewPostsToggle from "../components/NewPostsToggle";
+import TimeframeToggle from "../components/TimeframeToggle";
 import JoinTeamForm from "../components/JoinTeamForm";
 import Humans from "../components/Humans";
 import PostSubmitModal from "../components/Modals/PostSubmitModal";
@@ -398,10 +398,18 @@ const Index = () => {
       post.includeInNewsletter = true;
     }
 
+    const postForUIState = {
+      ...post,
+    };
+    postForUIState.timestamp = {
+      seconds: +new Date(),
+    };
+
     const totalPostCount =
       teamMembersWithRecentPosts[userId].totalPostCount + 1;
     recentPostIds = recentPostIds.slice(0, RECENT_POSTS_COUNT);
     recentPosts = { ...recentPosts, [postId]: post };
+    const recentPostsForUIState = { ...recentPosts, [postId]: postForUIState };
 
     console.log({ recentPostIds });
 
@@ -417,11 +425,11 @@ const Index = () => {
       [userId]: {
         ...teamMembersWithRecentPosts[userId],
         recentPostIds,
-        recentPosts,
+        recentPosts: recentPostsForUIState,
         totalPostCount,
       },
     });
-    setTeamPosts([post, ...teamPosts]);
+    setTeamPosts([postForUIState, ...teamPosts]);
     window.scrollTo(0, 0);
 
     firestore
@@ -564,11 +572,16 @@ const Index = () => {
     }
 
     if (searchString && searchString.length >= 2) {
-      teamMembersArray = teamMembersArray.filter((u) =>
-        `${u.firstName.toLowerCase()} ${u.lastName.toLowerCase()}`.includes(
-          searchString.toLowerCase()
-        )
-      );
+      teamMembersArray = teamMembersArray.filter((u) => {
+        const searchStringLower = searchString.toLowerCase();
+        return (
+          `${u.firstName.toLowerCase()} ${u.lastName.toLowerCase()}`.includes(
+            searchStringLower
+          ) ||
+          // TODO: either 3 capital letters or more than 4
+          (u.role && u.role.toLowerCase().includes(searchStringLower))
+        );
+      });
     }
   }
 
@@ -718,7 +731,7 @@ const Index = () => {
                         />
                       </div>
                     )}
-                    <NewPostsToggle
+                    <TimeframeToggle
                       timeframe={timeframe}
                       onSetTimeframe={onSetTimeframe}
                     />

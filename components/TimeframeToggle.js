@@ -1,6 +1,6 @@
 import c from "classnames";
 
-const NewPostsToggle = ({ timeframe, onSetTimeframe }) => {
+const TimeframeToggle = ({ timeframe, onSetTimeframe }) => {
   const toggle = () => {
     if (timeframe) {
       onSetTimeframe(null);
@@ -9,7 +9,7 @@ const NewPostsToggle = ({ timeframe, onSetTimeframe }) => {
     }
   };
   return (
-    <div className="new-posts-toggle">
+    <div className="timeframe-toggle">
       <div
         className={c("toggle-control", timeframe && "active")}
         onClick={toggle}
@@ -19,13 +19,17 @@ const NewPostsToggle = ({ timeframe, onSetTimeframe }) => {
       </div>
       <button
         className={c("timeframe-tag", timeframe === "week" && "active")}
-        onClick={() => onSetTimeframe("week")}
+        onClick={() =>
+          timeframe === "week" ? onSetTimeframe(null) : onSetTimeframe("week")
+        }
       >
         Week
       </button>
       <button
         className={c("timeframe-tag", timeframe === "month" && "active")}
-        onClick={() => onSetTimeframe("month")}
+        onClick={() =>
+          timeframe === "month" ? onSetTimeframe(null) : onSetTimeframe("month")
+        }
       >
         Month
       </button>
@@ -33,4 +37,4 @@ const NewPostsToggle = ({ timeframe, onSetTimeframe }) => {
   );
 };
 
-export default NewPostsToggle;
+export default TimeframeToggle;

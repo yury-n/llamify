@@ -136,6 +136,7 @@ button:active {
 .label-inline {
   font-size: 15px;
   color: #747474;
+  cursor: pointer;
 }
 
 .input-wrapper {
@@ -154,8 +155,8 @@ button:active {
   outline: none;
 }
 
-.input:hover,
-.textarea:hover {
+.input:not(.read-only):hover,
+.textarea:not(.read-only):hover {
   transition: all 250ms;
   box-shadow: 0 0 0px 6px #796eff1c;
   background: white;
@@ -167,8 +168,8 @@ button:active {
   transform: scale(1);
 }
 
-.input:focus,
-.textarea:focus {
+.input:not(.read-only):focus,
+.textarea:not(.read-only):focus {
   border-color: #796eff;
   box-shadow: 0 0 0px 6px #796eff1c;
   background: white;
@@ -540,7 +541,7 @@ button:active {
 
 .avatar-modal {
   border-radius: 100%;
-  padding: 20px;
+  padding: 15px;
 }
 
 .form {
