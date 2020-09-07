@@ -1,4 +1,4 @@
-export default () => (
+const ListIcon = () => (
   <svg
     height="1792"
     viewBox="0 0 1792 1792"
@@ -11,3 +11,5 @@ export default () => (
     />
   </svg>
 );
+
+export default ListIcon;

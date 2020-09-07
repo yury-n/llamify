@@ -12,7 +12,7 @@ import { mapUserData } from "./mapUserData";
 
 initFirebase();
 
-const useUser = () => {
+const useUser = (redirectIfNoUser = true) => {
   const [user, setUser] = useState();
   const [isUserFetched, setIsUserFetched] = useState(false);
   const router = useRouter();
@@ -48,7 +48,7 @@ const useUser = () => {
     const userFromCookie = getUserFromCookie();
     if (!userFromCookie) {
       setIsUserFetched(true);
-      router.push("/app");
+      redirectIfNoUser && router.push("/auth");
       return;
     }
     setUser(userFromCookie);

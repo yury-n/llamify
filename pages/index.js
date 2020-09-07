@@ -4,8 +4,8 @@ import { useUser } from "../utils/auth/useUser";
 
 const About = () => {
   const router = useRouter();
-  const { user, isUserFetched } = useUser();
-  if (isUserFetched && user) {
+  const { user, isUserFetched } = useUser(false);
+  if (isUserFetched && user?.id) {
     router.push("/app");
     return null;
   }
@@ -24,9 +24,6 @@ const About = () => {
             <span className="llamify">llamify</span>
           </div>
           <div className="header-right-side">
-            <a href="#" className="header-link">
-              Pricing
-            </a>
             <a
               href="https://github.com/yury-n/llamify"
               target="_blank"
@@ -41,11 +38,7 @@ const About = () => {
             >
               Contact
             </a>
-            <a
-              href="javascript:void(0)"
-              onClick={() => router.push("/app")}
-              className="header-link"
-            >
+            <a onClick={() => router.push("/app")} className="header-link">
               Log In
             </a>
             <button

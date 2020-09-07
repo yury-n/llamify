@@ -73,7 +73,13 @@ const Human = ({
   return (
     <>
       <div key={human.id} className="human">
-        <div className={c("name-wrapper", isOwner && "owner-name-wrapper")}>
+        <div
+          className={c(
+            "name-wrapper",
+            isOwner && "owner-name-wrapper",
+            human.role && "owner-name-with-role-wrapper"
+          )}
+        >
           {human.avatarThumbUrl && (
             <div
               className={c("avatar", !human.avatarThumbUrl && "no-avatar")}

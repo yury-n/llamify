@@ -105,6 +105,7 @@
 }
 
 .name-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   margin-bottom: 40px;
@@ -903,10 +904,52 @@ svg.new-notifications-icon {
 }
 
 @media (hover: none) {
-  .view-mode-buttons {
+  .view-mode-buttons,
+  .timeframe-toggle,
+  .sticky-bar-buttons {
     display: none;
   }
-  .timeframe-toggle {
-    display: none;
+
+  .home-logo {
+    width: 44px;
+    left: auto;
+    top: 20px;
+    right: 20px;
+    margin-left: 0;
+  }
+
+  .posts-stream {
+    display: flex;
+    width: 100%;
+    overflow: auto;
+  }
+
+  .posts-stream .post-thumb {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+    float: left;
+  }
+
+  .name {
+    font-size: 18px;
+    position: absolute;
+    left: 58px;
+  }
+
+  .owner-name-with-role-wrapper .name {
+    top: -3px;
+    font-size: 18px;
+  }
+
+  .owner-name-with-role-wrapper .role {
+    font-size: 13px;
+    left: 2px;
+    margin-left: 0;
+    top: 13px;
+  }
+
+  .avatar {
+    flex-shrink: 0;
   }
 }

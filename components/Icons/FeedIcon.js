@@ -1,4 +1,4 @@
-export default () => (
+const FeedIcon = () => (
   <svg
     width="16"
     height="18"
@@ -39,3 +39,5 @@ export default () => (
     </defs>
   </svg>
 );
+
+export default FeedIcon;
