@@ -131,6 +131,10 @@
   cursor: pointer;
 }
 
+.avatar:hover {
+  transform: scale(1.1);
+}
+
 .no-avatar {
   pointer-events: none;
 }

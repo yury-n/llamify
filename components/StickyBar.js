@@ -160,7 +160,7 @@ const StickyBar = ({
           <button
             className="button-wrapper"
             onClick={() => logout()}
-            aria-label="Logout"
+            aria-label="Log out"
             data-balloon-pos="down"
           >
             <span
