@@ -1,8 +1,14 @@
 import Head from "./_head";
 import { useRouter } from "next/router";
+import { useUser } from "../utils/auth/useUser";
 
 const About = () => {
   const router = useRouter();
+  const { user, isUserFetched } = useUser();
+  if (isUserFetched && user) {
+    router.push("/app");
+    return null;
+  }
   return (
     <>
       <Head />

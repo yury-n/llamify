@@ -74,18 +74,20 @@ const Human = ({
     <>
       <div key={human.id} className="human">
         <div className={c("name-wrapper", isOwner && "owner-name-wrapper")}>
-          <div
-            className={c("avatar", !human.avatarThumbUrl && "no-avatar")}
-            onClick={onAvatarClick}
-          >
-            {human.avatarThumbUrl && (
-              <img
-                src={human.avatarThumbUrl}
-                loading="lazy"
-                onLoad={onImageLoad}
-              />
-            )}
-          </div>
+          {human.avatarThumbUrl && (
+            <div
+              className={c("avatar", !human.avatarThumbUrl && "no-avatar")}
+              onClick={onAvatarClick}
+            >
+              {human.avatarThumbUrl && (
+                <img
+                  src={human.avatarThumbUrl}
+                  loading="lazy"
+                  onLoad={onImageLoad}
+                />
+              )}
+            </div>
+          )}
           <div className="name" onClick={onEditClick}>
             {highlightedNamePart ? (
               <>

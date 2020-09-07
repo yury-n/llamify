@@ -901,3 +901,12 @@ svg.new-notifications-icon {
     transform: rotate3d(0deg);
   }
 }
+
+@media (hover: none) {
+  .view-mode-buttons {
+    display: none;
+  }
+  .timeframe-toggle {
+    display: none;
+  }
+}
