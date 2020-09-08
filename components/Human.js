@@ -21,6 +21,10 @@ const Human = ({
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
 
+  if (!isOwner && !human.recentPostIds?.length) {
+    return null;
+  }
+
   let requiredNumOfCards = isOwner
     ? RECENT_POSTS_COUNT - 1
     : RECENT_POSTS_COUNT;
@@ -77,7 +81,8 @@ const Human = ({
           className={c(
             "name-wrapper",
             isOwner && "owner-name-wrapper",
-            human.role && "owner-name-with-role-wrapper"
+            human.role && "name-with-role-wrapper",
+            human.avatarThumbUrl && "name-with-avatar-wrapper"
           )}
         >
           {human.avatarThumbUrl && (

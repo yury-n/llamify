@@ -7,6 +7,7 @@ import NotificationsButton from "./NotificationsButton";
 import ListIcon from "./Icons/ListIcon";
 import GridIcon from "./Icons/GridIcon";
 import FeedIcon from "./Icons/FeedIcon";
+import BurgerIcon from "./Icons/BurgerIcon";
 
 const StickyBar = ({
   teamId,
@@ -20,7 +21,7 @@ const StickyBar = ({
   const [showInviteModal, setShowInviteModal] = useState(false);
   const { logout } = useUser();
 
-  const renderViewModeButtons = () => (
+  const viewModeButtons = (
     <div className="view-mode-buttons">
       <button
         className="button-wrapper list-view-button"
@@ -73,6 +74,17 @@ const StickyBar = ({
     </div>
   );
 
+  const burgerButton = (
+    <button className="button-wrapper burger-button">
+      <span
+        className={c("button icon-button button-secondary button-white")}
+        tabIndex="-1"
+      >
+        <BurgerIcon />
+      </span>
+    </button>
+  );
+
   return (
     <>
       <div className="sticky-bar">
@@ -84,6 +96,7 @@ const StickyBar = ({
           }}
         />
         <div className="sticky-bar-left-side">
+          {burgerButton}
           <div
             className={c(
               "team-name-wrapper",
@@ -97,7 +110,7 @@ const StickyBar = ({
             <div className="team-name">{teamName}</div>
             {isTeamEditable && <img className="icon" src="/icons/edit.svg" />}
           </div>
-          {teamId && renderViewModeButtons()}
+          {teamId && viewModeButtons}
         </div>
         <div className="sticky-bar-buttons buttons">
           {teamId && <NotificationsButton />}

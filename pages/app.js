@@ -23,6 +23,7 @@ import Footer from "../components/Footer";
 import { RECENT_POSTS_COUNT, TEAM_POSTS_PER_PAGE } from "../utils/consts";
 import LoadingIndicator from "../components/LoadingIndicator";
 import getFromTimestamp from "../utils/getFromTimestamp";
+import ViewModeTabs from "../components/ViewModeTabs";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -42,7 +43,6 @@ const Index = () => {
   const [isDragActive, setIsDragActive] = useState(false);
   const [droppedFile, setDroppedFile] = useState();
   const [searchString, setSearchString] = useState();
-  const [openModal] = useState(false);
   const [isTeamFetched, setIsTeamFetched] = useState(false);
   const [areTeamPostsFetched, setAreTeamPostsFetched] = useState(false);
   const [isFetchingInitial, setIsFetchingInitial] = useState(false);
@@ -706,12 +706,6 @@ const Index = () => {
                     onSetViewMode={onSetViewMode}
                   />
                 )}
-                {openModal && (
-                  <PostModal
-                    image="https://source.unsplash.com/random?6"
-                    description="This wonderfull view I had when I visited Croatia with my team of frontend and backend developers this autumn."
-                  />
-                )}
                 {showJoinTeamForm && <JoinTeamForm onJoinTeam={joinTeam} />}
                 {showStartTeamForm && <StartTeamForm onStartTeam={startTeam} />}
                 {showTeamDirectoty && (
@@ -735,6 +729,7 @@ const Index = () => {
                       timeframe={timeframe}
                       onSetTimeframe={onSetTimeframe}
                     />
+                    <ViewModeTabs />
                     {viewMode === "list" && teamMembersArray && (
                       <Humans
                         humans={teamMembersArray}
