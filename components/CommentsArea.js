@@ -140,9 +140,9 @@ const CommentsArea = ({
       <div className="comments-area">
         {!withLoadedComments && commentCount && !comments.length && !isLoading && (
           <div className="post-comments-collapsed">
-            <button class="button-wrapper" onClick={fetchComments}>
+            <button className="button-wrapper" onClick={fetchComments}>
               <span
-                class="button icon-button button-secondary button-white"
+                className="button icon-button button-secondary button-white"
                 tabIndex="-1"
               >
                 <img className="icon" src="/icons/comment.svg" />

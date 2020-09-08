@@ -1,11 +1,11 @@
 import c from "classnames";
 
-const TimeframeToggle = ({ timeframe, onSetTimeframe }) => {
+const TimeframeToggle = ({ timeframe, setTimeframe }) => {
   const toggle = () => {
     if (timeframe) {
-      onSetTimeframe(null);
+      setTimeframe(null);
     } else {
-      onSetTimeframe("week");
+      setTimeframe("week");
     }
   };
   return (
@@ -20,7 +20,7 @@ const TimeframeToggle = ({ timeframe, onSetTimeframe }) => {
       <button
         className={c("timeframe-tag", timeframe === "week" && "active")}
         onClick={() =>
-          timeframe === "week" ? onSetTimeframe(null) : onSetTimeframe("week")
+          timeframe === "week" ? setTimeframe(null) : setTimeframe("week")
         }
       >
         Week
@@ -28,7 +28,7 @@ const TimeframeToggle = ({ timeframe, onSetTimeframe }) => {
       <button
         className={c("timeframe-tag", timeframe === "month" && "active")}
         onClick={() =>
-          timeframe === "month" ? onSetTimeframe(null) : onSetTimeframe("month")
+          timeframe === "month" ? setTimeframe(null) : setTimeframe("month")
         }
       >
         Month

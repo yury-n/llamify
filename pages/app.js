@@ -189,6 +189,7 @@ const Index = () => {
   useEffect(() => {
     const viewModeFromStorage =
       localStorage.getItem("app.viewMode") || viewMode;
+    console.log({ viewModeFromStorage });
     const timeframeFromStorage = localStorage.getItem("app.timeframe") || null;
 
     setViewMode(viewModeFromStorage);
@@ -222,6 +223,18 @@ const Index = () => {
       fetchTeamPosts(team?.teamId);
     }
   }, [viewMode, isTeamFetched]);
+
+  useEffect(() => {
+    localStorage.setItem("app.viewMode", viewMode);
+  }, [viewMode]);
+
+  useEffect(() => {
+    if (timeframe) {
+      localStorage.setItem("app.timeframe", timeframe);
+    } else {
+      localStorage.removeItem("app.timeframe");
+    }
+  }, [timeframe]);
 
   // re-fetch on timeframe change
   const prevTimeframeRef = useRef();
@@ -527,20 +540,6 @@ const Index = () => {
     firestore.doc(`/teams/${teamId}/`).update(updates);
   };
 
-  const onSetViewMode = (viewMode) => {
-    setViewMode(viewMode);
-    localStorage.setItem("app.viewMode", viewMode);
-  };
-
-  const onSetTimeframe = (timeframe) => {
-    setTimeframe(timeframe);
-    if (timeframe) {
-      localStorage.setItem("app.timeframe", timeframe);
-    } else {
-      localStorage.removeItem("app.timeframe");
-    }
-  };
-
   const showStartTeamForm = isTeamFetched && !team?.teamId && !teamIdFromURL;
   const showJoinTeamForm = isTeamFetched && !team?.teamId && teamIdFromURL;
   const showTeamDirectoty =
@@ -703,7 +702,7 @@ const Index = () => {
                     teamId={team?.teamId}
                     teamLogo={team?.teamLogo}
                     viewMode={viewMode}
-                    onSetViewMode={onSetViewMode}
+                    setViewMode={setViewMode}
                   />
                 )}
                 {showJoinTeamForm && <JoinTeamForm onJoinTeam={joinTeam} />}
@@ -727,7 +726,7 @@ const Index = () => {
                     )}
                     <TimeframeToggle
                       timeframe={timeframe}
-                      onSetTimeframe={onSetTimeframe}
+                      setTimeframe={setTimeframe}
                     />
                     <ViewModeTabs
                       viewMode={viewMode}

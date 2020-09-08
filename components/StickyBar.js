@@ -15,7 +15,7 @@ const StickyBar = ({
   teamLogo,
   isTeamEditable,
   viewMode,
-  onSetViewMode,
+  setViewMode,
 }) => {
   const [showTeamEditModal, setShowTeamEditModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -25,7 +25,7 @@ const StickyBar = ({
     <div className="view-mode-buttons">
       <button
         className="button-wrapper list-view-button"
-        onClick={() => onSetViewMode("list")}
+        onClick={() => setViewMode("list")}
         aria-label="List View"
         data-balloon-pos="down"
       >
@@ -41,7 +41,7 @@ const StickyBar = ({
       </button>
       <button
         className="button-wrapper grid-view-button"
-        onClick={() => onSetViewMode("grid")}
+        onClick={() => setViewMode("grid")}
         aria-label="Grid View"
         data-balloon-pos="down"
       >
@@ -57,7 +57,7 @@ const StickyBar = ({
       </button>
       <button
         className="button-wrapper grid-view-button"
-        onClick={() => onSetViewMode("feed")}
+        onClick={() => setViewMode("feed")}
         aria-label="Feed View"
         data-balloon-pos="down"
       >

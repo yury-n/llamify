@@ -19,14 +19,16 @@ const PostModal = ({ post, onClose }) => {
         <div className="post-sidebar">
           <div className="post-sidebar-top">
             <div className="post-author-block">
-              <div
-                className="post-author-avatar"
-                style={{
-                  backgroundImage: post.author?.avatarThumbUrl
-                    ? `url(${post.author?.avatarThumbUrl})`
-                    : undefined,
-                }}
-              />
+              {post.author?.avatarThumbUrl && (
+                <div
+                  className="post-author-avatar"
+                  style={{
+                    backgroundImage: post.author?.avatarThumbUrl
+                      ? `url(${post.author?.avatarThumbUrl})`
+                      : undefined,
+                  }}
+                />
+              )}
               <div className="post-author-name-wrapper">
                 <div className="post-author-name">
                   {post.author.firstName} {post.author.lastName}

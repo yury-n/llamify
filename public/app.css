@@ -75,14 +75,17 @@
   margin-bottom: 100px;
 }
 
+.humans {
+  margin-top: 110px;
+}
+
 .human {
   display: flex;
   flex-direction: column;
-  margin-top: 50px;
 }
 
 .human + .human {
-  margin-top: 80px;
+  margin-top: 130px;
 }
 
 .name {
@@ -936,16 +939,24 @@ svg.new-notifications-icon {
   }
 }
 
-@keyframes spin3D {
-  from {
-    transform: rotate3d(0.5, 0.5, 0.5, 360deg);
-  }
-  to {
-    transform: rotate3d(0deg);
-  }
+.burger-button,
+.view-mode-tabs {
+  display: none;
 }
 
 @media (hover: none) {
+  .burger-button,
+  .view-mode-tabs {
+    display: block;
+  }
+
+  .view-mode-buttons,
+  .timeframe-toggle,
+  .sticky-bar-buttons,
+  .post-thumb-empty {
+    display: none;
+  }
+
   .view-mode-tabs {
     margin: auto;
     margin-top: 40px;
@@ -976,13 +987,6 @@ svg.new-notifications-icon {
 
   .team-logo {
     margin-right: 10px;
-  }
-
-  .view-mode-buttons,
-  .timeframe-toggle,
-  .sticky-bar-buttons,
-  .post-thumb-empty {
-    display: none;
   }
 
   .home-logo {
@@ -1058,8 +1062,7 @@ svg.new-notifications-icon {
     margin-top: 30px;
   }
 
-  .name-wrapper,
-  .owner-name-wrapper {
+  .name-wrapper {
     margin-left: 20px;
     margin-top: 30px;
   }
@@ -1076,5 +1079,87 @@ svg.new-notifications-icon {
   .human,
   .human + .human {
     margin-top: 20px;
+  }
+
+  .a-real-large-button {
+    width: calc(100% - 40px);
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .large-post-thumb {
+    width: calc(100% - 20px);
+    height: auto;
+    margin-left: 10px;
+    margin-right: 10px;
+    flex-direction: column;
+    border-radius: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+
+  .large-post-thumb .post-image {
+    border-radius: 12px;
+  }
+
+  .post-image {
+    padding-top: 100%;
+    position: relative;
+  }
+
+  .post-image img {
+    position: absolute;
+    top: 0;
+  }
+
+  .post-author-block {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .post-description {
+    margin: 20px 0;
+  }
+
+  .feed-submit-post-button {
+    margin-bottom: 30px;
+    margin-top: -30px;
+  }
+
+  .post-sidebar {
+    padding-left: 0;
+    width: 100%;
+  }
+
+  .post-comments-collapsed {
+    margin-bottom: 30px;
+  }
+
+  .post-view {
+    flex-direction: column;
+  }
+
+  .modal-x {
+    position: absolute;
+    top: -53px;
+    right: 27px;
+    /* to hide anything behind, for better contrast */
+    background: white;
+    box-shadow: 1px -21px 29px 40px white;
+    border-radius: 100%;
+  }
+
+  .post-modal {
+    padding: 30px 25px;
+    margin: 0 10px;
+  }
+
+  .modal-overlay {
+    align-items: flex-end;
+  }
+
+  .modal {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 }

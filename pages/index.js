@@ -39,14 +39,14 @@ const About = () => {
               Contact
             </a>
             <a onClick={() => router.push("/app")} className="header-link">
-              Log In
+              Sign Up
             </a>
             <button
               className="button-wrapper"
               onClick={() => router.push("/app")}
             >
               <span className="button button-hollow" tabIndex="-1">
-                Sign Up
+                Log In
               </span>
             </button>
           </div>
