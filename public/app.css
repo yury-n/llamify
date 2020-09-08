@@ -281,11 +281,13 @@
 .view-mode-tab:nth-child(1).active {
   position: relative;
   right: -1px;
+  z-index: 1;
 }
 
 .view-mode-tab:nth-child(2).active {
   position: relative;
   left: -1px;
+  z-index: 1;
 }
 
 .posts-stream,
@@ -1007,8 +1009,13 @@ svg.new-notifications-icon {
     padding-top: 0;
   }
 
+  .avatar {
+    width: 47px;
+    height: 47px;
+  }
+
   .name {
-    font-size: 18px;
+    font-size: 21px;
     position: absolute;
   }
 
@@ -1026,16 +1033,15 @@ svg.new-notifications-icon {
 
   .name-with-avatar-wrapper .name,
   .name-with-avatar-wrapper .role {
-    left: 58px;
+    left: 66px;
   }
 
   .name-with-role-wrapper .name {
-    top: -3px;
-    font-size: 18px;
+    top: -2px;
   }
 
   .name-with-role-wrapper .role {
-    top: 24px;
+    top: 29px;
   }
 
   .avatar {

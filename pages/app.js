@@ -729,7 +729,10 @@ const Index = () => {
                       timeframe={timeframe}
                       onSetTimeframe={onSetTimeframe}
                     />
-                    <ViewModeTabs />
+                    <ViewModeTabs
+                      viewMode={viewMode}
+                      setViewMode={setViewMode}
+                    />
                     {viewMode === "list" && teamMembersArray && (
                       <Humans
                         humans={teamMembersArray}
