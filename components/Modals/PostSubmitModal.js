@@ -89,12 +89,17 @@ const PostSubmitModal = ({
 
   return (
     <>
-      <Modal width={660} height={730} onClose={onClose}>
+      <Modal
+        width={660}
+        height={730}
+        onClose={onClose}
+        modalClassname="post-submit-modal"
+      >
         <div className="post">
           {!imagePreview && (
             <div className={c("post-image-dropzone", isDragActive && "active")}>
-              <div>Drag and Drop</div>
-              <div>or</div>
+              <div className="drag-and-drop">Drag and Drop</div>
+              <div className="dnd-or">or</div>
               <button className="button-wrapper file-button-wrapper post-image-select-file">
                 <input
                   type="file"

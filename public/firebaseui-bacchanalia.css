@@ -2,6 +2,10 @@
   width: 100%;
 }
 
+.firebaseui-card-header {
+  border: none !important;
+}
+
 .mdl-shadow--2dp {
   box-shadow: none;
   background: transparent;

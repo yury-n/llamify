@@ -4,8 +4,9 @@ import Head from "next/head";
 export const HeadComp = ({ teamName }) => {
   return (
     <Head>
-      <title>{teamName ? `Llamify @ ${teamName}` : "Llamify"}</title>
+      <title>Llamify</title>
       <link rel="icon" type="image/icon" href="/favicon.ico" />
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&amp;display=swap"
         rel="stylesheet"

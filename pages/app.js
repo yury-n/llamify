@@ -24,6 +24,8 @@ import { RECENT_POSTS_COUNT, TEAM_POSTS_PER_PAGE } from "../utils/consts";
 import LoadingIndicator from "../components/LoadingIndicator";
 import getFromTimestamp from "../utils/getFromTimestamp";
 import ViewModeTabs from "../components/ViewModeTabs";
+import { shuffle } from "../utils";
+import SaveToHomeModal from "../components/Modals/SaveToHomeModal";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -555,12 +557,13 @@ const Index = () => {
       teamMembersArrayUnsorted.push(teamMembersWithRecentPosts[key]);
     });
 
-    // TODO: sort in firebase
-    teamMembersArray = orderBy(
-      teamMembersArrayUnsorted,
-      [(u) => `${u.firstName.toLowerCase()} ${u.lastName.toLowerCase()}`],
-      ["asc"]
-    );
+    teamMembersArray = shuffle(teamMembersArrayUnsorted);
+    // Order alphabetically
+    // teamMembersArray = orderBy(
+    //   teamMembersArrayUnsorted,
+    //   [(u) => `${u.firstName.toLowerCase()} ${u.lastName.toLowerCase()}`],
+    //   ["asc"]
+    // );
 
     if (teamMembersArray.length) {
       // put yourself first
@@ -818,6 +821,7 @@ const Index = () => {
                   </div>
                 )}
               </div>
+              {false && <SaveToHomeModal />}
               <Footer />
               {showPostSubmitModal && (
                 <PostSubmitModal

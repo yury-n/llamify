@@ -16,13 +16,13 @@ const NotificationsButton = () => {
     };
   }, []);
   return (
-    <div className="notifications-button-wrapper">
+    <div className="popover-menu-button-wrapper" style={{ marginRight: 8 }}>
       <button
         ref={buttonRef}
         className="button-wrapper"
         aria-label="Notifcations"
         data-balloon-pos="down"
-        onClick={() => setIsActive(true)}
+        onClick={() => setIsActive(!isActive)}
       >
         <span
           className={c(
@@ -62,8 +62,8 @@ const NotificationsButton = () => {
         </span>
       </button>
       {isActive && (
-        <div className="notifications-popover">
-          <div className="notification">
+        <div className="popover-menu notifications-menu">
+          <div className="popover-menu-item">
             <div
               className="notification-thumb"
               style={{

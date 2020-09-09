@@ -7,7 +7,7 @@ import NotificationsButton from "./NotificationsButton";
 import ListIcon from "./Icons/ListIcon";
 import GridIcon from "./Icons/GridIcon";
 import FeedIcon from "./Icons/FeedIcon";
-import BurgerIcon from "./Icons/BurgerIcon";
+import BurgerButton from "./BurgerButton";
 
 const StickyBar = ({
   teamId,
@@ -74,17 +74,6 @@ const StickyBar = ({
     </div>
   );
 
-  const burgerButton = (
-    <button className="button-wrapper burger-button">
-      <span
-        className={c("button icon-button button-secondary button-white")}
-        tabIndex="-1"
-      >
-        <BurgerIcon />
-      </span>
-    </button>
-  );
-
   return (
     <>
       <div className="sticky-bar">
@@ -96,7 +85,7 @@ const StickyBar = ({
           }}
         />
         <div className="sticky-bar-left-side">
-          {burgerButton}
+          <BurgerButton />
           <div
             className={c(
               "team-name-wrapper",
