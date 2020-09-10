@@ -236,6 +236,14 @@ const Index = () => {
     }
   }, [timeframe]);
 
+  useEffect(() => {
+    if (postToShow) {
+      history.pushState({}, "", `/app?post=${postToShow.postId}`);
+    } else {
+      history.pushState({}, "", "/app");
+    }
+  }, [postToShow]);
+
   // re-fetch on timeframe change
   const prevTimeframeRef = useRef();
   useEffect(() => {
@@ -655,6 +663,10 @@ const Index = () => {
         comment,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       });
+
+    firestore.doc(`/users/${notificationRecipientUserId}/`).set({
+      hasUnreadNotifications: true,
+    });
   };
 
   const submitComment = ({
@@ -683,7 +695,11 @@ const Index = () => {
       newCommentCount,
     });
 
-    pushNotification({ post, comment, replyToAuthor });
+    pushNotification({
+      post: { ...post, commentCount: newCommentCount },
+      comment,
+      replyToAuthor,
+    });
   };
 
   const removeComment = ({

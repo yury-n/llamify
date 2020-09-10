@@ -14,8 +14,9 @@ const NotificationsButton = () => {
   const buttonRef = useRef();
   const [isActive, setIsActive] = useState(false);
   const [isFetched, setIsFetched] = useState(false);
+  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  const hasNewNotifications = false;
+
   useEffect(() => {
     const makeInactive = (e) =>
       e.target !== buttonRef.current &&
@@ -41,9 +42,24 @@ const NotificationsButton = () => {
           });
           setNotifications(fetchedNotifications);
           setIsFetched(true);
+          setHasUnreadNotifications(false);
+          firestore.doc(`/users/${currentUser.id}/`).set({
+            hasUnreadNotifications: false,
+          });
         });
     }
   }, [isActive, isFetched, currentUser]);
+
+  useEffect(() => {
+    if (currentUser?.id) {
+      firestore
+        .doc(`/users/${currentUser.id}`)
+        .get()
+        .then((snapshot) => {
+          setHasUnreadNotifications(!!snapshot.data().hasUnreadNotifications);
+        });
+    }
+  }, [currentUser]);
 
   return (
     <div className="popover-menu-button-wrapper" style={{ marginRight: 8 }}>
@@ -61,7 +77,7 @@ const NotificationsButton = () => {
           )}
           tabIndex="-1"
         >
-          {hasNewNotifications && (
+          {hasUnreadNotifications && (
             <svg
               className="new-notifications-icon"
               viewBox="0 0 18 18"
