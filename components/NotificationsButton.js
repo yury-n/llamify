@@ -1,9 +1,20 @@
+import "firebase/firestore";
+import "firebase/database";
+import firebase from "firebase/app";
 import c from "classnames";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
+import LoadingIndicator from "./LoadingIndicator";
+import { CurrentUserContext, ActionsContext } from "../pages/app";
+
+const firestore = firebase.firestore();
 
 const NotificationsButton = () => {
+  const { currentUser } = useContext(CurrentUserContext);
+  const { showPostModal } = useContext(ActionsContext);
   const buttonRef = useRef();
   const [isActive, setIsActive] = useState(false);
+  const [isFetched, setIsFetched] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const hasNewNotifications = false;
   useEffect(() => {
     const makeInactive = (e) =>
@@ -15,6 +26,25 @@ const NotificationsButton = () => {
       window.removeEventListener("click", makeInactive);
     };
   }, []);
+
+  useEffect(() => {
+    if (isActive && !isFetched && currentUser.id) {
+      firestore
+        .collection(`/users/${currentUser.id}/notifications/`)
+        .orderBy("timestamp", "desc")
+        .limit(10)
+        .get()
+        .then((notificationsSnapshot) => {
+          const fetchedNotifications = [];
+          notificationsSnapshot.forEach((notification) => {
+            fetchedNotifications.push(notification.data());
+          });
+          setNotifications(fetchedNotifications);
+          setIsFetched(true);
+        });
+    }
+  }, [isActive, isFetched, currentUser]);
+
   return (
     <div className="popover-menu-button-wrapper" style={{ marginRight: 8 }}>
       <button
@@ -63,20 +93,41 @@ const NotificationsButton = () => {
       </button>
       {isActive && (
         <div className="popover-menu notifications-menu">
-          <div className="popover-menu-item">
-            <div
-              className="notification-thumb"
-              style={{
-                backgroundImage: `url(https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60)`,
-              }}
-            />
-            <div className="comment">
-              <div className="comment-body">
-                <span className="comment-author-name">Yury</span>
-                <span>Love the thick table top, makes it real cozy</span>
-              </div>
+          {!isFetched && (
+            <div className="popover-menu-loading-wrapper">
+              <LoadingIndicator />
             </div>
-          </div>
+          )}
+          {isFetched && notifications.length === 0 && (
+            <div className="popover-menu-empty-state">
+              No notifications yet{" "}
+              <span style={{ fontSize: 22, marginLeft: 8 }}>🍬</span>
+            </div>
+          )}
+          {isFetched &&
+            notifications.length > 0 &&
+            notifications.map((notification) => (
+              <div
+                key={notification.notificationId}
+                className="popover-menu-item"
+                onClick={() => showPostModal(notification.post)}
+              >
+                <div
+                  className="notification-thumb"
+                  style={{
+                    backgroundImage: `url(${notification.post.thumbImageUrl})`,
+                  }}
+                />
+                <div className="comment">
+                  <div className="comment-body">
+                    <span className="comment-author-name">
+                      {notification.comment.author.firstName}
+                    </span>
+                    <span>{notification.comment.content}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       )}
     </div>

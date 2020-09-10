@@ -1,5 +1,4 @@
 import c from "classnames";
-import orderBy from "lodash.orderby";
 import cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useUser } from "../utils/auth/useUser";
@@ -8,9 +7,8 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/database";
 import Head from "./_head";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import initFirebase from "../utils/auth/initFirebase";
-import PostModal from "../components/Modals/PostModal";
 import StartTeamForm from "../components/StartTeamForm";
 import TimeframeToggle from "../components/TimeframeToggle";
 import JoinTeamForm from "../components/JoinTeamForm";
@@ -24,8 +22,8 @@ import { RECENT_POSTS_COUNT, TEAM_POSTS_PER_PAGE } from "../utils/consts";
 import LoadingIndicator from "../components/LoadingIndicator";
 import getFromTimestamp from "../utils/getFromTimestamp";
 import ViewModeTabs from "../components/ViewModeTabs";
-import { shuffle } from "../utils";
 import SaveToHomeModal from "../components/Modals/SaveToHomeModal";
+import PostModal from "../components/Modals/PostModal";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -42,6 +40,7 @@ const Index = () => {
   const [timeframe, setTimeframe] = useState(null);
   const [viewMode, setViewMode] = useState("list");
   const [showPostSubmitModal, setShowPostSubmitModal] = useState(false);
+  const [postToShow, setPostToShow] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
   const [droppedFile, setDroppedFile] = useState();
   const [searchString, setSearchString] = useState();
@@ -191,7 +190,6 @@ const Index = () => {
   useEffect(() => {
     const viewModeFromStorage =
       localStorage.getItem("app.viewMode") || viewMode;
-    console.log({ viewModeFromStorage });
     const timeframeFromStorage = localStorage.getItem("app.timeframe") || null;
 
     setViewMode(viewModeFromStorage);
@@ -426,8 +424,6 @@ const Index = () => {
     recentPosts = { ...recentPosts, [postId]: post };
     const recentPostsForUIState = { ...recentPosts, [postId]: postForUIState };
 
-    console.log({ recentPostIds });
-
     Object.keys(recentPosts).forEach((key) => {
       const p = recentPosts[key];
       if (!recentPostIds.includes(p.postId)) {
@@ -557,7 +553,12 @@ const Index = () => {
       teamMembersArrayUnsorted.push(teamMembersWithRecentPosts[key]);
     });
 
-    teamMembersArray = shuffle(teamMembersArrayUnsorted);
+    teamMembersArray = teamMembersArrayUnsorted;
+
+    // TODO
+
+    // teamMembersArray = shuffle(teamMembersArrayUnsorted);
+
     // Order alphabetically
     // teamMembersArray = orderBy(
     //   teamMembersArrayUnsorted,
@@ -631,20 +632,48 @@ const Index = () => {
     });
   };
 
-  const submitComment = ({
-    teamId,
-    postAuthorId,
-    postId,
-    newComment,
-    newCommentCount,
-  }) => {
+  const pushNotification = ({ post, comment, replyToAuthor }) => {
+    const notificationRecipientUserId = replyToAuthor
+      ? replyToAuthor.id
+      : post.author.id;
+
+    const db = firebase.database();
+    const notificationsRef = db.ref(
+      `/users/${notificationRecipientUserId}/notifications/`
+    );
+    const notificationId = notificationsRef.push().key;
+
     firestore
       .doc(
-        `/teams/${teamId}/postComments/${postId}/comments/${newComment.commentId}`
+        `/users/${notificationRecipientUserId}/notifications/${notificationId}`
       )
       .set({
-        commentTimestamp: newComment.timestamp,
-        commentData: newComment,
+        notificationId,
+        postId: post.postId,
+        post,
+        commentId: comment.commentId,
+        comment,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+  };
+
+  const submitComment = ({
+    teamId,
+    post,
+    comment,
+    newCommentCount,
+    replyToAuthor,
+  }) => {
+    const { postId } = post;
+    const postAuthorId = post.author.id;
+
+    firestore
+      .doc(
+        `/teams/${teamId}/postComments/${post.postId}/comments/${comment.commentId}`
+      )
+      .set({
+        commentTimestamp: comment.timestamp,
+        commentData: comment,
       });
 
     updateCommentCount({
@@ -653,6 +682,8 @@ const Index = () => {
       postAuthorId,
       newCommentCount,
     });
+
+    pushNotification({ post, comment, replyToAuthor });
   };
 
   const removeComment = ({
@@ -668,7 +699,12 @@ const Index = () => {
       .delete();
   };
 
-  const actions = { submitComment, removeComment, updateTeam };
+  const actions = {
+    submitComment,
+    removeComment,
+    updateTeam,
+    showPostModal: setPostToShow,
+  };
 
   const currentUser = user.id ? teamMembersWithRecentPosts[user.id] : {};
 
@@ -832,6 +868,12 @@ const Index = () => {
                   onPostSubmit={onPostSubmit}
                   onClose={onClosePostSubmitModal}
                   isDragActive={isDragActive}
+                />
+              )}
+              {postToShow && (
+                <PostModal
+                  post={postToShow}
+                  onClose={() => setPostToShow(false)}
                 />
               )}
             </TimeframeContext.Provider>

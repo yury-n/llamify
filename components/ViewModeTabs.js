@@ -1,7 +1,6 @@
 import c from "classnames";
 
 const ViewModeTabs = ({ viewMode, setViewMode }) => {
-  console.log({ viewMode });
   return (
     <div className="view-mode-tabs">
       <div

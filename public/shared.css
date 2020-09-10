@@ -79,8 +79,9 @@ textarea,
 .home-logo {
   position: absolute;
   width: 48px;
+  transform: scale(1.05);
   left: 50%;
-  margin-left: -24px;
+  margin-left: -29px;
   top: 19px;
   z-index: 100;
   transition: 300ms ease;

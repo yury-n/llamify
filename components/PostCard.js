@@ -1,15 +1,19 @@
 import c from "classnames";
 import { useState, useContext } from "react";
 import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
-import PostModal from "./Modals/PostModal";
-import { CurrentUserContext, TimeframeContext } from "../pages/app";
+import {
+  CurrentUserContext,
+  TimeframeContext,
+  ActionsContext,
+} from "../pages/app";
 
 const PostCard = ({ post, onPostRemove, morePostsCount }) => {
   const { timeframe, fromTimestamp } = useContext(TimeframeContext);
+  const { showPostModal } = useContext(ActionsContext);
   const { currentUser } = useContext(CurrentUserContext);
 
   const [showRemoveModal, setShowRemoveModal] = useState(false);
-  const [showPostModal, setShowPostModal] = useState(false);
+
   if (!post) {
     return (
       <div
@@ -38,7 +42,7 @@ const PostCard = ({ post, onPostRemove, morePostsCount }) => {
           (!isAfterTimestamp || morePostsCount) && "post-before-timeframe",
           morePostsCount && "post-thumb-disabled"
         )}
-        onClick={() => setShowPostModal(true)}
+        onClick={() => showPostModal(post)}
       >
         {isOwner && (
           <div
@@ -79,9 +83,6 @@ const PostCard = ({ post, onPostRemove, morePostsCount }) => {
           </div>
         )}
       </div>
-      {showPostModal && (
-        <PostModal post={post} onClose={() => setShowPostModal(false)} />
-      )}
       {showRemoveModal && (
         <RemoveConfirmationModal
           text="Are you sure you want to remove this post?"

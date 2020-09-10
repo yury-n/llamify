@@ -1,5 +1,5 @@
 import "firebase/firestore";
-import database from "firebase/database";
+import "firebase/database";
 import firebase from "firebase/app";
 import { useState, useRef, useContext, useEffect, useCallback } from "react";
 import { ActionsContext, TeamContext, CurrentUserContext } from "../pages/app";
@@ -7,12 +7,7 @@ import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 
 const firestore = firebase.firestore();
 
-const CommentsArea = ({
-  postId,
-  postAuthorId,
-  withLoadedComments,
-  commentCount,
-}) => {
+const CommentsArea = ({ post, withLoadedComments }) => {
   const { submitComment, removeComment } = useContext(ActionsContext);
   const { teamId } = useContext(TeamContext);
   const { currentUser } = useContext(CurrentUserContext);
@@ -24,6 +19,8 @@ const CommentsArea = ({
   const [currentCommentId, setCurrentCommentId] = useState();
   const [currentReplyToAuthor, setCurrentReplyToAuthor] = useState();
   const [isLoading, setIsLoading] = useState(false);
+
+  const { commentCount } = post;
 
   useEffect(() => {
     commentCount > 0 && withLoadedComments && fetchComments();
@@ -46,7 +43,7 @@ const CommentsArea = ({
   const fetchComments = () => {
     setIsLoading(true);
     firestore
-      .collection(`/teams/${teamId}/postComments/${postId}/comments`)
+      .collection(`/teams/${teamId}/postComments/${post.postId}/comments`)
       .get()
       .then((commentsSnapshot) => {
         const fetchedComments = [];
@@ -83,10 +80,10 @@ const CommentsArea = ({
   const onSubmit = () => {
     const db = firebase.database();
     const commentsRef = db.ref(
-      `/teams/${teamId}/postComments/${postId}/comments`
+      `/teams/${teamId}/postComments/${post.postId}/comments`
     );
     const commentId = commentsRef.push().key;
-    const newComment = {
+    const comment = {
       commentId,
       content: textareaValue,
       author: {
@@ -97,21 +94,20 @@ const CommentsArea = ({
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     };
     if (currentUser.avatarThumbUrl) {
-      newComment.author.avatarThumbUrl = currentUser.avatarThumbUrl;
+      comment.author.avatarThumbUrl = currentUser.avatarThumbUrl;
     }
     const params = {
-      newComment,
+      comment,
       newCommentCount: comments.length + 1,
       teamId,
-      postId,
-      postAuthorId,
+      post,
     };
     if (currentReplyToAuthor) {
-      params.newComment.replyToCommentId = currentCommentId;
+      params.comment.replyToCommentId = currentCommentId;
       params.replyToAuthor = currentReplyToAuthor;
     }
     submitComment(params);
-    setComments([...comments, newComment]);
+    setComments([...comments, comment]);
     clearAndBlurTextarea();
   };
 
@@ -125,8 +121,7 @@ const CommentsArea = ({
   const onCommentRemoveHandler = () => {
     removeComment({
       teamId,
-      postId,
-      postAuthorId,
+      post,
       commentId: currentCommentId,
       newCommentCount: comments.length - 1,
     });

@@ -40,11 +40,7 @@ const LargePostCard = ({ post, onPostRemove }) => {
             <div className="post-description">{post.description}</div>
           </div>
           <div className="post-sidebar-bottom">
-            <CommentsArea
-              postId={post.postId}
-              postAuthorId={post.author.id}
-              commentCount={post.commentCount}
-            />
+            <CommentsArea post={post} />
           </div>
         </div>
       </div>

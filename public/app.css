@@ -712,9 +712,31 @@ svg.new-notifications-icon {
   top: 52px;
 }
 
+.notifications-menu .comment {
+  margin-top: 0;
+}
+
 .burger-menu {
   top: 55px;
   width: 230px;
+}
+
+.popover-menu-empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 49px;
+}
+
+.popover-menu-loading-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 170px;
+}
+
+.popover-menu-loading-wrapper .spinner-box {
+  transform: scale(0.8);
 }
 
 .popover-menu {
@@ -805,11 +827,10 @@ svg.new-notifications-icon {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: -50px;
 }
 
 .spinner-box {
-  margin-top: -100px;
   width: 300px;
   height: 300px;
   display: flex;
