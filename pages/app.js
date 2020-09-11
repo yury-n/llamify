@@ -24,6 +24,7 @@ import getFromTimestamp from "../utils/getFromTimestamp";
 import ViewModeTabs from "../components/ViewModeTabs";
 import SaveToHomeModal from "../components/Modals/SaveToHomeModal";
 import PostModal from "../components/Modals/PostModal";
+import { shuffle } from "../utils";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -58,6 +59,9 @@ const Index = () => {
   const [teamMembersWithRecentPosts, setTeamMembersWithRecentPosts] = useState(
     []
   );
+  const [teamMembersOrder, setTeamMembersOrder] = useState([]);
+
+  const currentUser = user?.id ? teamMembersWithRecentPosts[user.id] : {};
 
   let teamIdFromURL;
   let forNewsletterOnly = false;
@@ -104,11 +108,14 @@ const Index = () => {
       .get()
       .then((membersSnapshot) => {
         const fetchedMembers = [];
+        const fetchedMemberIds = [];
         membersSnapshot.forEach((m) => {
           const member = m.data();
           fetchedMembers[member.id] = member;
+          fetchedMemberIds.push(member.id);
         });
         setTeamMembersWithRecentPosts(fetchedMembers);
+        setTeamMembersOrder(shuffle(fetchedMemberIds));
       });
   };
 
@@ -471,7 +478,7 @@ const Index = () => {
     }
   };
 
-  const onPostRemove = (postId) => {
+  const removePost = (postId) => {
     const userId = user.id;
     const teamId = team?.teamId;
     if (!userId || !teamId) {
@@ -530,6 +537,12 @@ const Index = () => {
               recentPosts: newRecentPosts,
               totalPostCount: newTotalPostCount,
             });
+
+          firestore
+            .collection(`/users/${userId}/notifications/`)
+            .where("postId", "==", postId)
+            .get()
+            .then((docs) => docs.forEach((doc) => doc.ref.delete()));
         });
       });
   };
@@ -561,7 +574,9 @@ const Index = () => {
       teamMembersArrayUnsorted.push(teamMembersWithRecentPosts[key]);
     });
 
-    teamMembersArray = teamMembersArrayUnsorted;
+    teamMembersArray = teamMembersOrder.map(
+      (memberId) => teamMembersWithRecentPosts[memberId]
+    );
 
     // TODO
 
@@ -640,9 +655,9 @@ const Index = () => {
     });
   };
 
-  const pushNotification = ({ post, comment, replyToAuthor }) => {
-    const notificationRecipientUserId = replyToAuthor
-      ? replyToAuthor.id
+  const pushNotification = ({ post, comment, replyToUser }) => {
+    const notificationRecipientUserId = replyToUser
+      ? replyToUser.id
       : post.author.id;
 
     const db = firebase.database();
@@ -674,7 +689,7 @@ const Index = () => {
     post,
     comment,
     newCommentCount,
-    replyToAuthor,
+    replyToUser,
   }) => {
     const { postId } = post;
     const postAuthorId = post.author.id;
@@ -695,34 +710,41 @@ const Index = () => {
       newCommentCount,
     });
 
-    pushNotification({
-      post: { ...post, commentCount: newCommentCount },
-      comment,
-      replyToAuthor,
-    });
+    if (replyToUser || post.author.id !== currentUser.id) {
+      console.log({
+        replyToUser,
+      });
+      pushNotification({
+        post: { ...post, commentCount: newCommentCount },
+        comment,
+        replyToUser,
+      });
+    }
   };
 
-  const removeComment = ({
-    teamId,
-    postId,
-    postAuthorId,
-    commentId,
-    newCommentCount,
-  }) => {
+  const removeComment = ({ teamId, post, commentId, newCommentCount }) => {
+    const { postId } = post;
+    const postAuthorId = post.author.id;
+
     updateCommentCount({ teamId, postId, postAuthorId, newCommentCount });
     firestore
       .doc(`/teams/${teamId}/postComments/${postId}/comments/${commentId}`)
       .delete();
+
+    firestore
+      .collection(`/users/${postAuthorId}/notifications/`)
+      .where("commentId", "==", commentId)
+      .get()
+      .then((docs) => docs.forEach((doc) => doc.ref.delete()));
   };
 
   const actions = {
     submitComment,
     removeComment,
+    removePost,
     updateTeam,
     showPostModal: setPostToShow,
   };
-
-  const currentUser = user.id ? teamMembersWithRecentPosts[user.id] : {};
 
   return (
     <>
@@ -794,7 +816,6 @@ const Index = () => {
                         currentUserId={user.id}
                         onHumanEditSubmit={updateHuman}
                         onShowPostSubmitModal={onShowPostSubmitModal}
-                        onPostRemove={onPostRemove}
                         searchString={
                           searchString &&
                           searchString.length >= 2 &&
@@ -816,7 +837,7 @@ const Index = () => {
                                 : teamPosts
                             }
                             onShowPostSubmitModal={onShowPostSubmitModal}
-                            onPostRemove={onPostRemove}
+                            removePost={removePost}
                           />
                         )}
                         {isFetchingMore && <LoadingIndicator withWrapper />}
@@ -850,7 +871,7 @@ const Index = () => {
                             </button>
                             <PostsFeed
                               posts={teamPosts}
-                              onPostRemove={onPostRemove}
+                              removePost={removePost}
                             />
                             {isFetchingMore && <LoadingIndicator withWrapper />}
                             {teamPosts.length > 0 &&

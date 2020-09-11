@@ -7,9 +7,9 @@ import {
   ActionsContext,
 } from "../pages/app";
 
-const PostCard = ({ post, onPostRemove, morePostsCount }) => {
+const PostCard = ({ post, morePostsCount }) => {
   const { timeframe, fromTimestamp } = useContext(TimeframeContext);
-  const { showPostModal } = useContext(ActionsContext);
+  const { showPostModal, removePost } = useContext(ActionsContext);
   const { currentUser } = useContext(CurrentUserContext);
 
   const [showRemoveModal, setShowRemoveModal] = useState(false);
@@ -89,7 +89,7 @@ const PostCard = ({ post, onPostRemove, morePostsCount }) => {
           onClose={() => setShowRemoveModal(false)}
           onRemove={() => {
             setShowRemoveModal(false);
-            onPostRemove(post.postId);
+            removePost(post.postId);
           }}
         />
       )}

@@ -17,7 +17,7 @@ const CommentsArea = ({ post, withLoadedComments }) => {
   const [comments, setComments] = useState([]);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [currentCommentId, setCurrentCommentId] = useState();
-  const [currentReplyToAuthor, setCurrentReplyToAuthor] = useState();
+  const [currentReplyToUser, setCurrentReplyToUser] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   const { commentCount } = post;
@@ -57,10 +57,10 @@ const CommentsArea = ({ post, withLoadedComments }) => {
 
   const onTextareaChange = (e) => {
     setTextareaValue(e.target.value);
-    if (currentReplyToAuthor) {
-      if (e.target.value.indexOf(`@${currentReplyToAuthor.firstName}`) !== 0) {
+    if (currentReplyToUser) {
+      if (e.target.value.indexOf(`@${currentReplyToUser.firstName}`) !== 0) {
         setCurrentCommentId(null);
-        setCurrentReplyToAuthor(null);
+        setCurrentReplyToUser(null);
       }
     }
   };
@@ -74,7 +74,7 @@ const CommentsArea = ({ post, withLoadedComments }) => {
   const onCancel = () => {
     clearAndBlurTextarea();
     setCurrentCommentId(null);
-    setCurrentReplyToAuthor(null);
+    setCurrentReplyToUser(null);
   };
 
   const onSubmit = () => {
@@ -102,9 +102,9 @@ const CommentsArea = ({ post, withLoadedComments }) => {
       teamId,
       post,
     };
-    if (currentReplyToAuthor) {
+    if (currentReplyToUser) {
       params.comment.replyToCommentId = currentCommentId;
-      params.replyToAuthor = currentReplyToAuthor;
+      params.replyToUser = currentReplyToUser;
     }
     submitComment(params);
     setComments([...comments, comment]);
@@ -113,7 +113,7 @@ const CommentsArea = ({ post, withLoadedComments }) => {
 
   const onClickReply = (comment) => {
     setCurrentCommentId(comment.commentId);
-    setCurrentReplyToAuthor(comment.author);
+    setCurrentReplyToUser(comment.author);
     setTextareaValue(`@${comment.author.firstName}, `);
     textareaRef.current.focus();
   };

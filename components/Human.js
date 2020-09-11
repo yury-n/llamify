@@ -12,7 +12,6 @@ const Human = ({
   teamId,
   onHumanEditSubmit,
   onShowPostSubmitModal,
-  onPostRemove,
   searchString,
 }) => {
   const { currentUser } = useContext(CurrentUserContext);
@@ -139,7 +138,6 @@ const Human = ({
             <PostCard
               key={`${index}-${post?.id}`}
               post={post}
-              onPostRemove={onPostRemove}
               morePostsCount={
                 index === recentPosts.length - 1 ? morePostsCount : undefined
               }

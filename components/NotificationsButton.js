@@ -56,7 +56,7 @@ const NotificationsButton = () => {
         .doc(`/users/${currentUser.id}`)
         .get()
         .then((snapshot) => {
-          setHasUnreadNotifications(!!snapshot.data().hasUnreadNotifications);
+          setHasUnreadNotifications(!!snapshot.data()?.hasUnreadNotifications);
         });
     }
   }, [currentUser]);
