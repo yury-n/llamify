@@ -17,22 +17,26 @@ const TimeframeToggle = ({ timeframe, setTimeframe }) => {
       <div className="label-inline" onClick={toggle}>
         Show only new posts
       </div>
-      <button
-        className={c("timeframe-tag", timeframe === "week" && "active")}
-        onClick={() =>
-          timeframe === "week" ? setTimeframe(null) : setTimeframe("week")
-        }
-      >
-        Week
-      </button>
-      <button
-        className={c("timeframe-tag", timeframe === "month" && "active")}
-        onClick={() =>
-          timeframe === "month" ? setTimeframe(null) : setTimeframe("month")
-        }
-      >
-        Month
-      </button>
+      {timeframe && (
+        <>
+          <button
+            className={c("timeframe-tag", timeframe === "week" && "active")}
+            onClick={() =>
+              timeframe === "week" ? setTimeframe(null) : setTimeframe("week")
+            }
+          >
+            Week
+          </button>
+          <button
+            className={c("timeframe-tag", timeframe === "month" && "active")}
+            onClick={() =>
+              timeframe === "month" ? setTimeframe(null) : setTimeframe("month")
+            }
+          >
+            Month
+          </button>
+        </>
+      )}
     </div>
   );
 };

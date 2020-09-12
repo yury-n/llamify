@@ -194,6 +194,10 @@ const Index = () => {
     setDroppedFile(file);
   };
 
+  const onPopState = () => {
+    setPostToShow(false);
+  };
+
   useEffect(() => {
     const viewModeFromStorage =
       localStorage.getItem("app.viewMode") || viewMode;
@@ -218,10 +222,13 @@ const Index = () => {
       cookies.set("auth", cookies.get("auth"), { expires: 1000 });
     }, 1000);
 
+    window.addEventListener("popstate", onPopState);
+
     return () => {
       window.document.removeEventListener("dragenter", onDragEnter);
       window.document.removeEventListener("dragover", onDragOver);
       window.document.removeEventListener("drop", onDrop);
+      window.removeEventListener("popstate", onPopState);
     };
   }, []);
 

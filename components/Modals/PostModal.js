@@ -5,7 +5,7 @@ const PostModal = ({ post, onClose }) => {
   return (
     <Modal
       modalClassname="post-modal"
-      width={860}
+      width={880}
       height={630}
       onClose={onClose}
     >

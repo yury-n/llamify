@@ -1,5 +1,6 @@
 import "firebase/firestore";
 import "firebase/database";
+import c from "classnames";
 import firebase from "firebase/app";
 import { useState, useRef, useContext, useEffect, useCallback } from "react";
 import { ActionsContext, TeamContext, CurrentUserContext } from "../pages/app";
@@ -205,8 +206,10 @@ const CommentsArea = ({ post, withLoadedComments }) => {
         <div className="comment-textarea-wrapper">
           <textarea
             ref={textareaRef}
-            className="textarea comment-textarea"
-            rows={isTextareaFocused ? 2 : 1}
+            className={c(
+              "textarea comment-textarea",
+              isTextareaFocused && "focused"
+            )}
             placeholder="Add a comment"
             onFocus={() => setIsTextareaFocused(true)}
             value={textareaValue}
