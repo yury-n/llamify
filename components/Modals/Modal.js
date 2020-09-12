@@ -38,8 +38,10 @@ const Modal = ({
       }
     };
     window.addEventListener("keyup", handleEscapeKey);
+    window.document.body.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keyup", handleEscapeKey);
+      window.document.body.style.overflow = "auto";
     };
   }, []);
   return (

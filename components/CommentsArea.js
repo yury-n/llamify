@@ -133,7 +133,9 @@ const CommentsArea = ({ post, withLoadedComments }) => {
 
   return (
     <>
-      <div className="comments-area">
+      <div
+        className={c("comments-area", isTextareaFocused && "textarea-focused")}
+      >
         {!withLoadedComments && commentCount && !comments.length && !isLoading && (
           <div className="post-comments-collapsed">
             <button className="button-wrapper" onClick={fetchComments}>

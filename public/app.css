@@ -514,12 +514,16 @@
 }
 
 .comments-area {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
 .comment-textarea-wrapper {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   flex-shrink: 0;
 }
 
@@ -618,8 +622,15 @@
 }
 
 .comments {
-  height: 100%;
+  position: absolute;
+  top: 0;
+  height: calc(100% - 47px - 10px);
   box-sizing: border-box;
+  overflow: auto;
+}
+
+.textarea-focused .comments {
+  height: calc(100% - 142px - 10px);
 }
 
 .loading-comment {
