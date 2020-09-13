@@ -3,7 +3,7 @@ input[type="text"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 /* http://meyerweb.com/eric/tools/css/reset/

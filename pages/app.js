@@ -901,7 +901,7 @@ const Index = () => {
                   </div>
                 )}
               </div>
-              {false && <SaveToHomeModal />}
+              <SaveToHomeModal />
               <Footer />
               {showPostSubmitModal && (
                 <PostSubmitModal

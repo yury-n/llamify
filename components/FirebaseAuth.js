@@ -43,6 +43,15 @@ const FirebaseAuth = () => {
       setRenderAuth(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (renderAuth) {
+      setTimeout(() => {
+        const emailInput = document.getElementById("ui-sign-in-email-input");
+        emailInput.setAttribute("autocomplete", "email");
+      }, 200);
+    }
+  }, [renderAuth]);
   return (
     <div className="sisu-form">
       {renderAuth ? (

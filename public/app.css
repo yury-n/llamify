@@ -1209,7 +1209,7 @@ svg.new-notifications-icon {
     right: 27px;
     /* to hide anything behind, for better contrast */
     background: white;
-    box-shadow: 1px -21px 29px 40px white;
+    box-shadow: 1px -38px 53px 70px white;
     border-radius: 100%;
   }
 
@@ -1235,7 +1235,7 @@ svg.new-notifications-icon {
   }
 
   .comment-textarea-wrapper {
-    margin-top: 40px;
+    margin-top: 30px;
   }
 
   .popover-menu {
@@ -1246,11 +1246,34 @@ svg.new-notifications-icon {
     height: 240px;
   }
 
+  .save-to-home-overlay {
+    opacity: 0;
+    transition: 300ms ease;
+  }
+
+  .save-to-home-overlay.active {
+    opacity: 1;
+  }
+
   .save-to-home-modal {
     border-radius: 32px;
-    bottom: 20px;
+    bottom: 33px;
     position: absolute;
     left: 10px;
+  }
+
+  .save-to-home-modal:before {
+    display: block;
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    box-shadow: rgb(0 0 0 / 0.14) 14px 16px 17px 0px;
+    transform: rotate(45deg);
+    bottom: -14px;
+    background: white;
+    left: 50%;
+    margin-left: -16px;
   }
 
   .save-to-home-header {
@@ -1277,5 +1300,10 @@ svg.new-notifications-icon {
   .ios-share-icon {
     margin: 0 6px;
     margin-top: -6px;
+  }
+
+  .comments,
+  .comment-textarea-wrapper {
+    position: static;
   }
 }

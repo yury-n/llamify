@@ -1,8 +1,26 @@
+import { useEffect, useState } from "react";
+import c from "classnames";
+
 const SaveToHomeModal = () => {
+  const [isActive, setIsActive] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsActive(true);
+    }, 3000);
+  }, []);
+
   return (
-    <div className="modal-overlay">
+    <div
+      className={c("modal-overlay save-to-home-overlay", isActive && "active")}
+      style={{ opacity: isActive ? 1 : 0 }}
+      onClick={() => setIsActive(false)}
+    >
       <div className="modal save-to-home-modal">
-        <img className="modal-x" src="/icons/x.svg" onClick={() => onClose()} />
+        <img
+          className="modal-x"
+          src="/icons/x.svg"
+          onClick={() => setIsActive(false)}
+        />
         <div className="save-to-home-header">
           <img src="/images/logo.svg" />
           <div class="modal-title">Save to Home screen</div>
