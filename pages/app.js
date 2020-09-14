@@ -24,6 +24,7 @@ import getFromTimestamp from "../utils/getFromTimestamp";
 import ViewModeTabs from "../components/ViewModeTabs";
 import SaveToHomeModal from "../components/Modals/SaveToHomeModal";
 import PostModal from "../components/Modals/PostModal";
+import NotificationsModal from "../components/Modals/NotificationsModal";
 import { shuffle } from "../utils";
 
 initFirebase();
@@ -42,6 +43,7 @@ const Index = () => {
   const [viewMode, setViewMode] = useState("list");
   const [showPostSubmitModal, setShowPostSubmitModal] = useState(false);
   const [postToShow, setPostToShow] = useState(null);
+  const [notificationsToShow, setNotificationsToShow] = useState(null);
   const [isDragActive, setIsDragActive] = useState(false);
   const [droppedFile, setDroppedFile] = useState();
   const [searchString, setSearchString] = useState();
@@ -752,6 +754,7 @@ const Index = () => {
     removePost,
     updateTeam,
     showPostModal: setPostToShow,
+    showNotificationsModal: setNotificationsToShow,
   };
 
   return (
@@ -913,6 +916,15 @@ const Index = () => {
                   onPostSubmit={onPostSubmit}
                   onClose={onClosePostSubmitModal}
                   isDragActive={isDragActive}
+                />
+              )}
+              {notificationsToShow && (
+                <NotificationsModal
+                  areNotificationsFetched={
+                    notificationsToShow?.areNotificationsFetched
+                  }
+                  notifications={notificationsToShow?.notifications}
+                  onClose={() => setNotificationsToShow(false)}
                 />
               )}
               {postToShow && (

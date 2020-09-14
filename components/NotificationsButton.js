@@ -1,21 +1,26 @@
-import "firebase/firestore";
-import "firebase/database";
-import firebase from "firebase/app";
 import c from "classnames";
 import { useState, useRef, useEffect, useContext } from "react";
 import LoadingIndicator from "./LoadingIndicator";
-import { CurrentUserContext, ActionsContext } from "../pages/app";
-
-const firestore = firebase.firestore();
+import { ActionsContext } from "../pages/app";
+import useNotifications from "../utils/hooks/useNotifications";
+import ZenIcon from "./Icons/ZenIcon";
 
 const NotificationsButton = () => {
-  const { currentUser } = useContext(CurrentUserContext);
   const { showPostModal } = useContext(ActionsContext);
   const buttonRef = useRef();
   const [isActive, setIsActive] = useState(false);
-  const [isFetched, setIsFetched] = useState(false);
-  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const {
+    areNotificationsFetched,
+    notifications,
+    hasUnreadNotifications,
+    fetchNotifications,
+  } = useNotifications();
+
+  useEffect(() => {
+    if (isActive && !areNotificationsFetched) {
+      fetchNotifications();
+    }
+  }, [fetchNotifications, isActive, areNotificationsFetched]);
 
   useEffect(() => {
     const makeInactive = (e) =>
@@ -27,39 +32,6 @@ const NotificationsButton = () => {
       window.removeEventListener("click", makeInactive);
     };
   }, []);
-
-  useEffect(() => {
-    if (isActive && !isFetched && currentUser.id) {
-      firestore
-        .collection(`/users/${currentUser.id}/notifications/`)
-        .orderBy("timestamp", "desc")
-        .limit(10)
-        .get()
-        .then((notificationsSnapshot) => {
-          const fetchedNotifications = [];
-          notificationsSnapshot.forEach((notification) => {
-            fetchedNotifications.push(notification.data());
-          });
-          setNotifications(fetchedNotifications);
-          setIsFetched(true);
-          setHasUnreadNotifications(false);
-          firestore.doc(`/users/${currentUser.id}/`).set({
-            hasUnreadNotifications: false,
-          });
-        });
-    }
-  }, [isActive, isFetched, currentUser]);
-
-  useEffect(() => {
-    if (currentUser?.id) {
-      firestore
-        .doc(`/users/${currentUser.id}`)
-        .get()
-        .then((snapshot) => {
-          setHasUnreadNotifications(!!snapshot.data()?.hasUnreadNotifications);
-        });
-    }
-  }, [currentUser]);
 
   return (
     <div className="popover-menu-button-wrapper" style={{ marginRight: 8 }}>
@@ -77,18 +49,7 @@ const NotificationsButton = () => {
           )}
           tabIndex="-1"
         >
-          {hasUnreadNotifications && (
-            <svg
-              className="new-notifications-icon"
-              viewBox="0 0 18 18"
-              id="zen-star--inline"
-            >
-              <path
-                fill="currentColor"
-                d="M17 9.24194V8.75806C14.1121 8.58296 12.478 8.20496 11.1214 6.87857C9.79504 5.52203 9.41704 3.88792 9.24194 1H8.75806C8.58296 3.88792 8.20496 5.52203 6.87857 6.87857C5.52203 8.20496 3.88792 8.58296 1 8.75806V9.24194C3.88792 9.41704 5.52203 9.79504 6.87857 11.1214C8.20496 12.478 8.58296 14.1121 8.75806 17H9.24194C9.41704 14.1121 9.79504 12.478 11.1214 11.1214C12.478 9.79504 14.1121 9.41704 17 9.24194Z"
-              ></path>
-            </svg>
-          )}
+          {hasUnreadNotifications && <ZenIcon />}
           <svg
             style={{ transform: "scale(1.15)" }}
             aria-hidden="true"
@@ -109,18 +70,18 @@ const NotificationsButton = () => {
       </button>
       {isActive && (
         <div className="popover-menu notifications-menu">
-          {!isFetched && (
+          {!areNotificationsFetched && (
             <div className="popover-menu-loading-wrapper">
               <LoadingIndicator />
             </div>
           )}
-          {isFetched && notifications.length === 0 && (
+          {areNotificationsFetched && notifications.length === 0 && (
             <div className="popover-menu-empty-state">
               No notifications yet{" "}
               <span style={{ fontSize: 22, marginLeft: 8 }}>🍬</span>
             </div>
           )}
-          {isFetched &&
+          {areNotificationsFetched &&
             notifications.length > 0 &&
             notifications.map((notification) => (
               <div

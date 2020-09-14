@@ -717,6 +717,7 @@ svg.new-notifications-icon {
   background-position: 50%;
   background-size: 80%;
   color: #ff6dd2;
+  pointer-events: none;
 }
 
 .popover-menu-button-wrapper {
@@ -789,6 +790,7 @@ svg.new-notifications-icon {
   background-size: cover;
   background-position: center;
   flex-shrink: 0;
+  align-self: flex-start;
 }
 
 .notification .comment {
@@ -954,6 +956,7 @@ svg.new-notifications-icon {
 
 .a-real-large-button {
   width: 860px;
+  font-size: 16px;
   box-sizing: border-box;
   padding: 18px 22px;
   display: inline-flex;
@@ -965,6 +968,8 @@ svg.new-notifications-icon {
 .a-real-large-button img {
   margin-right: 8px;
   width: 20px;
+  position: relative;
+  top: -1px;
 }
 
 .a-real-large-button span {
@@ -1286,10 +1291,28 @@ svg.new-notifications-icon {
     margin-right: 10px;
   }
 
-  .post-submit-modal {
+  .post-submit-modal,
+  .notifications-modal {
     position: absolute;
     bottom: 0;
     left: 10px;
+  }
+
+  .notifications-modal {
+    max-height: 80vh;
+  }
+
+  .notifications-modal .comment {
+    margin-top: 0;
+  }
+
+  .notifications-modal .popover-menu-item {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .notifications-modal .modal-title {
+    margin-bottom: 20px;
   }
 
   .modal-overlay {
