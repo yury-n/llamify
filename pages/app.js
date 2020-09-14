@@ -41,7 +41,7 @@ const Index = () => {
   const [timeframe, setTimeframe] = useState(null);
   const [viewMode, setViewMode] = useState("list");
   const [showPostSubmitModal, setShowPostSubmitModal] = useState(false);
-  const [postToShow, setPostToShow] = useState(false);
+  const [postToShow, setPostToShow] = useState(null);
   const [isDragActive, setIsDragActive] = useState(false);
   const [droppedFile, setDroppedFile] = useState();
   const [searchString, setSearchString] = useState();
@@ -253,7 +253,8 @@ const Index = () => {
   useEffect(() => {
     if (postToShow) {
       history.pushState({}, "", `/app?post=${postToShow.postId}`);
-    } else {
+    } else if (postToShow === false) {
+      // not null
       history.pushState({}, "", "/app");
     }
   }, [postToShow]);

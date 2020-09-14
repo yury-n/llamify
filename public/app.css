@@ -994,12 +994,79 @@ svg.new-notifications-icon {
   display: none;
 }
 
+.save-to-home-overlay {
+  pointer-events: none;
+  opacity: 0;
+  transition: 300ms ease;
+}
+
+.save-to-home-overlay.active {
+  pointer-events: all;
+  opacity: 1;
+}
+
+.modal.save-to-home-modal {
+  border-radius: 32px;
+  bottom: 33px;
+  position: absolute;
+  left: 10px;
+}
+
+.save-to-home-modal:before {
+  display: block;
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  box-shadow: rgba(0, 0, 0, 0.12) 14px 16px 17px 0px;
+  transform: rotate(45deg);
+  bottom: -14px;
+  background: white;
+  left: 50%;
+  margin-left: -16px;
+}
+
+.save-to-home-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.save-to-home-header img {
+  width: 65px;
+  margin-right: 15px;
+  padding: 6px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  box-shadow: 0px 1px 4px -1px rgba(0, 0, 0, 0.24);
+}
+
+.save-to-home-header .modal-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.ios-share-icon {
+  margin: 0 6px;
+  margin-top: -6px;
+}
+
+.save-to-home-modal .form-buttons {
+  margin-top: 30px;
+}
+
+.save-to-home-modal .form-buttons .button-wrapper {
+  width: 100%;
+}
+
 @media (hover: none) {
   .burger-button,
   .view-mode-tabs {
     display: block;
   }
 
+  .post-thumb-remove,
   .view-mode-buttons,
   .timeframe-toggle,
   .sticky-bar-buttons,
@@ -1246,64 +1313,10 @@ svg.new-notifications-icon {
     height: 240px;
   }
 
-  .save-to-home-overlay {
-    opacity: 0;
-    transition: 300ms ease;
-  }
-
-  .save-to-home-overlay.active {
-    opacity: 1;
-  }
-
-  .save-to-home-modal {
-    border-radius: 32px;
-    bottom: 33px;
-    position: absolute;
-    left: 10px;
-  }
-
-  .save-to-home-modal:before {
-    display: block;
-    content: "";
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    box-shadow: rgb(0 0 0 / 0.14) 14px 16px 17px 0px;
-    transform: rotate(45deg);
-    bottom: -14px;
-    background: white;
-    left: 50%;
-    margin-left: -16px;
-  }
-
-  .save-to-home-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-
-  .save-to-home-header img {
-    width: 65px;
-    margin-right: 15px;
-    padding: 6px;
-    box-sizing: border-box;
-    border-radius: 16px;
-    box-shadow: 0px 1px 4px -1px rgba(0, 0, 0, 0.24);
-  }
-
-  .save-to-home-header .modal-title {
-    font-size: 17px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
-  .ios-share-icon {
-    margin: 0 6px;
-    margin-top: -6px;
-  }
-
   .comments,
   .comment-textarea-wrapper {
     position: static;
+    height: auto;
+    overflow: visible;
   }
 }

@@ -48,7 +48,10 @@ const useUser = (redirectIfNoUser = true) => {
     const userFromCookie = getUserFromCookie();
     if (!userFromCookie) {
       setIsUserFetched(true);
-      redirectIfNoUser && router.push("/auth");
+      const urlParams = new URLSearchParams(window.location.search);
+      const team = urlParams.get("team");
+      let redirectTo = team ? `/auth?team=${team}` : "/auth";
+      redirectIfNoUser && router.push(redirectTo);
       return;
     }
     setUser(userFromCookie);

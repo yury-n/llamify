@@ -110,13 +110,13 @@
 
 .firebaseui-textfield.mdl-textfield .firebaseui-input:hover {
   transition: all 250ms;
-  box-shadow: 0 0 0px 6px #796eff1c;
+  box-shadow: 0 0 0px 6px rgba(121, 110, 255, 0.11) !important;
   background: white;
 }
 
 .firebaseui-textfield.mdl-textfield .firebaseui-input:focus {
   border-color: #796eff !important;
-  box-shadow: 0 0 0px 6px #796eff1c;
+  box-shadow: 0 0 0px 6px rgba(121, 110, 255, 0.11) !important;
   background: white;
 }
 

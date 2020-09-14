@@ -159,7 +159,7 @@ button:active {
 .input:not(.read-only):hover,
 .textarea:not(.read-only):hover {
   transition: all 250ms;
-  box-shadow: 0 0 0px 6px #796eff1c;
+  box-shadow: 0 0 0px 6px rgba(121, 110, 255, 0.11) !important;
   background: white;
 }
 
@@ -172,7 +172,7 @@ button:active {
 .input:not(.read-only):focus,
 .textarea:not(.read-only):focus {
   border-color: #796eff;
-  box-shadow: 0 0 0px 6px #796eff1c;
+  box-shadow: 0 0 0px 6px rgba(121, 110, 255, 0.11) !important;
   background: white;
 }
 
@@ -452,7 +452,8 @@ button:active {
   box-sizing: border-box;
   padding: 20px;
   height: 86px;
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(2px);
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -39,6 +39,16 @@ const BurgerButton = () => {
           <div className="popover-menu-item" onClick={logout}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <img
+                src="/icons/bell.svg"
+                style={{ transform: "scale(1.05)" }}
+                className="icon"
+              />
+              <div>Notifications</div>
+            </div>
+          </div>
+          <div className="popover-menu-item" onClick={logout}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
                 src="/icons/logout.svg"
                 style={{ transform: "scale(1.05)" }}
                 className="icon"

@@ -1,4 +1,7 @@
-input[type="text"] {
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
   /* Remove First */
   -webkit-appearance: none;
   -moz-appearance: none;
