@@ -53,7 +53,7 @@ const About = () => {
         </div>
         <img src="/images/confetti-back.png" className="confetti-back" />
         <div className="main-text">
-          a place to share your off work moments with colleagues
+          a place to share your off-work moments with colleagues
         </div>
         <div className="cta-button-wrapper">
           <button
@@ -72,11 +72,15 @@ const About = () => {
             <span></span>
           </div>
           <img
-            style={{ width: "100%" }}
+            className="screenshot-desktop"
             src="/images/app-screenshot-small-simple.jpg"
           />
+          <img
+            className="screenshot-mobile"
+            src="/images/app-screenshot-mobile.jpg"
+          />
         </div>
-        <div className="secondary-text" style={{ maxWidth: 740 }}>
+        <div className="secondary-text your-identiy-at-work">
           <div
             dangerouslySetInnerHTML={{
               __html: `<div class="secondary-text-img-wrapper"><div class="post-thumb" style="
@@ -87,15 +91,14 @@ const About = () => {
             }}
           />
           <div>
-            <h2>Your identity at work</h2>
+            <h2>Your identity… at work!</h2>
             <div className="secondary-text-block">
-              Behind each username in your team there is a{" "}
-              <span className="human-span">human</span>.
+              Behind every username in your team there’s a{" "}
+              <span className="human-span">human</span>,
             </div>
             <div className="secondary-text-block">
-              With their strengths and weaknesses.
-              <br />
-              With their cool and uncool parts.
+              each with strengths, weaknesses, hobbies, <br />
+              and experiences to share.
             </div>
             <div className="secondary-text-block">
               <span
@@ -106,20 +109,20 @@ const About = () => {
                   height: 16,
                 }}
               ></span>
-              Get to know your teammates better.
+              Get to know your teammates better
               <div style={{ marginTop: 2 }}>
                 <span
                   className="bullet"
                   style={{ background: "rgb(255 242 131)", left: -6 }}
                 ></span>
-                Be yourself at work.
+                and be yourself at work.
               </div>
             </div>
           </div>
         </div>
         <div className="secondary-text space-for-updates">
           <div>
-            <h2>Dedicated space for updates</h2>
+            <h2>A dedicated space for updates</h2>
             <div>
               <span
                 className="bullet"
@@ -132,7 +135,7 @@ const About = () => {
                 className="bullet"
                 style={{ background: "#53d870", left: -4, top: 5 }}
               ></span>
-              Consume updates from them at a comfortable pace.
+              Browse updates from them at a comfortable pace.
             </div>
           </div>
           <div
@@ -158,9 +161,9 @@ const About = () => {
           <div>
             <h2>More productive environment</h2>
             <div className="secondary-text-block">
-              You are more productive in a team
+              You’re more productive in a team
               <br />
-              where you are accepted the way you are.
+              when you’ve built a closer bond with your co-workers.
             </div>
             <div className="secondary-text-block">
               Start sharing about your <br />{" "}
@@ -168,7 +171,6 @@ const About = () => {
               <span className="activity">outdoor</span>, and{" "}
               <span className="activity">virtual</span> activities!
             </div>
-            <div className="secondary-text-block">It's going to be fun!</div>
           </div>
         </div>
         <div className="cta-button-wrapper" style={{ marginTop: 240 }}>
@@ -180,21 +182,6 @@ const About = () => {
               Create a Team
             </span>
           </button>
-        </div>
-        <div className="final-cta">
-          <div style={{ marginTop: 30 }}>
-            to be cool you don't really need to try to be cool{" "}
-            <span
-              style={{
-                fontSize: "20px",
-                position: "relative",
-                top: 2,
-                left: 2,
-              }}
-            >
-              😎
-            </span>
-          </div>
         </div>
       </div>
     </>

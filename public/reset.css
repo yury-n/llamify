@@ -7,6 +7,7 @@ textarea {
   -moz-appearance: none;
   appearance: none;
   box-shadow: none !important;
+  caret-color: #6c28f5 !important;
 }
 
 /* http://meyerweb.com/eric/tools/css/reset/
