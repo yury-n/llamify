@@ -173,7 +173,7 @@ const About = () => {
             </div>
           </div>
         </div>
-        <div className="cta-button-wrapper">
+        <div className="cta-button-wrapper cta-button-wrapper-bottom">
           <button
             className="button-wrapper"
             onClick={() => router.push("/app")}

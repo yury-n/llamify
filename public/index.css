@@ -279,7 +279,7 @@
   display: none;
 }
 
-.cta-button-wrapper {
+.cta-button-wrapper-bottom {
   margin-top: 240px;
 }
 
@@ -339,7 +339,7 @@
     margin-top: 40px;
   }
 
-  .cta-button-wrapper {
+  .cta-button-wrapper-bottom {
     margin-top: 110px;
   }
 }

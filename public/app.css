@@ -622,6 +622,7 @@
 .comments {
   position: absolute;
   top: 0;
+  width: 100%;
   height: calc(100% - 47px - 10px);
   box-sizing: border-box;
   overflow: auto;
