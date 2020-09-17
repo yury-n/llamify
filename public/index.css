@@ -175,8 +175,8 @@
   max-width: 740px;
 }
 
-.max-space-for-updates {
-  width: 710px;
+.space-for-updates {
+  max-width: 730px;
 }
 
 .more-productive {
@@ -275,6 +275,10 @@
   width: 100%;
 }
 
+.screenshot-mobile {
+  display: none;
+}
+
 @media (hover: none) {
   .screenshot-desktop,
   .mock-up-bar {
@@ -295,6 +299,7 @@
   }
 
   .screenshot-mobile {
+    display: block;
     width: 100%;
   }
 

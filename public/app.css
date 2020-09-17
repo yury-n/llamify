@@ -76,7 +76,7 @@
 }
 
 .humans {
-  margin-top: 110px;
+  margin: 90px 0;
 }
 
 .human {
@@ -129,7 +129,6 @@
   margin-left: 4px;
   background: white;
   background-size: cover;
-  box-shadow: 0px 1px 4px -1px rgba(0, 0, 0, 0.32);
   transition: 300ms ease;
   cursor: pointer;
 }
@@ -587,7 +586,6 @@
   margin-right: 14px;
   background: white;
   background-size: cover;
-  box-shadow: 0px 1px 4px -1px rgba(0, 0, 0, 0.24);
 }
 
 .post-author-name {

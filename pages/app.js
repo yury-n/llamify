@@ -588,17 +588,6 @@ const Index = () => {
       (memberId) => teamMembersWithRecentPosts[memberId]
     );
 
-    // TODO
-
-    // teamMembersArray = shuffle(teamMembersArrayUnsorted);
-
-    // Order alphabetically
-    // teamMembersArray = orderBy(
-    //   teamMembersArrayUnsorted,
-    //   [(u) => `${u.firstName.toLowerCase()} ${u.lastName.toLowerCase()}`],
-    //   ["asc"]
-    // );
-
     if (teamMembersArray.length) {
       // put yourself first
       teamMembersArray = [
