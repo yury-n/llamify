@@ -5,7 +5,7 @@ import PostCard from "./PostCard";
 import FullAvatarModal from "./Modals/FullAvatarModal";
 import { RECENT_POSTS_COUNT } from "../utils/consts";
 const { default: HumanEditModal } = require("./Modals/HumanEditModal");
-import { CurrentUserContext } from "../pages/app";
+import { CurrentUserContext, TimeframeContext } from "../pages/app";
 
 const Human = ({
   human,
@@ -14,6 +14,7 @@ const Human = ({
   onShowPostSubmitModal,
   searchString,
 }) => {
+  const { fromTimestamp } = useContext(TimeframeContext);
   const { currentUser } = useContext(CurrentUserContext);
   const isOwner = human.id === currentUser.id;
 
@@ -30,6 +31,14 @@ const Human = ({
   const recentPosts = (human.recentPostIds || [])
     .map((recentPostId) => human.recentPosts[recentPostId])
     .slice(0, requiredNumOfCards);
+
+  const isAnyPostAfterTimestamp = recentPosts.some((post) => {
+    return post.timestamp.seconds > fromTimestamp;
+  });
+
+  if (!isAnyPostAfterTimestamp && !isOwner) {
+    return null;
+  }
 
   let morePostsCount = human.totalPostCount - recentPosts.length;
   if (morePostsCount > 0) {

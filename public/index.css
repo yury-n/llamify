@@ -279,9 +279,14 @@
   display: none;
 }
 
+.cta-button-wrapper {
+  margin-top: 240px;
+}
+
 @media (hover: none) {
   .screenshot-desktop,
-  .mock-up-bar {
+  .mock-up-bar,
+  .human-span:before {
     display: none;
   }
 
@@ -292,6 +297,7 @@
 
   .mock-up {
     width: calc(100% - 40px);
+    margin-bottom: 150px;
   }
 
   .header {
@@ -309,6 +315,10 @@
     flex-direction: column;
   }
 
+  .space-for-updates {
+    flex-direction: column-reverse;
+  }
+
   .header-right-side a {
     display: none;
   }
@@ -316,5 +326,20 @@
   .confetti-back {
     width: 710px;
     top: 440px;
+  }
+
+  .secondary-text {
+    margin: 110px auto;
+    padding: 0 40px;
+    box-sizing: border-box;
+  }
+
+  .secondary-text h2 {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .cta-button-wrapper {
+    margin-top: 110px;
   }
 }
