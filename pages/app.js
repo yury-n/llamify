@@ -1,3 +1,4 @@
+import { useEffect, useState, useRef } from "react";
 import c from "classnames";
 import cookies from "js-cookie";
 import { useRouter } from "next/router";
@@ -6,9 +7,8 @@ import StickyBar from "../components/StickyBar";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/database";
-import Head from "./_head";
-import { useEffect, useState, useRef } from "react";
 import initFirebase from "../utils/auth/initFirebase";
+import Head from "./_head";
 import StartTeamForm from "../components/StartTeamForm";
 import TimeframeToggle from "../components/TimeframeToggle";
 import JoinTeamForm from "../components/JoinTeamForm";
@@ -616,7 +616,6 @@ const Index = () => {
     postAuthorId,
     newCommentCount,
   }) => {
-    // TODO: might be a comment in grid view
     const post = teamMembersWithRecentPosts[postAuthorId].recentPosts[postId];
     const indexInPosts = teamPosts.findIndex((p) => p.postId === postId);
 
@@ -631,7 +630,6 @@ const Index = () => {
       ...teamMembersWithRecentPosts,
       [postAuthorId]: {
         ...teamMembersWithRecentPosts[postAuthorId],
-        // TODO: this is not right
         recentPosts: {
           ...teamMembersWithRecentPosts[postAuthorId].recentPosts,
           [postId]: updatedPost,
@@ -641,16 +639,19 @@ const Index = () => {
 
     setTeamPosts(updatedTeamPosts);
 
-    firestore
-      .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${postAuthorId}/`)
-      .update({
-        [`recentPosts.${postId}.commentCount`]: newCommentCount,
-      });
-    firestore.doc(`/teams/${teamId}/posts/${postId}`).update({
-      ["postData.commentCount"]: newCommentCount,
-    });
-    firestore.doc(`/users/${postAuthorId}/posts/${postId}`).update({
-      ["postData.commentCount"]: newCommentCount,
+    fetch("/api/updateCommentCount", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json",
+        token: user.token,
+      }),
+      body: JSON.stringify({
+        teamId,
+        postId,
+        postAuthorId,
+        newCommentCount,
+      }),
+      credentials: "same-origin",
     });
   };
 
