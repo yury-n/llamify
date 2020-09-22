@@ -37,6 +37,7 @@
 
 .input-search-wrapper {
   z-index: 0;
+  margin-bottom: 30px;
 }
 
 .input-search-wrapper img {
@@ -199,7 +200,6 @@
 
 .timeframe-toggle {
   display: flex;
-  margin-top: 30px;
   height: 37px;
   justify-content: center;
   align-items: center;
