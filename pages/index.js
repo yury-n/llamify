@@ -1,13 +1,10 @@
+import cookies from "js-cookie";
 import Head from "./_head";
-import { useRouter } from "next/router";
-import { useUser } from "../utils/auth/useUser";
 import SimpleStats from "../components/Stats";
 
 const About = () => {
-  const router = useRouter();
-  const { user, isUserFetched } = useUser(false);
-  if (isUserFetched && user?.id) {
-    router.push("/app");
+  if (cookies.get("auth")) {
+    window.location.href = "/app";
     return null;
   }
   return (
