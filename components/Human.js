@@ -14,7 +14,7 @@ const Human = ({
   onShowPostSubmitModal,
   searchString,
 }) => {
-  const { fromTimestamp } = useContext(TimeframeContext);
+  const { timeframe, fromTimestamp } = useContext(TimeframeContext);
   const { currentUser } = useContext(CurrentUserContext);
   const isOwner = human.id === currentUser.id;
 
@@ -36,7 +36,7 @@ const Human = ({
     return post.timestamp.seconds > fromTimestamp;
   });
 
-  if (!isAnyPostAfterTimestamp && !isOwner) {
+  if (!isAnyPostAfterTimestamp && !isOwner && timeframe) {
     return null;
   }
 

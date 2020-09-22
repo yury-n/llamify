@@ -1,6 +1,7 @@
 import FirebaseAuth from "../components/FirebaseAuth";
 import Head from "./_head";
 import Footer from "../components/Footer";
+import SimpleStats from "../components/Stats";
 
 const Auth = () => {
   return (
@@ -15,6 +16,7 @@ const Auth = () => {
         <FirebaseAuth />
       </div>
       <Footer />
+      <SimpleStats />
     </>
   );
 };

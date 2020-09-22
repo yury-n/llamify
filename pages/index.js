@@ -1,6 +1,7 @@
 import Head from "./_head";
 import { useRouter } from "next/router";
 import { useUser } from "../utils/auth/useUser";
+import SimpleStats from "../components/Stats";
 
 const About = () => {
   const router = useRouter();
@@ -184,6 +185,7 @@ const About = () => {
           </button>
         </div>
       </div>
+      <SimpleStats />
     </>
   );
 };

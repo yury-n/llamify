@@ -26,6 +26,7 @@ import SaveToHomeModal from "../components/Modals/SaveToHomeModal";
 import PostModal from "../components/Modals/PostModal";
 import NotificationsModal from "../components/Modals/NotificationsModal";
 import { shuffle } from "../utils";
+import SimpleStats from "../components/Stats";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -896,6 +897,7 @@ const Index = () => {
               </div>
               <SaveToHomeModal />
               <Footer />
+              <SimpleStats />
               {showPostSubmitModal && (
                 <PostSubmitModal
                   userId={user.id}
