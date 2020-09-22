@@ -43,9 +43,8 @@ const CommentsArea = ({ post, withLoadedComments }) => {
 
   useEffect(() => {
     if (isTextareaFocused) {
-      const isInModal = document
-        .querySelector(".post-modal")
-        .contains(textareaRef.current);
+      const postModal = document.querySelector(".post-modal");
+      const isInModal = postModal && postModal.contains(textareaRef.current);
       if (isInModal) {
         setTimeout(() => {
           const modal = textareaRef.current.closest(".modal-overlay");
