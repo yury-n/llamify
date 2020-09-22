@@ -49,6 +49,10 @@ const FirebaseAuth = () => {
       setTimeout(() => {
         const emailInput = document.getElementById("ui-sign-in-email-input");
         emailInput.setAttribute("autocomplete", "email");
+        const lastEmailUsed = localStorage.getItem("app.lastEmailUsed");
+        if (lastEmailUsed) {
+          emailInput.value = lastEmailUsed;
+        }
       }, 200);
     }
   }, [renderAuth]);

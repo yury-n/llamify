@@ -57,11 +57,11 @@ const PostSubmitModal = ({
       const postsRef = db.ref(`/teams/${teamId}/teamMembers/${userId}/posts`);
       const newPostId = postsRef.push().key;
       uploadToFirebase(
-        `posts/${teamId}/full/${userId}/${newPostId}`,
+        `posts/${teamId}/${userId}/full/${newPostId}`,
         1080,
         (fullImageUrl) => {
           uploadToFirebase(
-            `posts/${teamId}/thumb/${userId}/${newPostId}`,
+            `posts/${teamId}/${userId}/thumb/${newPostId}`,
             400,
             (thumbImageUrl) => {
               onPostSubmit({

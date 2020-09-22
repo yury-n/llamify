@@ -25,8 +25,7 @@
   width: 50px;
   margin-right: 16px;
   border-radius: 100%;
-  box-shadow: 0 0 110px 80px #ffffffe8;
-  box-shadow: 0 0 600px 220px #ffffffed;
+  box-shadow: 0 0 600px 220px #ffffff59;
   cursor: pointer;
 }
 
@@ -40,7 +39,7 @@
 
 .llamify {
   font-weight: 700;
-  font-size: 22px;
+  font-size: 19px;
   cursor: pointer;
 }
 

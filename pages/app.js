@@ -221,7 +221,7 @@ const Index = () => {
 
     // hack: extend auth cookie expiration date
     setTimeout(() => {
-      cookies.set("auth", cookies.get("auth"), { expires: 1000 });
+      cookies.set("auth", cookies.get("auth"), { expires: 365 });
     }, 1000);
 
     window.addEventListener("popstate", onPopState);
@@ -367,25 +367,24 @@ const Index = () => {
     if (!team?.teamId) {
       return;
     }
+    const updateFields = {
+      firstName,
+      lastName,
+      role: role || null,
+    };
+    if (avatarThumbUrl && avatarFullUrl) {
+      updateFields.avatarThumbUrl = avatarThumbUrl;
+      updateFields.avatarFullUrl = avatarFullUrl;
+    }
     firestore
       .doc(`/teams/${team.teamId}/teamMembersWithRecentPosts/${user.id}`)
-      .update({
-        firstName,
-        lastName,
-        role: role || null,
-        avatarThumbUrl: avatarThumbUrl || null,
-        avatarFullUrl: avatarFullUrl || null,
-      });
+      .update(updateFields);
 
     setTeamMembersWithRecentPosts({
       ...teamMembersWithRecentPosts,
       [user.id]: {
         ...teamMembersWithRecentPosts[user.id],
-        firstName,
-        lastName,
-        role,
-        avatarThumbUrl,
-        avatarFullUrl,
+        ...updateFields,
       },
     });
   };

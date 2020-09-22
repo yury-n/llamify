@@ -41,6 +41,20 @@ const CommentsArea = ({ post, withLoadedComments }) => {
     };
   }, [textareaValue, comments]);
 
+  useEffect(() => {
+    if (isTextareaFocused) {
+      const isInModal = document
+        .querySelector(".post-modal")
+        .contains(textareaRef.current);
+      if (isInModal) {
+        setTimeout(() => {
+          const modal = textareaRef.current.closest(".modal-overlay");
+          modal.scrollTop = modal.scrollHeight - modal.offsetHeight;
+        }, 100);
+      }
+    }
+  }, [isTextareaFocused]);
+
   const fetchComments = () => {
     setIsLoading(true);
     firestore

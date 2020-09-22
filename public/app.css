@@ -1016,7 +1016,7 @@ svg.new-notifications-icon {
   left: 10px;
 }
 
-.save-to-home-modal:before {
+.iOS .save-to-home-modal:before {
   display: block;
   content: "";
   position: absolute;
@@ -1060,7 +1060,7 @@ svg.new-notifications-icon {
   margin-top: 30px;
 }
 
-.save-to-home-modal .form-buttons .button-wrapper {
+.iOS .save-to-home-modal .form-buttons .button-wrapper {
   width: 100%;
 }
 
@@ -1340,5 +1340,9 @@ svg.new-notifications-icon {
     position: static;
     height: auto;
     overflow: visible;
+  }
+
+  .input-search-wrapper img {
+    top: 14px;
   }
 }

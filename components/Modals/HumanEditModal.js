@@ -34,11 +34,11 @@ const HumanEditModal = ({
     e.preventDefault();
     if (imageFile) {
       uploadToFirebase(
-        `userAvatars/${teamId}/thumb/${userId}`,
+        `userAvatars/${teamId}/${userId}/thumb/`,
         80,
         (avatarThumbUrl) => {
           uploadToFirebase(
-            `userAvatars/${teamId}/full/${userId}`,
+            `userAvatars/${teamId}/${userId}/full`,
             400,
             (avatarFullUrl) => {
               onHumanEditSubmit({
