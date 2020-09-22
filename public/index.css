@@ -282,7 +282,7 @@
   margin-top: 240px;
 }
 
-@media (hover: none) {
+@media only screen and (max-device-width: 480px) {
   .screenshot-desktop,
   .mock-up-bar,
   .human-span:before {

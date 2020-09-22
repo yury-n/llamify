@@ -1,8 +1,11 @@
 import cookies from "js-cookie";
 import Head from "./_head";
+import { useRouter } from "next/router";
 import SimpleStats from "../components/Stats";
 
 const About = () => {
+  const router = useRouter();
+
   if (cookies.get("auth")) {
     window.location.href = "/app";
     return null;

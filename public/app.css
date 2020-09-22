@@ -1064,7 +1064,7 @@ svg.new-notifications-icon {
   width: 100%;
 }
 
-@media (hover: none) {
+@media only screen and (max-device-width: 480px) {
   .burger-button,
   .view-mode-tabs {
     display: block;
