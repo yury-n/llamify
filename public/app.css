@@ -824,6 +824,8 @@ svg.new-notifications-icon {
 }
 
 .post-comments-collapsed {
+  position: relative;
+  z-index: 1;
 }
 
 .post-comments-collapsed .icon {
@@ -1324,7 +1326,7 @@ svg.new-notifications-icon {
   }
 
   .comment-textarea-wrapper {
-    margin-top: 30px;
+    margin-top: 0px;
   }
 
   .popover-menu {
@@ -1333,6 +1335,10 @@ svg.new-notifications-icon {
 
   .post-image-dropzone {
     height: 240px;
+  }
+
+  .comments {
+    margin-bottom: 30px;
   }
 
   .comments,

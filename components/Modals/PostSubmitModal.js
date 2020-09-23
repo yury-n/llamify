@@ -169,7 +169,7 @@ const PostSubmitModal = ({
                 Submit
               </span>
             </button>
-            <button className="button-wrapper">
+            <button className="button-wrapper" onClick={onClose}>
               <span className="button button-secondary" tabIndex="-1">
                 Cancel
               </span>

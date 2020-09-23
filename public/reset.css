@@ -10,15 +10,6 @@ textarea {
   caret-color: #6c28f5 !important;
 }
 
-@media only screen and (max-device-width: 480px) {
-  input[type="password"]:focus,
-  input[type="text"]:focus,
-  select:focus,
-  textarea:focus {
-    font-size: 16px !important;
-  }
-}
-
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0-modified | 20110126
    License: none (public domain)
