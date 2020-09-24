@@ -10,10 +10,10 @@ const SaveToHomeModal = () => {
     const modalClosed =
       localStorage.getItem("app.saveToHomeModalClosed") || false;
 
-    if (isMobile() && !modalClosed) {
+    if (isMobile() && iOS() && !modalClosed) {
       setTimeout(() => {
-        setMode(iOS() ? "iOS" : "android");
-      }, 3000);
+        setMode("iOS");
+      }, 10000);
     }
     const onBeforeInstallPrompt = (e) => {
       // Prevent the mini-infobar from appearing on mobile

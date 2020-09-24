@@ -101,8 +101,8 @@
   padding: 12px 18px;
   font-size: 16px;
   border-radius: 8px;
-  background: #f3f3f4;
-  border: 1px solid #f3f3f4 !important;
+  background: #f1f3f8;
+  border: 1px solid #f1f3f8 !important;
   outline: none;
   border: none;
   box-sizing: border-box;
@@ -131,7 +131,7 @@
 }
 
 .firebaseui-button.firebaseui-id-secondary-link {
-  background: #f6f6f6;
+  background: #f6f7f9;
   box-shadow: 0px 3px 6px -1px hsla(0, 0%, 0%, 0.14),
     inset 0px 4px 6px 1px hsl(0, 0%, 100%);
   border: 1px transparent solid;
@@ -141,11 +141,11 @@
 
 .firebaseui-button.firebaseui-id-secondary-link:hover {
   transform: scale(1.025);
-  background: #f6f6f6;
+  background: #f6f7f9;
 }
 
 .firebaseui-button.firebaseui-id-secondary-link:active {
-  background: #f6f6f6;
+  background: #f6f7f9;
   position: relative;
   top: 2px;
   box-shadow: none;

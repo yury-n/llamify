@@ -40,10 +40,16 @@
   margin-bottom: 30px;
 }
 
+.input.input-search,
+.textarea.comment-textarea {
+  background: #f5f6fa;
+  border-color: #f5f6fa;
+}
+
 .input-search-wrapper img {
   width: 16px;
   position: absolute;
-  left: 15px;
+  left: 16px;
   top: 13px;
   opacity: 0.5;
   pointer-events: none;
@@ -333,7 +339,7 @@
   bottom: 10px;
   left: 10px;
   right: 10px;
-  background: #f5f5f5;
+  background: #f5f6fa;
   border-radius: 10px;
   transition: opacity 500ms;
   overflow: hidden;
@@ -532,7 +538,7 @@
   border-radius: 14px;
   background-size: cover;
   background-position: center;
-  background-color: #f5f5f5;
+  background-color: #f5f6fa;
   overflow: hidden;
 }
 
@@ -914,14 +920,14 @@ svg.new-notifications-icon {
   left: 0;
   height: 25px;
   width: 25px;
-  background-color: #f0f0f1;
+  background-color: #eef0f6;
   border-radius: 9px;
   transform: scale(0.9);
   border: 2px solid white;
 }
 
 .newsletter-checkbox-label:hover input ~ .checkmark {
-  background-color: #e7e7e7;
+  background-color: #e8eaf3;
 }
 
 .newsletter-checkbox-label input:focus ~ .checkmark {
@@ -958,6 +964,7 @@ svg.new-notifications-icon {
 .a-real-large-button {
   width: 860px;
   font-size: 16px;
+  border-radius: 14px;
   box-sizing: border-box;
   padding: 18px 22px;
   display: inline-flex;

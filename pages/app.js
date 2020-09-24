@@ -292,6 +292,12 @@ const Index = () => {
     }
   }, [user, isTeamFetched]);
 
+  useEffect(() => {
+    if (user?.email) {
+      localStorage.setItem("app.lastEmailUsed", user?.email);
+    }
+  }, [user]);
+
   if (!user) {
     if (isUserFetched) {
       // http://localhost:3000/?team=OmDHMXlbFNTWeaqBeabLlie4CaK2
@@ -709,9 +715,6 @@ const Index = () => {
     });
 
     if (replyToUser || post.author.id !== currentUser.id) {
-      console.log({
-        replyToUser,
-      });
       pushNotification({
         post: { ...post, commentCount: newCommentCount },
         comment,

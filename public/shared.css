@@ -1,6 +1,5 @@
 :root {
   --primary-color: #7c3cfc;
-  --secondary-color: #f6f6f6;
   --border-radius: 8px;
   --footer-height: 60px;
 }
@@ -151,8 +150,8 @@ button:active {
   padding: 12px 18px;
   font-size: 16px;
   border-radius: var(--border-radius);
-  background: #f3f3f4;
-  border: 1px solid #f3f3f4;
+  background: #f1f3f8;
+  border: 1px solid #f1f3f8;
   outline: none;
 }
 
@@ -190,7 +189,7 @@ button:active {
 .toggle-control {
   position: relative;
   display: inline-block;
-  background-color: #e7e7e9;
+  background-color: #eeeef3;
   width: 38px;
   height: 22px;
   cursor: pointer;
@@ -406,7 +405,7 @@ button:active {
 }
 
 .button-secondary {
-  background: var(--secondary-color);
+  background: #f6f7f9;
   box-shadow: 0px 3px 6px -1px hsla(0, 0%, 0%, 0.14),
     inset 0px 4px 6px 1px hsl(0, 0%, 100%);
   border: 1px transparent solid; /* #dbdbdb99 */
@@ -471,6 +470,7 @@ button:active {
 
 .sticky-bar-left-side {
   display: flex;
+  align-items: center;
 }
 
 .sticky-bar-buttons {
@@ -498,6 +498,7 @@ button:active {
 .sticky-bar .team-name {
   font-weight: 700;
   font-size: 22px;
+  line-height: 1;
 }
 
 .modal-overlay {

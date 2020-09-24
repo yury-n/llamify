@@ -125,7 +125,6 @@ const CommentsArea = ({ post, withLoadedComments }) => {
       params.comment.replyToCommentId = currentCommentId;
       params.replyToUser = currentReplyToUser;
     }
-    console.log({ params });
     submitComment(params);
     if (withLoadedComments) {
       setComments([...comments, comment]);
@@ -176,64 +175,60 @@ const CommentsArea = ({ post, withLoadedComments }) => {
               </button>
             </div>
           )}
-        {withLoadedComments && (
+        {isLoading && (
           <div className="comments">
-            {isLoading && (
-              <>
-                {new Array(collapsedCommentCount)
-                  .fill(null)
-                  .map((comment, index) => (
-                    <div key={index} className="comment loading-comment">
-                      <div className="comment-author-avatar" />
-                      <div className="comment-content"></div>
+            {new Array(collapsedCommentCount)
+              .fill(null)
+              .map((comment, index) => (
+                <div key={index} className="comment loading-comment">
+                  <div className="comment-author-avatar" />
+                  <div className="comment-content"></div>
+                </div>
+              ))}
+          </div>
+        )}
+        {comments.length > 0 && (
+          <div className="comments">
+            {comments.map((comment) => {
+              const isCommentAuthor = comment.author.id == currentUser.id;
+              return (
+                <div key={comment.commentId} className="comment">
+                  <div
+                    className="comment-author-avatar"
+                    style={{
+                      backgroundImage:
+                        comment.author.avatarThumbUrl &&
+                        `url(${comment.author.avatarThumbUrl})`,
+                    }}
+                  />
+                  <div className="comment-content">
+                    <span className="comment-author-name">
+                      {comment.author.firstName}
+                    </span>
+                    <span>{comment.content}</span>
+                  </div>
+                  {isCommentAuthor && (
+                    <div
+                      className="comment-action-button"
+                      onClick={() => {
+                        setCurrentCommentId(comment.commentId);
+                        setShowRemoveModal(true);
+                      }}
+                    >
+                      Remove
                     </div>
-                  ))}
-              </>
-            )}
-            {comments.length > 0 && (
-              <>
-                {comments.map((comment) => {
-                  const isCommentAuthor = comment.author.id == currentUser.id;
-                  return (
-                    <div key={comment.commentId} className="comment">
-                      <div
-                        className="comment-author-avatar"
-                        style={{
-                          backgroundImage:
-                            comment.author.avatarThumbUrl &&
-                            `url(${comment.author.avatarThumbUrl})`,
-                        }}
-                      />
-                      <div className="comment-content">
-                        <span className="comment-author-name">
-                          {comment.author.firstName}
-                        </span>
-                        <span>{comment.content}</span>
-                      </div>
-                      {isCommentAuthor && (
-                        <div
-                          className="comment-action-button"
-                          onClick={() => {
-                            setCurrentCommentId(comment.commentId);
-                            setShowRemoveModal(true);
-                          }}
-                        >
-                          Remove
-                        </div>
-                      )}
-                      {!isCommentAuthor && (
-                        <div
-                          className="comment-action-button"
-                          onClick={() => onClickReply(comment)}
-                        >
-                          Reply
-                        </div>
-                      )}
+                  )}
+                  {!isCommentAuthor && (
+                    <div
+                      className="comment-action-button"
+                      onClick={() => onClickReply(comment)}
+                    >
+                      Reply
                     </div>
-                  );
-                })}
-              </>
-            )}
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
         <div className="comment-textarea-wrapper">
