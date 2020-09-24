@@ -223,7 +223,7 @@ const Index = () => {
     // hack: extend auth cookie expiration date
     setTimeout(() => {
       cookies.set("auth", cookies.get("auth"), { expires: 365 });
-    }, 1000);
+    }, 5000);
 
     window.addEventListener("popstate", onPopState);
 
