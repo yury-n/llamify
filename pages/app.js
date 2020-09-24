@@ -639,19 +639,17 @@ const Index = () => {
 
     setTeamPosts(updatedTeamPosts);
 
-    fetch("/api/updateCommentCount", {
-      method: "POST",
-      headers: new Headers({
-        "Content-Type": "application/json",
-        token: user.token,
-      }),
-      body: JSON.stringify({
-        teamId,
-        postId,
-        postAuthorId,
-        newCommentCount,
-      }),
-      credentials: "same-origin",
+    firestore
+      .doc(`/teams/${teamId}/teamMembersWithRecentPosts/${postAuthorId}/`)
+      .update({
+        [`recentPosts.${postId}.commentCount`]: newCommentCount,
+      });
+    firestore.doc(`/teams/${teamId}/posts/${postId}`).update({
+      ["postData.commentCount"]: newCommentCount,
+    });
+
+    firestore.doc(`/users/${postAuthorId}/posts/${postId}`).update({
+      ["postData.commentCount"]: newCommentCount,
     });
   };
 
