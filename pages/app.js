@@ -339,6 +339,7 @@ const Index = () => {
     setUserRole("admin");
     setTeam(teamData);
     setTeamMembersWithRecentPosts({ [user.id]: teamMember });
+    setTeamMembersOrder([user.id]);
     setIsTeamFetched(true);
   };
 

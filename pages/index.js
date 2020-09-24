@@ -34,6 +34,7 @@ const About = () => {
             </a>
             <a
               href="https://docs.google.com/forms/d/1925mzlkhLEle8P7uF14645l9izpuhfCrsrEhBPPtVT0/"
+              target="_blank"
               className="header-link"
               style={{ marginRight: 60 }}
             >

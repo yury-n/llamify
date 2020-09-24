@@ -496,6 +496,8 @@ button:active {
 }
 
 .sticky-bar .team-name {
+  position: relative;
+  top: 1px;
   font-weight: 700;
   font-size: 22px;
   line-height: 1;

@@ -48,19 +48,24 @@ const FirebaseAuth = () => {
     if (renderAuth) {
       setTimeout(() => {
         const emailInput = document.getElementById("ui-sign-in-email-input");
+        if (!emailInput) {
+          return;
+        }
         emailInput.setAttribute("autocomplete", "email");
         const lastEmailUsed = localStorage.getItem("app.lastEmailUsed");
         if (lastEmailUsed) {
           emailInput.value = lastEmailUsed;
         }
-      }, 200);
+      }, 750);
     }
   }, [renderAuth]);
   return (
     <div className="sisu-form">
       {renderAuth ? (
         <>
-          <img src="/images/logo.svg" className="sisu-logo" />
+          <a href="/">
+            <img src="/images/logo.svg" className="sisu-logo" />
+          </a>
           <StyledFirebaseAuth
             uiConfig={firebaseAuthConfig}
             firebaseAuth={firebase.auth()}

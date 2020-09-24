@@ -8,16 +8,19 @@ import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 
 const firestore = firebase.firestore();
 
-const CommentsArea = ({ post, withLoadedComments }) => {
+const CommentsArea = ({ post, withLoadedComments: withLoadedCommentsProp }) => {
   const { submitComment, removeComment } = useContext(ActionsContext);
   const { teamId } = useContext(TeamContext);
   const { currentUser } = useContext(CurrentUserContext);
   const textareaRef = useRef(null);
+  const [withLoadedComments, setWithLoadedComments] = useState(
+    !post.commentCount ? true : withLoadedCommentsProp
+  );
   const [textareaValue, setTextareaValue] = useState("");
   const [isTextareaFocused, setIsTextareaFocused] = useState(false);
   const [comments, setComments] = useState([]);
   const [collapsedCommentCount, setCollapsedCommentCount] = useState(
-    post.commentCount
+    Number.isInteger(post.commentCount) ? post.commentCount : null
   );
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [currentCommentId, setCurrentCommentId] = useState();
@@ -56,6 +59,7 @@ const CommentsArea = ({ post, withLoadedComments }) => {
   }, [isTextareaFocused]);
 
   const fetchComments = () => {
+    setWithLoadedComments(true);
     setIsLoading(true);
     firestore
       .collection(`/teams/${teamId}/postComments/${post.postId}/comments`)
