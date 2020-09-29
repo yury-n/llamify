@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <div className="footer">
-      <div className="llamify-com">llamify.com</div>
+      <div className="llamify-com">llamify.me</div>
       <div className="footer-buttons">
         <a href="https://github.com/yury-n/llamify" target="_blank">
           github
