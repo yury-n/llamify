@@ -576,16 +576,10 @@ const Index = () => {
     firestore.doc(`/teams/${teamId}/`).update(updates);
   };
 
-  const userHasDAEmail =
-    user?.email &&
-    ["wix.com", "deviantart.com"].includes(user?.email.split("@")[0]);
-
   const showStartTeamForm = isTeamFetched && !team?.teamId && !teamIdFromURL;
   const showJoinTeamForm = isTeamFetched && !team?.teamId && teamIdFromURL;
   const showTeamDirectoty =
-    isTeamFetched &&
-    Object.keys(teamMembersWithRecentPosts).length > 0 &&
-    userHasDAEmail;
+    isTeamFetched && Object.keys(teamMembersWithRecentPosts).length > 0;
 
   const showForm = showStartTeamForm || showJoinTeamForm;
 
@@ -793,11 +787,6 @@ const Index = () => {
                 )}
                 {showJoinTeamForm && <JoinTeamForm onJoinTeam={joinTeam} />}
                 {showStartTeamForm && <StartTeamForm onStartTeam={startTeam} />}
-                {!userHasDAEmail && (
-                  <div className="use-correct-email">
-                    Please use @wix.com or @deviantart.com email!
-                  </div>
-                )}
                 {showTeamDirectoty && (
                   <div className="directory">
                     {viewMode === "list" && (
