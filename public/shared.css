@@ -576,6 +576,11 @@ button:active {
   flex-shrink: 0;
 }
 
+.use-correct-email {
+  text-align: center;
+  margin-top: 50px;
+}
+
 /* tooltip */
 
 :root {
