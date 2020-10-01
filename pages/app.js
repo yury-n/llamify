@@ -149,7 +149,9 @@ const Index = () => {
 
     query.get().then((postsSnapshot) => {
       const fetchedPosts = [];
+      let unfilteredPostsCount = 0;
       postsSnapshot.forEach((post) => {
+        unfilteredPostsCount++;
         const postData = post.data().postData; // <3
         if (
           !forNewsletterOnly ||
@@ -158,7 +160,7 @@ const Index = () => {
           fetchedPosts.push(post.data().postData);
         }
       });
-      const fetchHasMore = fetchedPosts.length === TEAM_POSTS_PER_PAGE + 1;
+      const fetchHasMore = unfilteredPostsCount === TEAM_POSTS_PER_PAGE + 1;
       if (fetchHasMore) {
         fetchedPosts.pop();
       }
