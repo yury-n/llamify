@@ -1,8 +1,9 @@
-const Footer = () => {
+const Footer = ({ showPostsForNewsletter }) => {
   return (
     <div className="footer">
       <div className="llamify-com">llamify.me</div>
       <div className="footer-buttons">
+        <a onClick={showPostsForNewsletter}>for newsletter</a>
         <a href="https://github.com/yury-n/llamify" target="_blank">
           github
         </a>

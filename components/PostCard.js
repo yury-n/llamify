@@ -6,6 +6,7 @@ import {
   TimeframeContext,
   ActionsContext,
 } from "../pages/app";
+import { showThisImageOnLoad } from "../utils";
 
 const PostCard = ({ post, morePostsCount }) => {
   const { timeframe, fromTimestamp } = useContext(TimeframeContext);
@@ -29,10 +30,6 @@ const PostCard = ({ post, morePostsCount }) => {
   const isAfterTimestamp = fromTimestamp
     ? post.timestamp.seconds > fromTimestamp
     : true;
-
-  const onImageLoad = (e) => {
-    e.target.style.opacity = 1;
-  };
 
   return (
     <>
@@ -60,7 +57,7 @@ const PostCard = ({ post, morePostsCount }) => {
             key={`thumb-${post.postId}`}
             src={post.thumbImageUrl}
             loading="lazy"
-            onLoad={onImageLoad}
+            onLoad={showThisImageOnLoad}
           />
         </div>
         {(post.description || post.commentCount > 0) && (

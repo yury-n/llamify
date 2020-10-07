@@ -37,7 +37,7 @@
 
 .input-search-wrapper {
   z-index: 0;
-  margin-bottom: 30px;
+  margin: 30px 40px;
 }
 
 .input.input-search,
@@ -63,7 +63,7 @@
 
 .grid-view,
 .feed-view {
-  margin-top: 100px;
+  margin-top: 90px;
   margin-bottom: 350px;
   display: flex;
   flex-direction: column;
@@ -74,7 +74,7 @@
   margin-bottom: 50px;
 }
 
-.directory {
+.content-area {
   display: flex;
   flex-direction: column;
   margin: 40px;
@@ -83,7 +83,7 @@
 }
 
 .humans {
-  margin: 90px 0;
+  margin: 80px 0;
 }
 
 .human {
@@ -98,17 +98,17 @@
 .name {
   position: relative;
   font-weight: 700;
-  font-size: 33px;
+  font-size: 30px;
 }
 
 .name span,
 .role span {
-  background: #e2dbff;
+  background: #d5ff43;
 }
 
 .role {
   color: #595959;
-  margin-left: 16px;
+  margin-left: 18px;
   position: relative;
   top: 4px;
 }
@@ -117,7 +117,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   cursor: default;
 }
 
@@ -128,11 +128,11 @@
 }
 
 .avatar {
-  width: 39px;
-  height: 39px;
+  width: 60px;
+  height: 60px;
   border-radius: 100%;
   overflow: hidden;
-  margin-right: 14px;
+  margin-right: 18px;
   margin-left: 4px;
   background: white;
   background-size: cover;
@@ -256,17 +256,19 @@
 }
 
 .view-mode-tab {
-  padding: 7px 17px;
+  padding: 7px 30px;
   border: 1px solid #dbdbdb;
   font-size: 14px;
-  border-radius: var(--border-radius);
   font-family: Poppins, sans-serif;
   position: relative;
   top: -1px;
   transition: transform 200ms;
   box-shadow: 0px 3px 6px -1px rgba(0, 0, 0, 0.08);
-  width: 100px;
+  min-width: 135px;
+  box-sizing: border-box;
   text-align: center;
+  cursor: pointer;
+  background: white;
 }
 
 .view-mode-tab.active {
@@ -275,26 +277,29 @@
   box-shadow: none;
   color: #7c3cfc;
   filter: hue-rotate(-6deg);
+  cursor: default;
 }
 
-.view-mode-tab:nth-child(1) {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+.view-mode-tab:first-child {
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  border-right-width: 0;
 }
 
-.view-mode-tab:nth-child(2) {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+.view-mode-tab:last-child {
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  border-left-width: 0;
 }
 
-.view-mode-tab:nth-child(1).active {
+.view-mode-tab:first-child.active {
   position: relative;
+  border-right-width: 1px;
   right: -1px;
   z-index: 1;
 }
 
-.view-mode-tab:nth-child(2).active {
+.view-mode-tab:last-child.active {
   position: relative;
+  border-left-width: 1px;
   left: -1px;
   z-index: 1;
 }
@@ -353,6 +358,14 @@
   object-fit: cover;
   opacity: 0;
   transition: opacity 300ms ease;
+}
+
+.post-image.post-image-lazy img {
+  object-fit: contain;
+}
+
+.post-image.post-image-lazy a {
+  cursor: zoom-in;
 }
 
 .post-thumb-shadow {
@@ -538,7 +551,7 @@
   border-radius: 14px;
   background-size: cover;
   background-position: center;
-  background-color: #f5f6fa;
+  background-color: #fafafc;
   overflow: hidden;
 }
 
@@ -1002,8 +1015,7 @@ svg.new-notifications-icon {
   }
 }
 
-.burger-button,
-.view-mode-tabs {
+.burger-button {
   display: none;
 }
 
@@ -1073,9 +1085,39 @@ svg.new-notifications-icon {
   width: 100%;
 }
 
+.view-mode-tabs {
+  display: inline-flex;
+  margin: auto;
+  margin-top: 10px;
+}
+
+.view-mode-tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.view-mode-tab svg {
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  position: relative;
+  left: -5px;
+  top: -1px;
+}
+
+.warning-banner {
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  padding: 8px 0;
+  background: #d5ff43;
+  position: relative;
+  top: -4px;
+}
+
 @media only screen and (max-device-width: 480px) {
-  .burger-button,
-  .view-mode-tabs {
+  .burger-button {
     display: block;
   }
 
@@ -1092,7 +1134,10 @@ svg.new-notifications-icon {
   .view-mode-tabs {
     margin: auto;
     margin-top: 40px;
-    display: inline-flex;
+  }
+
+  .view-mode-tab-grid {
+    display: none;
   }
 
   .team-name {
@@ -1184,7 +1229,7 @@ svg.new-notifications-icon {
     flex-shrink: 0;
   }
 
-  .directory {
+  .content-area {
     margin: 0;
     margin-bottom: 100px;
   }

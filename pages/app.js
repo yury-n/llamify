@@ -27,6 +27,7 @@ import PostModal from "../components/Modals/PostModal";
 import NotificationsModal from "../components/Modals/NotificationsModal";
 import { shuffle } from "../utils";
 import SimpleStats from "../components/Stats";
+import SearchBox from "../components/SearchBox";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -46,6 +47,7 @@ const Index = () => {
   const [postToShow, setPostToShow] = useState(null);
   const [notificationsToShow, setNotificationsToShow] = useState(null);
   const [isDragActive, setIsDragActive] = useState(false);
+  const [forNewsletterOnly, setForNewsletterOnly] = useState(false);
   const [droppedFile, setDroppedFile] = useState();
   const [searchString, setSearchString] = useState();
   const [isTeamFetched, setIsTeamFetched] = useState(false);
@@ -67,14 +69,15 @@ const Index = () => {
   const currentUser = user?.id ? teamMembersWithRecentPosts[user.id] : {};
 
   let teamIdFromURL;
-  let forNewsletterOnly = false;
-  if (typeof window !== "undefined") {
-    const urlParams = new URLSearchParams(window.location.search);
-    teamIdFromURL = urlParams.get("team");
-    if (window.location.search.includes("newsletter")) {
-      forNewsletterOnly = true;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      teamIdFromURL = urlParams.get("team");
+      if (window.location.search.includes("newsletter")) {
+        setForNewsletterOnly(true);
+      }
     }
-  }
+  }, []);
 
   const fetchUserTeam = (userId) => {
     firestore
@@ -149,18 +152,10 @@ const Index = () => {
 
     query.get().then((postsSnapshot) => {
       const fetchedPosts = [];
-      let unfilteredPostsCount = 0;
       postsSnapshot.forEach((post) => {
-        unfilteredPostsCount++;
-        const postData = post.data().postData; // <3
-        if (
-          !forNewsletterOnly ||
-          (forNewsletterOnly && postData.includeInNewsletter)
-        ) {
-          fetchedPosts.push(post.data().postData);
-        }
+        fetchedPosts.push(post.data().postData);
       });
-      const fetchHasMore = unfilteredPostsCount === TEAM_POSTS_PER_PAGE + 1;
+      const fetchHasMore = fetchedPosts.length === TEAM_POSTS_PER_PAGE + 1;
       if (fetchHasMore) {
         fetchedPosts.pop();
       }
@@ -578,13 +573,13 @@ const Index = () => {
     firestore.doc(`/teams/${teamId}/`).update(updates);
   };
 
-  const userHasDAEmail =
+  let userHasDAEmail =
     user?.email &&
     ["wix.com", "deviantart.com"].includes(user?.email.split("@")[1]);
 
   const showStartTeamForm = isTeamFetched && !team?.teamId && !teamIdFromURL;
   const showJoinTeamForm = isTeamFetched && !team?.teamId && teamIdFromURL;
-  const showTeamDirectoty =
+  const showContentArea =
     isTeamFetched &&
     Object.keys(teamMembersWithRecentPosts).length > 0 &&
     userHasDAEmail;
@@ -791,6 +786,9 @@ const Index = () => {
                     teamLogo={team?.teamLogo}
                     viewMode={viewMode}
                     setViewMode={setViewMode}
+                    resetFilters={() => {
+                      setForNewsletterOnly(false);
+                    }}
                   />
                 )}
                 {showJoinTeamForm && <JoinTeamForm onJoinTeam={joinTeam} />}
@@ -800,27 +798,20 @@ const Index = () => {
                     Please use @wix.com or @deviantart.com email!
                   </div>
                 )}
-                {showTeamDirectoty && (
-                  <div className="directory">
-                    {viewMode === "list" && (
-                      <div className="input-wrapper input-search-wrapper">
-                        <img src="/icons/magnifying_glass.svg" />
-                        <input
-                          className="input input-search"
-                          id="email"
-                          type="text"
-                          autoComplete="off"
-                          spellCheck={false}
-                          placeholder="Search by name or role"
-                          value={searchString}
-                          onChange={(e) => setSearchString(e.target.value)}
-                        />
-                      </div>
-                    )}
-                    <TimeframeToggle
-                      timeframe={timeframe}
-                      setTimeframe={setTimeframe}
-                    />
+                {forNewsletterOnly && viewMode === "feed" && (
+                  <div className="warning-banner">
+                    You're viewing posts marked to be included in the
+                    newsletter!
+                  </div>
+                )}
+                {showContentArea && (
+                  <SearchBox
+                    searchString={searchString}
+                    setSearchString={setSearchString}
+                  />
+                )}
+                {showContentArea && (
+                  <div className="content-area">
                     <ViewModeTabs
                       viewMode={viewMode}
                       setViewMode={setViewMode}
@@ -886,7 +877,13 @@ const Index = () => {
                               <span>Submit a Post</span>
                             </button>
                             <PostsFeed
-                              posts={teamPosts}
+                              posts={
+                                forNewsletterOnly
+                                  ? teamPosts.filter(
+                                      (post) => post.includeInNewsletter
+                                    )
+                                  : teamPosts
+                              }
                               removePost={removePost}
                             />
                             {isFetchingMore && <LoadingIndicator withWrapper />}
@@ -911,7 +908,13 @@ const Index = () => {
                 )}
               </div>
               <SaveToHomeModal />
-              <Footer />
+              <Footer
+                showPostsForNewsletter={() => {
+                  window.scrollTo(0, 0);
+                  setViewMode("feed");
+                  setForNewsletterOnly(true);
+                }}
+              />
               <SimpleStats />
               {showPostSubmitModal && (
                 <PostSubmitModal

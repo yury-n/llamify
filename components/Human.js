@@ -6,6 +6,7 @@ import FullAvatarModal from "./Modals/FullAvatarModal";
 import { RECENT_POSTS_COUNT } from "../utils/consts";
 const { default: HumanEditModal } = require("./Modals/HumanEditModal");
 import { CurrentUserContext, TimeframeContext } from "../pages/app";
+import { showThisImageOnLoad } from "../utils";
 
 const Human = ({
   human,
@@ -78,10 +79,6 @@ const Human = ({
     }
   };
 
-  const onImageLoad = (e) => {
-    e.target.style.opacity = 1;
-  };
-
   return (
     <>
       <div key={human.id} className="human">
@@ -102,7 +99,7 @@ const Human = ({
                 <img
                   src={human.avatarThumbUrl}
                   loading="lazy"
-                  onLoad={onImageLoad}
+                  onLoad={showThisImageOnLoad}
                 />
               )}
             </div>

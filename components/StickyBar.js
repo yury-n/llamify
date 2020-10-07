@@ -16,6 +16,7 @@ const StickyBar = ({
   isTeamEditable,
   viewMode,
   setViewMode,
+  resetFilters,
 }) => {
   const [showTeamEditModal, setShowTeamEditModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -82,6 +83,7 @@ const StickyBar = ({
           className="home-logo"
           onClick={() => {
             window.scrollTo(0, 0);
+            resetFilters();
           }}
         />
         <div className="sticky-bar-left-side">
@@ -99,7 +101,6 @@ const StickyBar = ({
             <div className="team-name">{teamName}</div>
             {isTeamEditable && <img className="icon" src="/icons/edit.svg" />}
           </div>
-          {teamId && viewModeButtons}
         </div>
         <div className="sticky-bar-buttons buttons">
           {teamId && <NotificationsButton />}

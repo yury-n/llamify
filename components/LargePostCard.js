@@ -1,19 +1,22 @@
 import { useState } from "react";
 import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
 import CommentsArea from "./CommentsArea";
+import { showThisImageOnLoad } from "../utils";
 
 const LargePostCard = ({ post, onPostRemove }) => {
   const [showRemoveModal, setShowRemoveModal] = useState(false);
-
-  const onImageLoad = (e) => {
-    e.target.style.opacity = 1;
-  };
 
   return (
     <>
       <div className="large-post-thumb post-view">
         <div className="post-image post-image-lazy">
-          <img src={post.fullImageUrl} loading="lazy" onLoad={onImageLoad} />
+          <a target="_blank" href={post.fullImageUrl}>
+            <img
+              src={post.fullImageUrl}
+              loading="lazy"
+              onLoad={showThisImageOnLoad}
+            />
+          </a>
         </div>
         <div className="post-sidebar">
           <div className="post-sidebar-top">

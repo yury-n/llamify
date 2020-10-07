@@ -36,3 +36,7 @@ export const iOS = () => {
     (navigator.userAgent.includes("Mac") && "ontouchend" in document)
   );
 };
+
+export const showThisImageOnLoad = (e) => {
+  e.target.style.opacity = 1;
+};

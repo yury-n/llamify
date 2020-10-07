@@ -1,3 +1,4 @@
+import { showThisImageOnLoad } from "../../utils";
 const { default: Modal } = require("./Modal");
 const { default: CommentsArea } = require("../CommentsArea");
 
@@ -10,12 +11,15 @@ const PostModal = ({ post, onClose }) => {
       onClose={onClose}
     >
       <div className="post post-view">
-        <div
-          className="post-image"
-          style={{
-            backgroundImage: `url(${post.fullImageUrl})`,
-          }}
-        ></div>
+        <div className="post-image post-image-lazy">
+          <a target="_blank" href={post.fullImageUrl}>
+            <img
+              src={post.fullImageUrl}
+              loading="lazy"
+              onLoad={showThisImageOnLoad}
+            />
+          </a>
+        </div>
         <div className="post-sidebar">
           <div className="post-sidebar-top">
             <div className="post-author-block">
