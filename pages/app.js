@@ -576,6 +576,7 @@ const Index = () => {
   let userHasDAEmail =
     user?.email &&
     ["wix.com", "deviantart.com"].includes(user?.email.split("@")[1]);
+  userHasDAEmail = true;
 
   const showStartTeamForm = isTeamFetched && !team?.teamId && !teamIdFromURL;
   const showJoinTeamForm = isTeamFetched && !team?.teamId && teamIdFromURL;

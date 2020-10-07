@@ -34,7 +34,7 @@ const NotificationsButton = () => {
   }, []);
 
   return (
-    <div className="popover-menu-button-wrapper" style={{ marginRight: 8 }}>
+    <div className="popover-menu-button-wrapper" style={{ marginRight: 6 }}>
       <button
         ref={buttonRef}
         className="button-wrapper"
@@ -51,7 +51,7 @@ const NotificationsButton = () => {
         >
           {hasUnreadNotifications && <ZenIcon />}
           <svg
-            style={{ transform: "scale(1.15)" }}
+            style={{ transform: "scale(1.3)" }}
             aria-hidden="true"
             focusable="false"
             data-prefix="far"

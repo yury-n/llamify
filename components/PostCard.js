@@ -36,12 +36,11 @@ const PostCard = ({ post, morePostsCount }) => {
       <div
         className={c(
           "post-thumb",
-          (!isAfterTimestamp || morePostsCount) && "post-before-timeframe",
-          morePostsCount && "post-thumb-disabled"
+          (!isAfterTimestamp || morePostsCount) && "post-before-timeframe"
         )}
         onClick={() => showPostModal(post)}
       >
-        {isOwner && (
+        {isOwner && !morePostsCount && (
           <div
             className="post-thumb-remove"
             onClick={(e) => {
@@ -74,7 +73,7 @@ const PostCard = ({ post, morePostsCount }) => {
           </div>
         )}
         {!!morePostsCount && (
-          <div class="post-thumb-more-button">
+          <div className="post-thumb-more-button">
             <span>+</span>
             {morePostsCount}
           </div>

@@ -316,7 +316,7 @@
   position: relative;
   width: 100%;
   padding-top: 100%;
-  border-radius: 14px;
+  border-radius: 18px;
   border: 1px white solid;
   box-sizing: border-box;
   background: white;
@@ -487,10 +487,6 @@
 
 .post-thumb-remove img {
   width: 100%;
-}
-
-.post-before-timeframe {
-  opacity: 0.2;
 }
 
 .post-thumb-empty.post-before-timeframe {
