@@ -767,7 +767,7 @@ const Index = () => {
               <link
                 rel="stylesheet"
                 media="screen, projection"
-                href="/app.css"
+                href="/app.css?1"
               />
               <div
                 className={c(

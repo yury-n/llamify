@@ -12,7 +12,7 @@ export const HeadComp = ({ teamName }) => {
         rel="stylesheet"
       ></link>
       <link rel="stylesheet" media="screen, projection" href="/reset.css" />
-      <link rel="stylesheet" media="screen, projection" href="/shared.css" />
+      <link rel="stylesheet" media="screen, projection" href="/shared.css?1" />
     </Head>
   );
 };
