@@ -18,6 +18,7 @@ const StickyBar = ({
   viewMode,
   setViewMode,
   resetFilters,
+  withInviteButton,
 }) => {
   const [showTeamEditModal, setShowTeamEditModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -124,6 +125,22 @@ const StickyBar = ({
                   }}
                 />
                 {currentUser.firstName}
+              </span>
+            </button>
+          )}
+          {teamId && withInviteButton && (
+            <button
+              className="button-wrapper"
+              onClick={() => setShowInviteModal(true)}
+              aria-label="Invite to join the team"
+              data-balloon-pos="down"
+            >
+              <span
+                className="button button-hollow"
+                tabIndex="-1"
+                style={{ width: 60, marginLeft: -4 }}
+              >
+                Invite
               </span>
             </button>
           )}
