@@ -38,8 +38,6 @@ const NotificationsButton = () => {
       <button
         ref={buttonRef}
         className="button-wrapper"
-        aria-label="Notifcations"
-        data-balloon-pos="down"
         onClick={() => setIsActive(!isActive)}
       >
         <span

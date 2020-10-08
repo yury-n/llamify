@@ -1,6 +1,5 @@
 import c from "classnames";
-import { useUser } from "../utils/auth/useUser";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import TeamEditModal from "./Modals/TeamEditModal";
 import InviteModal from "./Modals/InviteModal";
 import NotificationsButton from "./NotificationsButton";
@@ -8,7 +7,7 @@ import ListIcon from "./Icons/ListIcon";
 import GridIcon from "./Icons/GridIcon";
 import FeedIcon from "./Icons/FeedIcon";
 import BurgerButton from "./BurgerButton";
-import { CurrentUserContext } from "../pages/app";
+import UserProfileButton from "./UserProfileButton";
 
 const StickyBar = ({
   teamId,
@@ -20,10 +19,8 @@ const StickyBar = ({
   resetFilters,
   withInviteButton,
 }) => {
-  const [showTeamEditModal, setShowTeamEditModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
-  const { currentUser } = useContext(CurrentUserContext);
-  const { logout } = useUser();
+  const [showTeamEditModal, setShowTeamEditModal] = useState(false);
 
   const viewModeButtons = (
     <div className="view-mode-buttons">
@@ -107,27 +104,7 @@ const StickyBar = ({
         </div>
         <div className="sticky-bar-buttons buttons">
           {teamId && <NotificationsButton />}
-          {currentUser && (
-            <button
-              className="button-wrapper"
-              onClick={() => logout()}
-              aria-label="Log out"
-              data-balloon-pos="down"
-            >
-              <span
-                className="button icon-button button-secondary button-white profile-button"
-                tabIndex="-1"
-              >
-                <div
-                  className="profile-button-avatar"
-                  style={{
-                    backgroundImage: `url(${currentUser.avatarThumbUrl})`,
-                  }}
-                />
-                {currentUser.firstName}
-              </span>
-            </button>
-          )}
+          <UserProfileButton />
           {teamId && withInviteButton && (
             <button
               className="button-wrapper"

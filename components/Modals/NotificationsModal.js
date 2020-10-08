@@ -12,8 +12,8 @@ const NotificationsModal = ({
   const { showPostModal } = useContext(ActionsContext);
   return (
     <Modal onClose={onClose} modalClassname="notifications-modal">
-      <div class="alert">
-        <div class="modal-title">Notifications</div>
+      <div className="alert">
+        <div className="modal-title">Notifications</div>
         {!areNotificationsFetched && (
           <div className="popover-menu-loading-wrapper">
             <LoadingIndicator />

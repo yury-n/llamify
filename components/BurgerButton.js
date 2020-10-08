@@ -1,33 +1,15 @@
 import c from "classnames";
-import { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect } from "react";
 import BurgerIcon from "./Icons/BurgerIcon";
-import { useUser } from "../utils/auth/useUser";
 import ZenIcon from "./Icons/ZenIcon";
+import UserMenu from "./UserMenu";
 import useNotifications from "../utils/hooks/useNotifications";
-import { ActionsContext } from "../pages/app";
 
 const BurgerButton = () => {
   const buttonRef = useRef();
-  const { logout } = useUser();
   const [isActive, setIsActive] = useState(false);
 
-  const {
-    areNotificationsFetched,
-    notifications,
-    hasUnreadNotifications,
-    fetchNotifications,
-  } = useNotifications();
-
-  const { showNotificationsModal } = useContext(ActionsContext);
-
-  useEffect(() => {
-    if (areNotificationsFetched) {
-      showNotificationsModal({
-        areNotificationsFetched,
-        notifications,
-      });
-    }
-  }, [showNotificationsModal, areNotificationsFetched, notifications]);
+  const { hasUnreadNotifications } = useNotifications();
 
   useEffect(() => {
     const makeInactive = (e) =>
@@ -59,42 +41,7 @@ const BurgerButton = () => {
             <BurgerIcon />
           </span>
         </button>
-        {isActive && (
-          <div className="popover-menu burger-menu">
-            <div
-              className="popover-menu-item"
-              onClick={() => {
-                showNotificationsModal({
-                  areNotificationsFetched: false,
-                  notifications: [],
-                });
-                fetchNotifications();
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ position: "relative" }}>
-                  {hasUnreadNotifications && <ZenIcon />}
-                  <img
-                    src="/icons/bell.svg"
-                    style={{ transform: "scale(1.05)" }}
-                    className="icon"
-                  />
-                </span>
-                <div>Notifications</div>
-              </div>
-            </div>
-            <div className="popover-menu-item" onClick={logout}>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <img
-                  src="/icons/logout.svg"
-                  style={{ transform: "scale(1.05)" }}
-                  className="icon"
-                />
-                <div>Log Out</div>
-              </div>
-            </div>
-          </div>
-        )}
+        {isActive && <UserMenu />}
       </div>
     </>
   );
