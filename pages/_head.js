@@ -8,9 +8,9 @@ export const HeadComp = ({ teamName }) => {
       <link rel="icon" type="image/icon" href="/favicon.ico" />
       <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&amp;display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
         rel="stylesheet"
-      ></link>
+      />
       <link rel="stylesheet" media="screen, projection" href="/reset.css" />
       <link rel="stylesheet" media="screen, projection" href="/shared.css?1" />
     </Head>
