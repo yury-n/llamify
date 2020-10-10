@@ -297,7 +297,7 @@ button:active {
 .button.button-white {
   background: white;
   border-color: #dbdbdb;
-  box-shadow: 0px 3px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 3px 6px -1px rgba(0, 0, 0, 0.04);
 }
 
 .button:not(.busy):not(.disabled):hover {
