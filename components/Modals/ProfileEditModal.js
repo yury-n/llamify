@@ -1,47 +1,43 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import Modal from "./Modal";
 import useImageUpload from "../../utils/hooks/useImageUpload";
+import { CurrentUserContext, TeamContext } from "../../pages/app";
 
-const HumanEditModal = ({
-  userId,
-  teamId,
-  firstName: firstNameProp,
-  lastName: lastNameProp,
-  role: roleProp,
-  avatarThumbUrl: avatarThumbUrlProp,
-  onHumanEditSubmit,
-  onClose,
-}) => {
+const ProfileEditModal = ({ onSubmit, onClose }) => {
+  const currentUser = useContext(CurrentUserContext);
+  const team = useContext(TeamContext);
+  const userId = currentUser?.id;
+  const teamId = team?.teamId;
   const submitButton = useRef(null);
-  const [firstName, setFirstName] = useState(firstNameProp);
-  const [lastName, setLastName] = useState(lastNameProp);
-  const [role, setRole] = useState(roleProp);
+  const [firstName, setFirstName] = useState(currentUser.firstName);
+  const [lastName, setLastName] = useState(currentUser.lastName);
+  const [role, setRole] = useState(currentUser.role);
   const {
     imageFile,
     imagePreview,
     onFileChange,
     uploadToFirebase,
   } = useImageUpload(
-    avatarThumbUrlProp
+    currentUser.avatarThumbUrl
       ? {
-          src: avatarThumbUrlProp,
+          src: currentUser.avatarThumbUrl,
         }
       : null
   );
 
-  const onSubmit = (e) => {
+  const onSubmitHandler = (e) => {
     submitButton.current.childNodes[0].classList.add("busy");
     e.preventDefault();
     if (imageFile) {
       uploadToFirebase(
         `userAvatars/${teamId}/${userId}/thumb/`,
-        80,
+        120,
         (avatarThumbUrl) => {
           uploadToFirebase(
             `userAvatars/${teamId}/${userId}/full`,
             400,
             (avatarFullUrl) => {
-              onHumanEditSubmit({
+              onSubmit({
                 firstName,
                 lastName,
                 role,
@@ -53,7 +49,7 @@ const HumanEditModal = ({
         }
       );
     } else {
-      onHumanEditSubmit({
+      onSubmit({
         firstName,
         lastName,
         role,
@@ -139,7 +135,7 @@ const HumanEditModal = ({
         <div className="form-buttons">
           <button
             className="button-wrapper"
-            onClick={onSubmit}
+            onClick={onSubmitHandler}
             ref={submitButton}
           >
             <span className="button button-primary" tabIndex="-1">
@@ -157,4 +153,4 @@ const HumanEditModal = ({
   );
 };
 
-export default HumanEditModal;
+export default ProfileEditModal;

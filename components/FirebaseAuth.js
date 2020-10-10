@@ -44,6 +44,14 @@ const FirebaseAuth = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const team = urlParams.get("team");
       let redirectTo = team ? `/app?team=${team}` : "/app";
+
+      if (window?.location?.hostname !== "llamify.me") {
+        firebaseAuthConfig.signInOptions.push({
+          provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+          requireDisplayName: false,
+        });
+      }
+
       firebaseAuthConfig.signInSuccessUrl = redirectTo;
       setRenderAuth(true);
     }

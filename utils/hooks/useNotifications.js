@@ -7,7 +7,7 @@ import { CurrentUserContext } from "../../pages/app";
 const firestore = firebase.firestore();
 
 const useNotifications = () => {
-  const { currentUser } = useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
   const currentUserId = currentUser?.id;
 
   const [isFetched, setIsFetched] = useState(false);

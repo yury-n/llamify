@@ -4,27 +4,26 @@ import CreatePostButton from "./CreatePostButton";
 import PostCard from "./PostCard";
 import FullAvatarModal from "./Modals/FullAvatarModal";
 import { RECENT_POSTS_COUNT } from "../utils/consts";
-const { default: HumanEditModal } = require("./Modals/HumanEditModal");
-import { CurrentUserContext, TimeframeContext } from "../pages/app";
-import { showThisImageOnLoad } from "../utils";
+const { default: ProfileEditModal } = require("./Modals/ProfileEditModal");
+import {
+  CurrentUserContext,
+  TimeframeContext,
+  ActionsContext,
+} from "../pages/app";
+import { showThisImageOnLoad, getNextSubtleColor } from "../utils";
 
-const Human = ({
-  human,
-  teamId,
-  onHumanEditSubmit,
-  onShowPostSubmitModal,
-  searchString,
-}) => {
+const Human = ({ human, onShowPostSubmitModal, searchString }) => {
   const { timeframe, fromTimestamp } = useContext(TimeframeContext);
-  const { currentUser } = useContext(CurrentUserContext);
+  const { showProfileEditModal } = useContext(ActionsContext);
+  const currentUser = useContext(CurrentUserContext);
   const isOwner = human.id === currentUser.id;
-
-  const [showEditModal, setShowEditModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
 
   if (!isOwner && !human.recentPostIds?.length) {
     return null;
   }
+
+  const color = isOwner ? currentUser.color : getNextSubtleColor();
 
   let requiredNumOfCards = isOwner
     ? RECENT_POSTS_COUNT - 1
@@ -70,13 +69,7 @@ const Human = ({
   }
 
   const onAvatarClick = () => {
-    isOwner ? setShowEditModal(true) : setShowAvatarModal(true);
-  };
-
-  const onEditClick = () => {
-    if (isOwner) {
-      setShowEditModal(true);
-    }
+    isOwner ? showProfileEditModal() : setShowAvatarModal(true);
   };
 
   return (
@@ -85,26 +78,24 @@ const Human = ({
         <div
           className={c(
             "name-wrapper",
-            isOwner && "owner-name-wrapper",
             human.role && "name-with-role-wrapper",
             human.avatarThumbUrl && "name-with-avatar-wrapper"
           )}
         >
-          {human.avatarThumbUrl && (
-            <div
-              className={c("avatar", !human.avatarThumbUrl && "no-avatar")}
-              onClick={onAvatarClick}
-            >
-              {human.avatarThumbUrl && (
-                <img
-                  src={human.avatarThumbUrl}
-                  loading="lazy"
-                  onLoad={showThisImageOnLoad}
-                />
-              )}
-            </div>
-          )}
-          <div className="name" onClick={onEditClick}>
+          <div
+            className={c("avatar")}
+            style={{ backgroundColor: color }}
+            onClick={onAvatarClick}
+          >
+            {human.avatarThumbUrl && (
+              <img
+                src={human.avatarThumbUrl}
+                loading="lazy"
+                onLoad={showThisImageOnLoad}
+              />
+            )}
+          </div>
+          <div className="name">
             {highlightedNamePart ? (
               <>
                 {nameParts[0]}
@@ -132,9 +123,6 @@ const Human = ({
               )}
             </div>
           )}
-          {isOwner && (
-            <img className="icon" src="/icons/edit.svg" onClick={onEditClick} />
-          )}
         </div>
         <div className="posts-stream">
           {isOwner && (
@@ -151,21 +139,6 @@ const Human = ({
           ))}
         </div>
       </div>
-      {showEditModal && (
-        <HumanEditModal
-          userId={human.id}
-          teamId={teamId}
-          firstName={human.firstName}
-          lastName={human.lastName}
-          role={human.role}
-          avatarThumbUrl={human.avatarThumbUrl}
-          onHumanEditSubmit={(payload) => {
-            onHumanEditSubmit(payload);
-            setShowEditModal(false);
-          }}
-          onClose={() => setShowEditModal(false)}
-        />
-      )}
       {showAvatarModal && (
         <FullAvatarModal
           avatarFullUrl={human.avatarFullUrl}

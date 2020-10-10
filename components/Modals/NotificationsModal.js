@@ -1,15 +1,23 @@
 import LoadingIndicator from "../LoadingIndicator";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ActionsContext } from "../../pages/app";
+import useNotifications from "../../utils/hooks/useNotifications";
 
 const { default: Modal } = require("./Modal");
 
-const NotificationsModal = ({
-  areNotificationsFetched,
-  notifications,
-  onClose,
-}) => {
+const NotificationsModal = ({ onClose }) => {
+  const {
+    areNotificationsFetched,
+    notifications,
+    fetchNotifications,
+  } = useNotifications();
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]);
+
   const { showPostModal } = useContext(ActionsContext);
+
   return (
     <Modal onClose={onClose} modalClassname="notifications-modal">
       <div className="alert">

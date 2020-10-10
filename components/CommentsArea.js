@@ -11,7 +11,7 @@ const firestore = firebase.firestore();
 const CommentsArea = ({ post, withLoadedComments: withLoadedCommentsProp }) => {
   const { submitComment, removeComment } = useContext(ActionsContext);
   const { teamId } = useContext(TeamContext);
-  const { currentUser } = useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
   const textareaRef = useRef(null);
   const [withLoadedComments, setWithLoadedComments] = useState(
     !post.commentCount ? true : withLoadedCommentsProp

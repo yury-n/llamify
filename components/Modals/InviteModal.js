@@ -1,6 +1,10 @@
 const { default: Modal } = require("./Modal");
+import { TeamContext } from "../../pages/app";
+import { useContext } from "react";
 
-const InviteModal = ({ teamId, onClose }) => {
+const InviteModal = ({ onClose }) => {
+  const team = useContext(TeamContext);
+  const teamId = team?.teamId;
   return (
     <Modal onClose={onClose}>
       <div class="alert">
@@ -8,7 +12,7 @@ const InviteModal = ({ teamId, onClose }) => {
         <input
           class="input"
           type="text"
-          value={`http://llamify.me/app?team=${teamId}`}
+          value={`http://${window?.location?.hostname}/app?team=${teamId}`}
           style={{ width: 330 }}
           readOnly
         />

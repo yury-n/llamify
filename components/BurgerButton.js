@@ -41,7 +41,7 @@ const BurgerButton = () => {
             <BurgerIcon />
           </span>
         </button>
-        {isActive && <UserMenu />}
+        {isActive && <UserMenu withNotifications />}
       </div>
     </>
   );

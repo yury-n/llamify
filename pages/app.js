@@ -10,7 +10,6 @@ import "firebase/database";
 import initFirebase from "../utils/auth/initFirebase";
 import Head from "./_head";
 import StartTeamForm from "../components/StartTeamForm";
-import TimeframeToggle from "../components/TimeframeToggle";
 import JoinTeamForm from "../components/JoinTeamForm";
 import Humans from "../components/Humans";
 import PostSubmitModal from "../components/Modals/PostSubmitModal";
@@ -25,9 +24,12 @@ import ViewModeTabs from "../components/ViewModeTabs";
 import SaveToHomeModal from "../components/Modals/SaveToHomeModal";
 import PostModal from "../components/Modals/PostModal";
 import NotificationsModal from "../components/Modals/NotificationsModal";
-import { shuffle } from "../utils";
+import { shuffle, getRandomSubtleColor } from "../utils";
 import SimpleStats from "../components/Stats";
 import SearchBox from "../components/SearchBox";
+import ProfileEditModal from "../components/Modals/ProfileEditModal";
+import InviteModal from "../components/Modals/InviteModal";
+import PlusIcon from "../components/Icons/PlusIcon";
 
 initFirebase();
 const firestore = firebase.firestore();
@@ -45,7 +47,10 @@ const Index = () => {
   const [viewMode, setViewMode] = useState("list");
   const [showPostSubmitModal, setShowPostSubmitModal] = useState(false);
   const [postToShow, setPostToShow] = useState(null);
-  const [notificationsToShow, setNotificationsToShow] = useState(null);
+  const [showNotificationsModal, setShowNotificationsModal] = useState(null);
+  const [showProfileEditModal, setShowProfileEditModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [justCreatedTeam, setJustCreatedTeam] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
   const [forNewsletterOnly, setForNewsletterOnly] = useState(false);
   const [droppedFile, setDroppedFile] = useState();
@@ -66,7 +71,9 @@ const Index = () => {
   );
   const [teamMembersOrder, setTeamMembersOrder] = useState([]);
 
-  const currentUser = user?.id ? teamMembersWithRecentPosts[user.id] : {};
+  const currentUserColor = getRandomSubtleColor();
+  let currentUser = user?.id ? teamMembersWithRecentPosts[user.id] : {};
+  currentUser = { ...currentUser, color: currentUserColor };
 
   let teamIdFromURL;
   useEffect(() => {
@@ -338,6 +345,7 @@ const Index = () => {
     setTeamMembersWithRecentPosts({ [user.id]: teamMember });
     setTeamMembersOrder([user.id]);
     setIsTeamFetched(true);
+    setJustCreatedTeam(true);
   };
 
   const joinTeam = ({ firstName, lastName }) => {
@@ -362,7 +370,7 @@ const Index = () => {
       });
   };
 
-  const updateHuman = ({
+  const updateProfile = ({
     firstName,
     lastName,
     role,
@@ -750,14 +758,22 @@ const Index = () => {
     removePost,
     updateTeam,
     showPostModal: setPostToShow,
-    showNotificationsModal: setNotificationsToShow,
+    showNotificationsModal: () => {
+      setShowNotificationsModal(true);
+    },
+    showProfileEditModal: () => {
+      setShowProfileEditModal(true);
+    },
+    showInviteModal: () => {
+      setShowInviteModal(true);
+    },
   };
 
   return (
     <>
       <ActionsContext.Provider value={actions}>
         <TeamContext.Provider value={team}>
-          <CurrentUserContext.Provider value={{ currentUser }}>
+          <CurrentUserContext.Provider value={currentUser}>
             <TimeframeContext.Provider
               value={{
                 timeframe,
@@ -787,6 +803,7 @@ const Index = () => {
                     teamLogo={team?.teamLogo}
                     viewMode={viewMode}
                     setViewMode={setViewMode}
+                    withInviteButton={justCreatedTeam}
                     resetFilters={() => {
                       setForNewsletterOnly(false);
                     }}
@@ -822,7 +839,6 @@ const Index = () => {
                         humans={teamMembersArray}
                         teamId={team?.teamId}
                         currentUserId={user.id}
-                        onHumanEditSubmit={updateHuman}
                         onShowPostSubmitModal={onShowPostSubmitModal}
                         searchString={
                           searchString &&
@@ -874,7 +890,7 @@ const Index = () => {
                               tabIndex="-1"
                               onClick={onShowPostSubmitModal}
                             >
-                              <img src="/icons/plus.svg" />
+                              <PlusIcon />
                               <span>Submit a Post</span>
                             </button>
                             <PostsFeed
@@ -928,13 +944,9 @@ const Index = () => {
                   isDragActive={isDragActive}
                 />
               )}
-              {notificationsToShow && (
+              {showNotificationsModal && (
                 <NotificationsModal
-                  areNotificationsFetched={
-                    notificationsToShow?.areNotificationsFetched
-                  }
-                  notifications={notificationsToShow?.notifications}
-                  onClose={() => setNotificationsToShow(false)}
+                  onClose={() => setShowNotificationsModal(false)}
                 />
               )}
               {postToShow && (
@@ -942,6 +954,18 @@ const Index = () => {
                   post={postToShow}
                   onClose={() => setPostToShow(false)}
                 />
+              )}
+              {showProfileEditModal && (
+                <ProfileEditModal
+                  onSubmit={(payload) => {
+                    updateProfile(payload);
+                    setShowProfileEditModal(false);
+                  }}
+                  onClose={() => setShowProfileEditModal(false)}
+                />
+              )}
+              {showInviteModal && (
+                <InviteModal onClose={() => setShowInviteModal(false)} />
               )}
             </TimeframeContext.Provider>
           </CurrentUserContext.Provider>

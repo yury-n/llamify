@@ -49,7 +49,7 @@ const NotificationsButton = () => {
         >
           {hasUnreadNotifications && <ZenIcon />}
           <svg
-            style={{ transform: "scale(1.3)" }}
+            style={{ transform: "scale(1.25)" }}
             aria-hidden="true"
             focusable="false"
             data-prefix="far"

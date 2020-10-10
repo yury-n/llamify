@@ -11,7 +11,7 @@ import { showThisImageOnLoad } from "../utils";
 const PostCard = ({ post, morePostsCount }) => {
   const { timeframe, fromTimestamp } = useContext(TimeframeContext);
   const { showPostModal, removePost } = useContext(ActionsContext);
-  const { currentUser } = useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
 
   const [showRemoveModal, setShowRemoveModal] = useState(false);
 

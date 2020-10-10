@@ -434,10 +434,20 @@ button:active {
 .button-hollow {
   border: 3px solid var(--primary-color);
   box-sizing: content-box;
-  padding: 9px 20px;
+  padding: 7px 20px;
   color: hsl(260, 93%, 35%);
   box-shadow: 0px 3px 6px -1px rgba(0, 0, 0, 0.18);
   background: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-hollow .icon {
+  margin-right: 5px;
+  width: 20px;
+  position: relative;
+  margin-right: 4px;
 }
 
 .button-hollow.danger {
@@ -546,6 +556,7 @@ button:active {
   position: relative;
   padding: 30px;
   box-shadow: rgba(0, 0, 0, 0.18) 0px 6px 20px 0px;
+  border: 1px #dbdbdba3 solid;
   border-radius: 32px;
   background: white;
 }

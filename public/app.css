@@ -49,7 +49,7 @@
 .input-search-wrapper img {
   width: 16px;
   position: absolute;
-  left: 16px;
+  left: 20px;
   top: 13px;
   opacity: 0.5;
   pointer-events: none;
@@ -58,7 +58,7 @@
 
 .input-search-wrapper .input {
   width: 100%;
-  padding-left: 40px;
+  padding-left: 46px;
 }
 
 .grid-view,
@@ -110,7 +110,7 @@
   color: #595959;
   margin-left: 18px;
   position: relative;
-  top: 4px;
+  top: 3px;
 }
 
 .name-wrapper {
@@ -119,12 +119,6 @@
   align-items: center;
   margin-bottom: 25px;
   cursor: default;
-}
-
-.owner-name-wrapper .name,
-.owner-name-wrapper .avatar {
-  pointer-events: all;
-  cursor: pointer;
 }
 
 .avatar {
@@ -399,7 +393,7 @@
   align-items: center;
   font-weight: 500;
   cursor: pointer;
-  border-radius: 12px;
+  border-radius: 18px;
 }
 
 .post-thumb-more-button span {
@@ -424,8 +418,9 @@
   flex-direction: column;
 }
 
-.post-thumb-add-button img {
+.post-thumb-add-button .icon {
   width: 40px;
+  height: auto;
   margin-top: 10px;
 }
 
@@ -788,14 +783,20 @@ svg.new-notifications-icon {
 }
 
 .popover-menu-item {
-  padding: 15px 20px;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
   cursor: pointer;
+  font-size: 15px;
 }
 
 .popover-menu-item:hover {
   background: hsl(249deg 100% 97%);
+}
+
+.popover-menu-item-with-icon {
+  display: flex;
+  align-items: center;
 }
 
 .notification-thumb {
@@ -984,9 +985,10 @@ svg.new-notifications-icon {
   margin: auto;
 }
 
-.a-real-large-button img {
+.a-real-large-button .icon {
   margin-right: 8px;
   width: 20px;
+  height: auto;
   position: relative;
   top: -1px;
 }
@@ -1098,7 +1100,7 @@ svg.new-notifications-icon {
 .view-mode-tab svg {
   width: 14px;
   height: 14px;
-  margin-right: 8px;
+  margin-right: 6px;
   position: relative;
   left: -5px;
   top: -1px;

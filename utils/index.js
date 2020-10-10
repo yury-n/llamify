@@ -6,6 +6,31 @@ export const shuffle = (a) => {
   return a;
 };
 
+const subtleColors = [
+  "#EDDCE9",
+  "#FFE3E2",
+  "#FFF7E6",
+  "#FFE6E2",
+  "#F1F6F7",
+  "#FFE9EA",
+  "#FFF1E4",
+  "#FFDCD5",
+];
+
+let colorCursor = 0;
+export const getNextSubtleColor = () => {
+  if (colorCursor === subtleColors.length - 1) {
+    colorCursor = 0;
+  } else {
+    colorCursor++;
+  }
+  return subtleColors[colorCursor];
+};
+
+export const getRandomSubtleColor = () => {
+  return shuffle(subtleColors)[0];
+};
+
 export const isMobile = () => {
   let check = false;
   (function (a) {

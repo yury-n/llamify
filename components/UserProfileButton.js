@@ -1,17 +1,17 @@
 import c from "classnames";
-import { useUser } from "../utils/auth/useUser";
 import { CurrentUserContext } from "../pages/app";
 import { useState, useContext, useRef, useEffect } from "react";
 import UserMenu from "./UserMenu";
 
 const UserProfileButton = () => {
   const [isActive, setIsActive] = useState(false);
-  const [showInviteModal, setShowInviteModal] = useState(false);
-  const { currentUser } = useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
   const buttonRef = useRef();
-  const { logout } = useUser();
 
   useEffect(() => {
+    if (!buttonRef.current) {
+      return;
+    }
     const makeInactive = (e) =>
       e.target !== buttonRef.current &&
       !buttonRef.current.contains(e.target) &&
@@ -45,7 +45,10 @@ const UserProfileButton = () => {
           <div
             className="profile-button-avatar"
             style={{
-              backgroundImage: `url(${currentUser.avatarThumbUrl})`,
+              backgroundImage:
+                currentUser.avatarThumbUrl &&
+                `url(${currentUser.avatarThumbUrl})`,
+              backgroundColor: currentUser.color,
             }}
           />
           {currentUser.firstName}

@@ -1,13 +1,14 @@
 import c from "classnames";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import TeamEditModal from "./Modals/TeamEditModal";
-import InviteModal from "./Modals/InviteModal";
 import NotificationsButton from "./NotificationsButton";
 import ListIcon from "./Icons/ListIcon";
 import GridIcon from "./Icons/GridIcon";
 import FeedIcon from "./Icons/FeedIcon";
 import BurgerButton from "./BurgerButton";
 import UserProfileButton from "./UserProfileButton";
+import { ActionsContext } from "../pages/app";
+import PlusIcon from "./Icons/PlusIcon";
 
 const StickyBar = ({
   teamId,
@@ -19,8 +20,8 @@ const StickyBar = ({
   resetFilters,
   withInviteButton,
 }) => {
-  const [showInviteModal, setShowInviteModal] = useState(false);
   const [showTeamEditModal, setShowTeamEditModal] = useState(false);
+  const { showInviteModal } = useContext(ActionsContext);
 
   const viewModeButtons = (
     <div className="view-mode-buttons">
@@ -106,17 +107,13 @@ const StickyBar = ({
           {teamId && <NotificationsButton />}
           <UserProfileButton />
           {teamId && withInviteButton && (
-            <button
-              className="button-wrapper"
-              onClick={() => setShowInviteModal(true)}
-              aria-label="Invite to join the team"
-              data-balloon-pos="down"
-            >
+            <button className="button-wrapper" onClick={showInviteModal}>
               <span
                 className="button button-hollow"
                 tabIndex="-1"
-                style={{ width: 60, marginLeft: -4 }}
+                style={{ width: 60, marginLeft: 12 }}
               >
+                <PlusIcon />
                 Invite
               </span>
             </button>
@@ -129,12 +126,6 @@ const StickyBar = ({
           teamName={teamName}
           teamLogo={teamLogo}
           onClose={() => setShowTeamEditModal(false)}
-        />
-      )}
-      {showInviteModal && (
-        <InviteModal
-          teamId={teamId}
-          onClose={() => setShowInviteModal(false)}
         />
       )}
     </>
