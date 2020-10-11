@@ -168,7 +168,7 @@
 
 .mdl-button[data-provider-id="google.com"] {
   background: white;
-  box-shadow: 0px 3px 6px -1px rgb(0 0 0 / 20%);
+  box-shadow: 0px 3px 6px -1px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 12px 24px;
 }
@@ -178,6 +178,6 @@
   color: white;
   border-radius: 8px;
   background: #8b93a2 !important;
-  box-shadow: 0px 3px 6px -1px hsl(260deg 97% 10% / 28%);
+  box-shadow: 0px 3px 6px -1px rgba(17, 1, 50, 0.28);
   padding: 12px 24px;
 }

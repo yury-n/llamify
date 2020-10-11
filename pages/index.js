@@ -2,6 +2,7 @@ import cookies from "js-cookie";
 import Head from "./_head";
 import { useRouter } from "next/router";
 import SimpleStats from "../components/Stats";
+import PricingPlans from "../components/PricingPlans";
 
 const About = () => {
   const router = useRouter();
@@ -157,7 +158,7 @@ const About = () => {
               width: 200px;
               transform: rotate(-3deg);
               color: #eef8f5;
-          "><div class="post-thumb-image" style="background: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/37abb01e-9eb0-4ceb-8e7f-c247caed05a6/de4i19i-c489401c-c609-4b0d-89d4-50f61d234b40.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvMzdhYmIwMWUtOWViMC00Y2ViLThlN2YtYzI0N2NhZWQwNWE2XC9kZTRpMTlpLWM0ODk0MDFjLWM2MDktNGIwZC04OWQ0LTUwZjYxZDIzNGI0MC5wbmcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.d6Dp20eLPHLs1DYrl6-5wCXzPSTAersgWF-_4hkC1fI);background-size: cover;background-position-x: -85px;"></div></div></div>`,
+          "><div class="post-thumb-image" style="background: url(/images/collective.png);background-size: cover;background-position-x: -85px;"></div></div></div>`,
             }}
           />
           <div>
@@ -175,16 +176,8 @@ const About = () => {
             </div>
           </div>
         </div>
-        <div className="cta-button-wrapper cta-button-wrapper-bottom">
-          <button
-            className="button-wrapper"
-            onClick={() => router.push("/app")}
-          >
-            <span className="button button-primary cta-button" tabIndex="-1">
-              Create a Team
-            </span>
-          </button>
-        </div>
+        {typeof window !== "undefined" &&
+          window?.location?.hostname !== "llamify.me" && <PricingPlans />}
       </div>
       <SimpleStats />
     </>

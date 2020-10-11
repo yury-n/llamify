@@ -22,7 +22,7 @@ const UserProfileButton = () => {
     };
   }, []);
 
-  if (!currentUser) {
+  if (!currentUser || !currentUser.firstName) {
     return null;
   }
 
