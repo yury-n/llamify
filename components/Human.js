@@ -84,7 +84,9 @@ const Human = ({ human, onShowPostSubmitModal, searchString }) => {
         >
           <div
             className={c("avatar")}
-            style={{ backgroundColor: color }}
+            style={{
+              backgroundColor: !human.avatarThumbUrl ? color : undefined,
+            }}
             onClick={onAvatarClick}
           >
             {human.avatarThumbUrl && (

@@ -48,7 +48,9 @@ const UserProfileButton = () => {
               backgroundImage:
                 currentUser.avatarThumbUrl &&
                 `url(${currentUser.avatarThumbUrl})`,
-              backgroundColor: currentUser.color,
+              backgroundColor: !currentUser.avatarThumbUrl
+                ? currentUser.color
+                : undefined,
             }}
           />
           {currentUser.firstName}
