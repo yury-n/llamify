@@ -23,6 +23,9 @@ const PricingPlans = () => {
         <button
           className="button-wrapper"
           style={{ width: "100%", marginTop: 40, opacity: 0.9 }}
+          onClick={() => {
+            window.location.href = "/authf";
+          }}
         >
           <span className="button button-primary pricing-button" tabindex="-1">
             Create a Team
@@ -59,11 +62,15 @@ const PricingPlans = () => {
         <button
           className="button-wrapper"
           style={{ width: "100%", marginTop: 40 }}
+          onClick={() => {
+            window.location.href = "/authp";
+          }}
         >
           <span className="button button-primary pricing-button" tabindex="-1">
-            Create a Team
+            Start a Free Trial
           </span>
         </button>
+        <div className="no-credit-card">no credit card required</div>
       </div>
       <div className="pricing-plan">
         <div className="pricing-plan-head">Self-hosted</div>
@@ -88,6 +95,9 @@ const PricingPlans = () => {
         <button
           className="button-wrapper"
           style={{ width: "100%", marginTop: 40, opacity: 0.9 }}
+          onClick={() => {
+            window.location.href = "https://github.com/yury-n/llamify";
+          }}
         >
           <span className="button button-primary pricing-button" tabindex="-1">
             Clone on Github
