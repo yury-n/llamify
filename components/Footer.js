@@ -1,6 +1,9 @@
 import { isLlamifyDotMe } from "../utils";
 
 const Footer = ({ showPostsForNewsletter }) => {
+  if (typeof window === "undefined") {
+    return null;
+  }
   return (
     <div className="footer">
       <div className="llamify-com">{window?.location?.hostname}</div>
