@@ -73,3 +73,7 @@ export const isLlamifyDotMe = () => {
 export const isLlamifyDotCom = () => {
   return typeof window !== 'undefined' && window.location.hostname === 'lamify.com';
 }
+
+export const isLocalhost= () => {
+  return typeof window !== 'undefined' && window.location.hostname === 'localhost';
+}

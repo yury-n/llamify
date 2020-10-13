@@ -24,7 +24,7 @@ import ViewModeTabs from "../components/ViewModeTabs";
 import SaveToHomeModal from "../components/Modals/SaveToHomeModal";
 import PostModal from "../components/Modals/PostModal";
 import NotificationsModal from "../components/Modals/NotificationsModal";
-import { shuffle, getRandomSubtleColor, isLlamifyDotCom, isLlamifyDotMe } from "../utils";
+import { shuffle, getRandomSubtleColor, isLlamifyDotCom, isLlamifyDotMe, isLocalhost } from "../utils";
 import SimpleStats from "../components/Stats";
 import SearchBox from "../components/SearchBox";
 import ProfileEditModal from "../components/Modals/ProfileEditModal";
@@ -76,10 +76,13 @@ const Index = () => {
   currentUser = { ...currentUser, color: currentUserColor };
 
   let teamIdFromURL;
+  if (typeof window !== "undefined") {
+    const urlParams = new URLSearchParams(window.location.search);
+    teamIdFromURL = urlParams.get("team");
+  }
+
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      teamIdFromURL = urlParams.get("team");
       if (window.location.search.includes("newsletter")) {
         setForNewsletterOnly(true);
       }
@@ -590,7 +593,7 @@ const Index = () => {
   const showContentArea =
     isTeamFetched &&
     Object.keys(teamMembersWithRecentPosts).length > 0 &&
-    userHasDAEmail;
+    (isLlamifyDotCom() && !userHasDAEmail || isLlamifyDotMe() && userHasDAEmail || isLocalhost());
 
   const showForm = showStartTeamForm || showJoinTeamForm;
 

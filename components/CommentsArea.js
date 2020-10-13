@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 import { useState, useRef, useContext, useEffect, useCallback } from "react";
 import { ActionsContext, TeamContext, CurrentUserContext } from "../pages/app";
 import RemoveConfirmationModal from "./Modals/RemoveConfirmationModal";
+import { getNextSubtleColor } from "../utils";
 
 const firestore = firebase.firestore();
 
@@ -195,6 +196,7 @@ const CommentsArea = ({ post, withLoadedComments: withLoadedCommentsProp }) => {
           <div className="comments">
             {comments.map((comment) => {
               const isCommentAuthor = comment.author.id == currentUser.id;
+              const color = isCommentAuthor ? currentUser.color : getNextSubtleColor();
               return (
                 <div key={comment.commentId} className="comment">
                   <div
@@ -203,6 +205,7 @@ const CommentsArea = ({ post, withLoadedComments: withLoadedCommentsProp }) => {
                       backgroundImage:
                         comment.author.avatarThumbUrl &&
                         `url(${comment.author.avatarThumbUrl})`,
+                      backgroundColor: !comment.author.avatarThumbUrl ? color : undefined,
                     }}
                   />
                   <div className="comment-content">
