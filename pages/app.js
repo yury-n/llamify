@@ -24,7 +24,13 @@ import ViewModeTabs from "../components/ViewModeTabs";
 import SaveToHomeModal from "../components/Modals/SaveToHomeModal";
 import PostModal from "../components/Modals/PostModal";
 import NotificationsModal from "../components/Modals/NotificationsModal";
-import { shuffle, getRandomSubtleColor, isLlamifyDotCom, isLlamifyDotMe, isLocalhost } from "../utils";
+import {
+  shuffle,
+  getRandomSubtleColor,
+  isLlamifyDotCom,
+  isLlamifyDotMe,
+  isLocalhost,
+} from "../utils";
 import SimpleStats from "../components/Stats";
 import SearchBox from "../components/SearchBox";
 import ProfileEditModal from "../components/Modals/ProfileEditModal";
@@ -593,7 +599,9 @@ const Index = () => {
   const showContentArea =
     isTeamFetched &&
     Object.keys(teamMembersWithRecentPosts).length > 0 &&
-    (isLlamifyDotCom() && !userHasDAEmail || isLlamifyDotMe() && userHasDAEmail || isLocalhost());
+    ((isLlamifyDotCom() && !userHasDAEmail) ||
+      (isLlamifyDotMe() && userHasDAEmail) ||
+      isLocalhost());
 
   const showForm = showStartTeamForm || showJoinTeamForm;
 
@@ -820,7 +828,8 @@ const Index = () => {
                 )}
                 {isLlamifyDotCom() && userHasDAEmail && (
                   <div className="use-correct-email">
-                    DA's own space is located at <a href="http://llamify.me">llamify.me</a>.
+                    DA's own space is located at{" "}
+                    <a href="http://llamify.me">llamify.me</a>.
                   </div>
                 )}
                 {forNewsletterOnly && viewMode === "feed" && (
