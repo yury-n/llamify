@@ -3,6 +3,7 @@ import Head from "./_head";
 import { useRouter } from "next/router";
 import SimpleStats from "../components/Stats";
 import PricingPlans from "../components/PricingPlans";
+import { isLlamifyDotCom } from "../utils";
 
 const About = () => {
   const router = useRouter();
@@ -176,8 +177,7 @@ const About = () => {
             </div>
           </div>
         </div>
-        {typeof window !== "undefined" &&
-          window?.location?.hostname !== "llamify.me" && <PricingPlans />}
+        {isLlamifyDotCom() && <PricingPlans />}
       </div>
       <SimpleStats />
     </>

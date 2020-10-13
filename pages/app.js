@@ -24,7 +24,7 @@ import ViewModeTabs from "../components/ViewModeTabs";
 import SaveToHomeModal from "../components/Modals/SaveToHomeModal";
 import PostModal from "../components/Modals/PostModal";
 import NotificationsModal from "../components/Modals/NotificationsModal";
-import { shuffle, getRandomSubtleColor } from "../utils";
+import { shuffle, getRandomSubtleColor, isLlamifyDotCom, isLlamifyDotMe } from "../utils";
 import SimpleStats from "../components/Stats";
 import SearchBox from "../components/SearchBox";
 import ProfileEditModal from "../components/Modals/ProfileEditModal";
@@ -584,7 +584,6 @@ const Index = () => {
   let userHasDAEmail =
     user?.email &&
     ["wix.com", "deviantart.com"].includes(user?.email.split("@")[1]);
-  userHasDAEmail = true;
 
   const showStartTeamForm = isTeamFetched && !team?.teamId && !teamIdFromURL;
   const showJoinTeamForm = isTeamFetched && !team?.teamId && teamIdFromURL;
@@ -811,9 +810,14 @@ const Index = () => {
                 )}
                 {showJoinTeamForm && <JoinTeamForm onJoinTeam={joinTeam} />}
                 {showStartTeamForm && <StartTeamForm onStartTeam={startTeam} />}
-                {!userHasDAEmail && (
+                {isLlamifyDotMe() && !userHasDAEmail && (
                   <div className="use-correct-email">
                     Please use @wix.com or @deviantart.com email!
+                  </div>
+                )}
+                {isLlamifyDotCom() && userHasDAEmail && (
+                  <div className="use-correct-email">
+                    DA's own space is located at <a href="http://llamify.me">llamify.me</a>.
                   </div>
                 )}
                 {forNewsletterOnly && viewMode === "feed" && (

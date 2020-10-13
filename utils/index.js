@@ -65,3 +65,11 @@ export const iOS = () => {
 export const showThisImageOnLoad = (e) => {
   e.target.style.opacity = 1;
 };
+
+export const isLlamifyDotMe = () => {
+  return typeof window !== 'undefined' && window.location.hostname === 'lamify.me';
+}
+
+export const isLlamifyDotCom = () => {
+  return typeof window !== 'undefined' && window.location.hostname === 'lamify.com';
+}
