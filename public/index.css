@@ -73,8 +73,8 @@
 .mock-up {
   width: 100%;
   max-width: 1140px;
-  box-shadow: rgb(50 50 93 / 15%) 0px 35px 100px -20px,
-    rgb(0 0 0 / 6%) 0px 20px 60px -30px;
+  box-shadow: rgba(50, 50, 93, 0.15) 0px 35px 100px -20px,
+    rgba(0, 0, 0, 0.06) 0px 20px 60px -30px;
   backface-visibility: hidden;
   transform: translateZ(0px);
   margin: 110px auto 50px;

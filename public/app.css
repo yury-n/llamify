@@ -696,7 +696,7 @@
   background-size: cover;
   display: inline-block;
   flex-shrink: 0;
-  box-shadow: 0px 1px 4px -1px hsl(0deg 0% 0% / 24%);
+  box-shadow: none;
 }
 
 .comment-author-name {
@@ -791,7 +791,7 @@ svg.new-notifications-icon {
 }
 
 .popover-menu-item:hover {
-  background: hsl(249deg 100% 97%);
+  background: rgb(242, 240, 255);
 }
 
 .popover-menu-item-with-icon {

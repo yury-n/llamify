@@ -9,9 +9,6 @@ const UserProfileButton = () => {
   const buttonRef = useRef();
 
   useEffect(() => {
-    if (!buttonRef.current) {
-      return;
-    }
     const makeInactive = (e) =>
       e.target !== buttonRef.current &&
       !buttonRef.current.contains(e.target) &&

@@ -106,7 +106,7 @@ const PostSubmitModal = ({
                   name="file"
                   id="file"
                   className="file-input"
-                  accept="image/x-png,image/gif,image/jpeg"
+                  accept="image/x-png,image/gif,image/jpeg,.jpeg,.jpg,.png"
                   onChange={onFileChange}
                 />
                 <label className="file-input-label" htmlFor="file" />
