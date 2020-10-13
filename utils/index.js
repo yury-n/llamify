@@ -67,13 +67,19 @@ export const showThisImageOnLoad = (e) => {
 };
 
 export const isLlamifyDotMe = () => {
-  return typeof window !== 'undefined' && window.location.hostname === 'lamify.me';
-}
+  return (
+    typeof window !== "undefined" && window.location.hostname === "llamify.me"
+  );
+};
 
 export const isLlamifyDotCom = () => {
-  return typeof window !== 'undefined' && window.location.hostname === 'lamify.com';
-}
+  return (
+    typeof window !== "undefined" && window.location.hostname === "llamify.com"
+  );
+};
 
-export const isLocalhost= () => {
-  return typeof window !== 'undefined' && window.location.hostname === 'localhost';
-}
+export const isLocalhost = () => {
+  return (
+    typeof window !== "undefined" && window.location.hostname === "localhost"
+  );
+};
