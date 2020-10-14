@@ -411,6 +411,13 @@ button:active {
   z-index: 10;
 }
 
+@media only screen and (max-device-width: 480px) {
+  .product-hunt-button {
+    right: 50%;
+    margin-right: -125px;
+  }
+}
+
 @keyframes pulse {
   0% {
     opacity: 0.4;

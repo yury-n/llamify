@@ -1117,11 +1117,6 @@ svg.new-notifications-icon {
 }
 
 @media only screen and (max-device-width: 480px) {
-  .product-hunt-button {
-    right: 50%;
-    margin-right: -125px;
-  }
-
   .burger-button {
     display: block;
   }
