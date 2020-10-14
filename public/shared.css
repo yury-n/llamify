@@ -404,6 +404,13 @@ button:active {
     inset 0px 3px 8px 1px hsla(0, 0%, 100%, 0.35);
 }
 
+.product-hunt-button {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 10;
+}
+
 @keyframes pulse {
   0% {
     opacity: 0.4;
