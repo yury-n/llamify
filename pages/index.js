@@ -177,7 +177,7 @@ const About = () => {
             </div>
           </div>
         </div>
-        {isLlamifyDotCom() && <PricingPlans />}
+        {isLlamifyDotCom() && false && <PricingPlans />}
       </div>
       <SimpleStats />
     </>

@@ -1,6 +1,5 @@
 import React from "react";
 import Head from "next/head";
-import PHButton from "../components/PHButton";
 
 export const HeadComp = ({ teamName }) => {
   return (
@@ -20,7 +19,6 @@ export const HeadComp = ({ teamName }) => {
           href="/shared.css?1"
         />
       </Head>
-      <PHButton />
     </>
   );
 };
