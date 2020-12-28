@@ -67,6 +67,7 @@ export const showThisImageOnLoad = (e) => {
 };
 
 export const isLlamifyDotMe = () => {
+  return true;
   return (
     typeof window !== "undefined" && window.location.hostname === "llamify.me"
   );

@@ -3,7 +3,7 @@ import Head from "./_head";
 import { useRouter } from "next/router";
 import SimpleStats from "../components/Stats";
 import PricingPlans from "../components/PricingPlans";
-import { isLlamifyDotCom } from "../utils";
+import { isLlamifyDotCom, isLlamifyDotMe } from "../utils";
 
 const About = () => {
   const router = useRouter();
@@ -12,6 +12,16 @@ const About = () => {
     window.location.href = "/app";
     return null;
   }
+
+  if (isLlamifyDotMe()) {
+    return (
+      <div>
+        This app concept didn't take off and its maintenance is discontinued.{" "}
+        <br /> Please, send your cool photos directly to Jocelyn.
+      </div>
+    );
+  }
+
   return (
     <>
       <Head />

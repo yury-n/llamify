@@ -779,6 +779,15 @@ const Index = () => {
     },
   };
 
+  if (isLlamifyDotMe()) {
+    return (
+      <div>
+        This app concept didn't take off and its maintenance is discontinued.{" "}
+        <br /> Please, send your cool photos directly to Jocelyn.
+      </div>
+    );
+  }
+
   return (
     <>
       <ActionsContext.Provider value={actions}>
